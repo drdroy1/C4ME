@@ -153,3 +153,11 @@ input[type=text], input[type=password] {
   background-color: #4CAF50;
   color: white;
 }
+
+.extra { 
+    display: none;
+}
+
+h1:hover .extra {
+    display: inline-block;
+}
