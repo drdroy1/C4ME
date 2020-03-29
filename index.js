@@ -7,6 +7,17 @@ const bodyParser = require('body-parser');
 const fs = require('fs');
 const app = express();
 
+/** import mongodb module
+ *  setting up mongo client for future connection
+ *  audoIndex used to index each entry
+ */
+const mongoClient = require('mongodb').MongoClient;
+const mongo = "mongodb://localhost:27017/";
+const autoIndex = require("mongodb-autoincrement");
+
+/** additional functions
+ *  redirect login and home page
+ */
 const redirectLogin = function(req, res, next){
 	if(!req.session.userId){
 		res.redirect('/login');
@@ -44,17 +55,17 @@ app.use(session({
 	}
 }));
 
-/** Handling HTTP get requests
+/** Handling HTTP GET request
  *  @params
  */
-app.get('/', function(req,res){
+app.get('/', function(req, res){
 	res.sendFile(__dirname + "/html/index.html")
 });
-app.get('/login', function(req,res){
+app.get('/login', function(req, res){
 	res.send('Waiting for a login page')
 	//res.sendFile(__dirname + "/html/login.html")
 });
-app.get('/logout', function(req,res){
+app.get('/logout', function(req, res){
 	res.send('LOGOUT PAGE')
 });
 
@@ -63,6 +74,23 @@ app.get('/css/style.css', function(req, res){
         var fileContents = fs.readFileSync('css/style.css', {encoding: 'utf8'});
         res.write(fileContents);
         res.end();
+});
+
+/** Handling HTTP POST request
+ *
+ */
+
+app.post('/login', redirectHome, function(req, res){
+	let username = req.body.username;
+	let password = req.body.password;
+	MongoClient.connect(mongodb, function(err, db){
+		if (err) throw err;
+		console.log("Connected to Mongo");
+		let currentDB = db.db("c4me");
+		currentDB.collection("account").findOne({username:username}, function(err, result){
+			if (err) throw err;
+		});
+	});
 });
 
 app.listen(3000);
