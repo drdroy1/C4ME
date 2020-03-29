@@ -8,7 +8,6 @@ body{
     background-color: #E8FBFF;
 }
 
-
 a{
     text-decoration: none;
     color: #000000;
@@ -138,7 +137,7 @@ header nav {
     padding: 15px;
 }
 
-/*Boxes*/
+/*Boxes for Homepage*/
 #boxes{
     margin-top: 50px;
     text-align: center;
@@ -162,20 +161,20 @@ header nav {
     text-align: left;
 }
 
-#loginForm label{
+#loginRegisterForm label{
     font-weight:bold;
 }
 
-#loginForm input{
+#loginRegisterForm input{
     width: 35%;
     height: 30px;
 }
 
-#loginForm #loginBtn{
+#loginRegisterForm #loginRegisterBtn{
     padding: 5px 0 5px 0;
 }
 
-#registerBox .box{
+#loginRegisterBox .box{
     float:right;
     position: absolute;
     top: 160px;

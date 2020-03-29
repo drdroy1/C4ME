@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content="Helps high school students decide where to apply for college" />
+    <meta name="keywords" content="" />
+    <meta name="author" content="Andrew Cao, Qihong Jiang, Maggie Zhou" />
+    <title>C4me | Register</title>
+    <link rel="stylesheet" href="../css/style.css" />
+</head>
+
+<body>
+    <header>
+        <div class=container>
+            <div class=brand>
+                <a href="landing.html"><img src="../img/C4me Logo (Transparent).png" alt="Logo"></a>
+            </div>
+        </div>
+    </header>
+
+    <section id="pageName">
+        <div class="container">
+            <h1>Register</h1>
+        </div>
+    </section>
+
+    <form id="loginRegisterForm">
+        <div class="container">
+            <h2>1. Account Information</h2>
+            <label for="email">Email*</label><br>
+            <input type="text" id="email" name="email"><br><br>
+
+            <label for="password">Password*</label><br>
+            <input type="text" id="password" name="password"><br><br>
+
+            <label for="firstName">First Name*</label><br>
+            <input type="text" id="firstName" name="firstName"><br><br>
+
+            <label for="lastName">Last Name*</label><br>
+            <input type="text" id="lastName" name="lastName"><br><br>
+
+            <label for="userType">User Type*</label><br>
+            <input list="userType" type="text" name="userType">
+
+            <datalist id="userType">
+                <option value="Student"></option>
+                <option value="Administrator"></option>
+            </datalist>
+            <br><br>
+
+
+            <input type="button" id="loginRegisterBtn" value="Continue" onClick="location.href='register2.html'">
+        </div>
+    </form>
+
+    <section id="loginRegisterBox">
+        <div class="container">
+            <div class="box">
+                <h3>Already have an account?</h3>
+                <a href="login.html">
+                    <p>I need to login</p>
+                </a>
+            </div>
+    </section>
+
+
+    <script src="../js/script.js"></script>
+</body>
+
+</html>
