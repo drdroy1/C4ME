@@ -4,11 +4,21 @@
 const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
+const fs = require('fs');
 const app = express();
 
 const redirectLogin = function(req, res, next){
 	if(!req.session.userId){
-		res.redirect('/login')
+		res.redirect('/login');
+	}
+	else{
+		next();
+	}
+};
+
+const redirectHome = function(req, res, next){
+	if(!req.session.userId){
+		res.redirect('');
 	}
 	else{
 		next();
@@ -21,7 +31,7 @@ const redirectLogin = function(req, res, next){
 app.use(bodyParser.urlencoded({ extended:true }));
 app.use(bodyParser.json());
 app.use(express.static('css'));
-app.use(express.static('images'));
+app.use(express.static('img'));
 
 app.use(session({
 	name: 'sid',
@@ -38,15 +48,21 @@ app.use(session({
  *  @params
  */
 app.get('/', function(req,res){
-	res.send('Waiting for a home page')
-	//res.sendFile(__dirname + "index.html")
+	res.sendFile(__dirname + "/html/index.html")
 });
 app.get('/login', function(req,res){
 	res.send('Waiting for a login page')
-	//res.sendFile(__dirname + "login.html")
+	//res.sendFile(__dirname + "/html/login.html")
 });
 app.get('/logout', function(req,res){
 	res.send('LOGOUT PAGE')
+});
+
+app.get('/css/style.css', function(req, res){
+	res.writeHead(200,{'Content-type' : 'text/css'});
+        var fileContents = fs.readFileSync('css/style.css', {encoding: 'utf8'});
+        res.write(fileContents);
+        res.end();
 });
 
 app.listen(3000);
