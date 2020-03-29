@@ -1,0 +1,25 @@
+{
+  "name": "cse-416",
+  "version": "1.0.0",
+  "description": "Andrew Cao\\ Maggie Zhou\\ Qihong Jiang\\ Dhruba Roy",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qihongjiang/CSE-416.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/qihongjiang/CSE-416/issues"
+  },
+  "homepage": "https://github.com/qihongjiang/CSE-416#readme",
+  "dependencies": {
+    "ejs": "^3.0.1",
+    "express": "^4.17.1",
+    "express-session": "^1.17.0",
+    "mongodb": "^3.5.5"
+  }
+}
