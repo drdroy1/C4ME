@@ -1,0 +1,159 @@
+/*Global*/
+body{
+    font-family: Arial, Helvetica;
+    font-size: 15px;
+    line-height: 1.5;
+    padding: 0;
+    margin: 0;
+    background-color: #E8FBFF;
+}
+
+.container{
+    width: 85%;
+    margin: auto;
+    overflow: hidden;
+}
+
+/* Header + Nav*/
+header{
+    background: #FFFFFF;
+    padding-top: 0px;
+    min-height: 50px;
+}
+
+header .brand {
+    float: left;
+}
+
+header img{
+    height: 50px;
+    width: 100px;
+    vertical-align: middle;
+}
+
+header h1{
+    margin:0; 
+    display: inline;
+    font-weight: lighter;
+    color: #7bd1ff;
+}
+
+header a{
+    text-decoration: none;
+    color: #000000;
+    font-size: 16px;
+}
+
+header a:hover{
+    text-decoration: underline;
+}
+
+header ul{
+    margin: 0;
+    padding: 0;
+}
+
+header li {
+    display: inline;
+    padding: 0 20px 0 20px;
+}
+
+header nav {
+    float: right;
+    margin-top: 12px
+}
+
+/*SideNav Open Button*/
+
+.openbtn{
+    position: absolute;
+    top: 2px;
+    left: 0px;
+    font-size:30px;
+    cursor: pointer;
+    margin-left: 15px;
+}
+
+/*SideNav*/
+#sideNav{
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    width: 0px;
+    background-color: #222;
+    z-index: 1;
+    padding-top: 20px;
+    overflow-x: hidden;
+    transition: 0.5s;
+}
+
+#sideNav a{
+    padding: 8px 20px 8px 20px;
+    text-decoration: none;
+    font-size: 20px;
+    color: #999;
+    display: block;
+    border: 1px;
+}
+
+#sideNav a:hover{
+    background-color:white;
+}
+
+#sideNav .closebtn{
+    position: absolute;
+    top: 2px;
+    left: 0px;
+    font-size: 30px;
+    color: #999;
+    margin-left: 15px;
+}
+
+#sideNav h1{
+    margin: 50px;
+    padding: 50px 50px 50px 50px;
+    border-radius:50%;
+    background-color: #999;
+    text-align:center;
+    color: #222;
+}
+
+#pageName{
+    padding-top: 50px;
+    text-align: center;
+}
+
+#pageName button{
+    font-size: 100%;
+    font-family: inherit;
+    background-color: white;
+    border:1px solid black;
+    border-radius: 10px;
+    padding: 15px;
+
+}
+
+/*Boxes*/
+#boxes{
+    margin-top: 50px;
+    text-align: center;
+}
+
+#boxes .box{
+    width: 35%;
+    display: inline-block;
+    padding: 10px;
+    border: 3px solid black; 
+    margin: 25px;
+    background-color:white;
+}
+
+#boxes .box h3{
+    text-align: center;
+    border-bottom: 3px solid black;
+}
+
+#boxes .box p{
+    text-align: left;
+}
