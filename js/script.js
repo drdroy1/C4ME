@@ -1,5 +1,5 @@
 function openNav() {
-    document.getElementById("sideNav").style.width = "275px";
+    document.getElementById("sideNav").style.width = "300px";
 }
 function closeNav() {
     document.getElementById("sideNav").style.width = "0px";
@@ -7,4 +7,8 @@ function closeNav() {
 
 function redirectSearch() {
     location.href = "searchForColleges.html";
+}
+
+function redirectSearch() {
+    location.href = "login.html";
 }
