@@ -8,6 +8,16 @@ body{
     background-color: #E8FBFF;
 }
 
+
+a{
+    text-decoration: none;
+    color: #000000;
+    font-size: 16px;
+}
+
+a:hover{
+    text-decoration: underline;
+}
 .container{
     width: 85%;
     margin: auto;
@@ -36,16 +46,6 @@ header h1{
     display: inline;
     font-weight: lighter;
     color: #7bd1ff;
-}
-
-header a{
-    text-decoration: none;
-    color: #000000;
-    font-size: 16px;
-}
-
-header a:hover{
-    text-decoration: underline;
 }
 
 header ul{
@@ -124,6 +124,11 @@ header nav {
     text-align: center;
 }
 
+#pageName img{
+    height: 300px;
+    width: 500px;
+}
+
 #pageName button{
     font-size: 100%;
     font-family: inherit;
@@ -131,7 +136,6 @@ header nav {
     border:1px solid black;
     border-radius: 10px;
     padding: 15px;
-
 }
 
 /*Boxes*/
@@ -156,4 +160,27 @@ header nav {
 
 #boxes .box p{
     text-align: left;
+}
+
+#loginForm label{
+    font-weight:bold;
+}
+
+#loginForm input{
+    width: 35%;
+    height: 30px;
+}
+
+#loginForm #loginBtn{
+    padding: 5px 0 5px 0;
+}
+
+#registerBox .box{
+    float:right;
+    position: absolute;
+    top: 160px;
+    right: 0px;
+    width: 35%;
+    padding: 10px;
+    margin: 25px;
 }
