@@ -12,3 +12,7 @@ function redirectSearch() {
 function redirectSearch() {
     location.href = "login.html";
 }
+
+function redirectRegister2() {
+    location.href = "register2.html";
+}
