@@ -97,6 +97,9 @@ app.get('/img/:path', function(req, res){
 app.post('/register', function(req, res){
 	let username = req.body.username;
 	let password = req.body.password;
+	let fName = req.body.firstName;
+	let lName = req.body.lastName;
+	let userType = req.body.userType;
 	let msg = '';
 	MongoClient.connect(mongodb, function(err, db){
 		if (err) throw err;
@@ -108,7 +111,7 @@ app.post('/register', function(req, res){
 				res.redirect('/login');
 			}
 			else{
-				let newUser = { username: username, password: password};
+				let newUser = { username: username, password: password, fName: fName, lName: lName, };
 				currentDB.collection('account').insertOne(newUser, function(err, result){
 					if (err) throw err;
 					res.redirect('/login');	
