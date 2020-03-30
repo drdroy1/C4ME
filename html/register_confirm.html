@@ -7,7 +7,7 @@
     <meta name="description" content="Helps high school students decide where to apply for college" />
     <meta name="keywords" content="" />
     <meta name="author" content="Andrew Cao, Qihong Jiang, Maggie Zhou" />
-    <title>C4me | Login</title>
+    <title>C4me | Confirmation</title>
     <link rel="stylesheet" href="../css/style.css" />
 </head>
 
@@ -22,30 +22,22 @@
 
     <section id="pageName">
         <div class="container">
-            <h1> Login</h1>
+            <h1>Register</h1>
         </div>
     </section>
 
-    <form method='post' action='/login' id="loginRegisterForm">
+    <section id="confirmationInfo">
         <div class="container">
-            <label for="username">Username</label><br>
-            <input type="text" id="username" name="username"><br><br>
-
-            <label for="password">Password</label><br>
-            <input type="text" id="password" name="password"><br><br>
-            <input type="submit" id="loginRegisterBtn" value="Login">
-        </div>
-    </form>
-
-    <section id="loginRegisterBox">
-        <div class="container">
+            <h2>3. Confirmation</h2>
             <div class="box">
-                <h3>Are you new here?</h3>
-                <a href="register1.html">
-                    <p>I need to register</p>
-                </a>
+                <h3>Thank you for signing up!</h3>
+                <p>You will soon receive an email at the email address you used during registration.</p>
             </div>
+            <br>
+            <button class="redirectButton" onClick="location.href='login.html'">Back to Login</button>
     </section>
+
+    <script src="../js/script.js"></script>
 </body>
 
-<script src="../js/script.js"></script>
+</html>
