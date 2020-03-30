@@ -193,10 +193,6 @@ header nav {
     text-align: center;
 }
 
-#confirmationInfo h2{
-    text-align: left;
-}
-
 #confirmationInfo .box{
     width: 35%;
     display: inline-block;
