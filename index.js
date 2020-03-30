@@ -5,6 +5,7 @@ const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const fs = require('fs');
+const path = require('path');
 const app = express();
 
 /** import mongodb module
@@ -59,21 +60,34 @@ app.use(session({
  *  @params
  */
 app.get('/', function(req, res){
-	res.sendFile(__dirname + "/html/index.html")
+	res.sendFile(__dirname + "/html/index.html");
 });
+
+app.get('/register', function(req, res){
+	res.sendFile(__dirname + '/html/register1.html');
+});
+
 app.get('/login', function(req, res){
-	res.send('Waiting for a login page')
+	res.send('Waiting for a login page');
 	//res.sendFile(__dirname + "/html/login.html")
 });
+
 app.get('/logout', function(req, res){
 	res.send('LOGOUT PAGE')
 });
 
 app.get('/css/style.css', function(req, res){
 	res.writeHead(200,{'Content-type' : 'text/css'});
-        var fileContents = fs.readFileSync('css/style.css', {encoding: 'utf8'});
+        let fileContents = fs.readFileSync('css/style.css', {encoding: 'utf8'});
         res.write(fileContents);
         res.end();
+});
+
+app.get('/img/:path', function(req, res){
+	let filePath = path.join( 'img/' + path);
+	let fileContents = fs.readFileSync(filePath, {encoding: 'utf8'});
+	res.write(fileContents)
+	res.end()
 });
 
 /** Handling HTTP POST request
