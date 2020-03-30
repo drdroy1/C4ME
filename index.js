@@ -17,7 +17,7 @@ const TWO_HOURS = 100 * 60 * 60 * 2;
  *  setting up mongo client for future connection
  *  audoIndex used to index each entry
  */
-const MongoClient = require('mongodb').MongoClient;
+const mongoClient = require('mongodb').MongoClient;
 const mongodb = "mongodb://localhost:27017/";
 const autoIndex = require('mongodb-autoincrement');
 
@@ -33,9 +33,9 @@ const redirectLogin = function(req, res, next){
 	}
 };
 
-const redirectHome = function(req, res, next){
-	if(!req.session.userId){
-		res.redirect('/');
+const redirectAdmin = function(req, res, next){
+	if(req.session.userId){
+		res.redirect('/admin');
 	}
 	else{
 		next();
@@ -64,23 +64,19 @@ app.use(session({
 /** Handling HTTP GET request
  *  @params
  */
-app.get('/', function(req, res){
+app.get('/', redirectAdmin, function(req, res){
 	res.sendFile(__dirname + '/html/index.html');
 });
 
-app.get('/', function(req,res){
-	res.sendFile(__dirname + '/html/ad.html');
-});
-
-app.get('/register',  function(req, res){
+app.get('/register', function(req, res){
 	res.sendFile(__dirname + '/html/register1.html');
 });
 
-app.get('/login',  function(req, res){
+app.get('/login', redirectAdmin, function(req, res){
 	res.sendFile(__dirname + '/html/login.html');
 });
 
-app.get('/admin', function(req, res){
+app.get('/admin', redirectLogin, function(req, res){
 	res.sendFile(__dirname + '/html/ad.html');
 });
 
@@ -120,7 +116,7 @@ app.post('/register', function(req, res){
 	let lName = req.body.lastName;
 	let userType = req.body.userType;
 	let msg = '';
-	MongoClient.connect(mongodb, function(err, db){
+	mongoClient.connect(mongodb, function(err, db){
 		if (err) throw err;
 		let currentDB = db.db('c4me')
 		currentDB.collection('account').findOne({username: username}, function(err, result){
@@ -145,7 +141,7 @@ app.post('/login', function(req, res){
 	let username = req.body.username;
 	let password = req.body.password;
 	let msg = '';
-	MongoClient.connect(mongodb, function(err, db){
+	mongoClient.connect(mongodb, function(err, db){
 		if (err) throw err;
 		console.log('Connected to MongoDB');
 		let currentDB = db.db('c4me');
