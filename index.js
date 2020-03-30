@@ -84,8 +84,9 @@ app.get('/css/style.css', function(req, res){
 });
 
 app.get('/img/:path', function(req, res){
-	let filePath = path.join( 'img/' + path);
-	let fileContents = fs.readFileSync(filePath, {encoding: 'utf8'});
+	let filePath = path.join( 'img/' + req.params.path);
+	console.log(filePath)
+	let fileContents = fs.readFileSync(filePath);
 	res.write(fileContents)
 	res.end()
 });
