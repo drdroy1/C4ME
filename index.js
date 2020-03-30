@@ -83,7 +83,7 @@ app.get('/admin', redirectLogin, function(req, res){
 app.get('/logout', function(req, res){
 	console.log(req.session);
 	if(req.session != null){
-		MongoClient.connect(mongodb, function(err, db){
+		mongoClient.connect(mongodb, function(err, db){
 			req.session.destroy();
 			res.redirect('/login');
 		});
