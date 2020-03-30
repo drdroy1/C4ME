@@ -111,7 +111,7 @@ app.post('/register', function(req, res){
 				res.redirect('/login');
 			}
 			else{
-				let newUser = { username: username, password: password, fName: fName, lName: lName, };
+				let newUser = { username: username, password: password, fName: fName, lName: lName, userType: userType};
 				currentDB.collection('account').insertOne(newUser, function(err, result){
 					if (err) throw err;
 					res.redirect('/login');	
