@@ -94,6 +94,30 @@ app.get('/img/:path', function(req, res){
  *
  */
 
+app.post('/register', function(req, res){
+	let username = req.body.username;
+	let password = req.body.password;
+	let msg = '';
+	MongoClient.connect(mongodb, function(err, db){
+		if (err) throw err;
+		let currentDB = db.db('c4me')
+		currentDB.collection('account').findOne({username: username}, function(err, result){
+			if(result === null){
+				console.log("Someone with that username already exists");
+				msg = 'Already Registerd. Please Login';
+				res.redirect('/login');
+			}
+			else{
+				let newUser = { username: username, password: password};
+				currentDB.collection('account').insertOne(newUser, function(err, result){
+					if (err) throw err;
+					res.redirect('/login');	
+				});
+			}
+		});
+	});
+});
+
 app.post('/login', redirectHome, function(req, res){
 	let username = req.body.username;
 	let password = req.body.password;
@@ -114,7 +138,6 @@ app.post('/login', redirectHome, function(req, res){
 				console.log('User Found');
 				if(result.password === password){
 					req.session.userId = result.username;
-					msg = '';
 					if(result.authorized){
 						res.redirect('/admin');
 					}
