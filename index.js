@@ -97,13 +97,37 @@ app.get('/img/:path', function(req, res){
 app.post('/login', redirectHome, function(req, res){
 	let username = req.body.username;
 	let password = req.body.password;
-	console.log(username + " logging in with pw " + password);
+	let msg = '';
 	MongoClient.connect(mongodb, function(err, db){
 		if (err) throw err;
-		console.log("Connected to Mongo");
+		console.log("Connected to MongoDB");
 		let currentDB = db.db("c4me");
 		currentDB.collection("account").findOne({username:username}, function(err, result){
 			if (err) throw err;
+			console.log("retrieving login info");
+			if(result === null){
+				console.log('User Not Found');
+				msg = 'User Not Found';
+				res.redirect('/login');
+			}
+			else{
+				console.log('User Found');
+				if(result.password === password){
+					req.session.userId = result.username;
+					msg = '';
+					if(result.authorized){
+						res.redirect('/admin');
+					}
+					else{
+						res.redirect('/student');
+					}
+				}
+				else{
+					console.log('Incorrect Password');
+					msg = 'Invalid Username/Password';
+					res.redirect('/login');
+				}
+			}
 		});
 	});
 });
