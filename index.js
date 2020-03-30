@@ -12,8 +12,8 @@ const app = express();
  *  setting up mongo client for future connection
  *  audoIndex used to index each entry
  */
-const mongoClient = require('mongodb').MongoClient;
-const mongo = "mongodb://localhost:27017/";
+const MongoClient = require('mongodb').MongoClient;
+const mongodb = "mongodb://localhost:27017/";
 const autoIndex = require('mongodb-autoincrement');
 
 /** additional functions
@@ -121,7 +121,7 @@ app.post('/register', function(req, res){
 	});
 });
 
-app.post('/login', redirectHome, function(req, res){
+app.post('/signin', function(req, res){
 	let username = req.body.username;
 	let password = req.body.password;
 	let msg = '';
