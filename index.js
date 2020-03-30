@@ -8,12 +8,17 @@ const fs = require('fs');
 const path = require('path');
 const app = express();
 
+/** constants
+ *
+ */
+const TWO_HOURS = 100 * 60 * 60 * 2;
+
 /** import mongodb module
  *  setting up mongo client for future connection
  *  audoIndex used to index each entry
  */
 const mongoClient = require('mongodb').MongoClient;
-const mongo = "mongodb://localhost:27017/";
+const mongodb = "mongodb://localhost:27017/";
 const autoIndex = require('mongodb-autoincrement');
 
 /** additional functions
@@ -28,9 +33,9 @@ const redirectLogin = function(req, res, next){
 	}
 };
 
-const redirectHome = function(req, res, next){
-	if(!req.session.userId){
-		res.redirect('');
+const redirectAdmin = function(req, res, next){
+	if(req.session.userId){
+		res.redirect('/admin');
 	}
 	else{
 		next();
@@ -59,7 +64,7 @@ app.use(session({
 /** Handling HTTP GET request
  *  @params
  */
-app.get('/', function(req, res){
+app.get('/', redirectAdmin, function(req, res){
 	res.sendFile(__dirname + '/html/index.html');
 });
 
@@ -67,12 +72,22 @@ app.get('/register', function(req, res){
 	res.sendFile(__dirname + '/html/register1.html');
 });
 
-app.get('/login', function(req, res){
-	res.sendFile(__dirname + '/html/login.html')
+app.get('/login', redirectAdmin, function(req, res){
+	res.sendFile(__dirname + '/html/login.html');
+});
+
+app.get('/admin', redirectLogin, function(req, res){
+	res.sendFile(__dirname + '/html/ad.html');
 });
 
 app.get('/logout', function(req, res){
-	res.send('LOGOUT PAGE')
+	console.log(req.session);
+	if(req.session != null){
+		MongoClient.connect(mongodb, function(err, db){
+			req.session.destroy();
+			res.redirect('/login');
+		});
+	}
 });
 
 app.get('/css/style.css', function(req, res){
@@ -101,19 +116,20 @@ app.post('/register', function(req, res){
 	let lName = req.body.lastName;
 	let userType = req.body.userType;
 	let msg = '';
-	MongoClient.connect(mongodb, function(err, db){
+	mongoClient.connect(mongodb, function(err, db){
 		if (err) throw err;
 		let currentDB = db.db('c4me')
 		currentDB.collection('account').findOne({username: username}, function(err, result){
-			if(result === null){
+			if(result != null){
 				console.log("Someone with that username already exists");
 				msg = 'Already Registerd. Please Login';
-				res.redirect('/login');
+				res.redirect('/register');
 			}
 			else{
 				let newUser = { username: username, password: password, fName: fName, lName: lName, userType: userType};
 				currentDB.collection('account').insertOne(newUser, function(err, result){
 					if (err) throw err;
+					console.log(newUser)
 					res.redirect('/login');	
 				});
 			}
@@ -121,11 +137,11 @@ app.post('/register', function(req, res){
 	});
 });
 
-app.post('/login', redirectHome, function(req, res){
+app.post('/login', function(req, res){
 	let username = req.body.username;
 	let password = req.body.password;
 	let msg = '';
-	MongoClient.connect(mongodb, function(err, db){
+	mongoClient.connect(mongodb, function(err, db){
 		if (err) throw err;
 		console.log('Connected to MongoDB');
 		let currentDB = db.db('c4me');
@@ -141,7 +157,7 @@ app.post('/login', redirectHome, function(req, res){
 				console.log('User Found');
 				if(result.password === password){
 					req.session.userId = result.username;
-					if(result.authorized){
+					if(result.userType){
 						res.redirect('/admin');
 					}
 					else{
