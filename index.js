@@ -68,8 +68,7 @@ app.get('/register', function(req, res){
 });
 
 app.get('/login', function(req, res){
-	res.send('Waiting for a login page');
-	//res.sendFile(__dirname + "/html/login.html")
+	res.sendFile(__dirname + "/html/login.html")
 });
 
 app.get('/logout', function(req, res){
@@ -98,6 +97,7 @@ app.get('/img/:path', function(req, res){
 app.post('/login', redirectHome, function(req, res){
 	let username = req.body.username;
 	let password = req.body.password;
+	console.log(username + " logging in with pw " + password);
 	MongoClient.connect(mongodb, function(err, db){
 		if (err) throw err;
 		console.log("Connected to Mongo");
