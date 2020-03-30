@@ -14,7 +14,7 @@ const app = express();
  */
 const mongoClient = require('mongodb').MongoClient;
 const mongo = "mongodb://localhost:27017/";
-const autoIndex = require("mongodb-autoincrement");
+const autoIndex = require('mongodb-autoincrement');
 
 /** additional functions
  *  redirect login and home page
@@ -60,7 +60,7 @@ app.use(session({
  *  @params
  */
 app.get('/', function(req, res){
-	res.sendFile(__dirname + "/html/index.html");
+	res.sendFile(__dirname + '/html/index.html');
 });
 
 app.get('/register', function(req, res){
@@ -68,7 +68,7 @@ app.get('/register', function(req, res){
 });
 
 app.get('/login', function(req, res){
-	res.sendFile(__dirname + "/html/login.html")
+	res.sendFile(__dirname + '/html/login.html')
 });
 
 app.get('/logout', function(req, res){
@@ -100,11 +100,11 @@ app.post('/login', redirectHome, function(req, res){
 	let msg = '';
 	MongoClient.connect(mongodb, function(err, db){
 		if (err) throw err;
-		console.log("Connected to MongoDB");
-		let currentDB = db.db("c4me");
-		currentDB.collection("account").findOne({username:username}, function(err, result){
+		console.log('Connected to MongoDB');
+		let currentDB = db.db('c4me');
+		currentDB.collection('account').findOne({username:username}, function(err, result){
 			if (err) throw err;
-			console.log("retrieving login info");
+			console.log('retrieving login info');
 			if(result === null){
 				console.log('User Not Found');
 				msg = 'User Not Found';
