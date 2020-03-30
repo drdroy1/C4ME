@@ -23,6 +23,15 @@ a:hover{
     overflow: hidden;
 }
 
+.container .redirectButton{
+    font-size: 100%;
+    font-family: inherit;
+    background-color: white;
+    border:1px solid black;
+    border-radius: 10px;
+    padding: 15px;
+}
+
 /* Header + Nav*/
 header{
     background: #FFFFFF;
@@ -130,22 +139,15 @@ header nav {
     width: 500px;
 }
 
-#pageName button{
-    font-size: 100%;
-    font-family: inherit;
-    background-color: white;
-    border:1px solid black;
-    border-radius: 10px;
-    padding: 15px;
-}
 
-/*Boxes for Homepage*/
-#boxes{
+
+/*Information for Homepage*/
+#indexInfo{
     margin-top: 50px;
     text-align: center;
 }
 
-#boxes .box{
+#indexInfo .box{
     width: 35%;
     display: inline-block;
     padding: 10px;
@@ -154,12 +156,12 @@ header nav {
     background-color:white;
 }
 
-#boxes .box h3{
+#indexInfo .box h3{
     text-align: center;
     border-bottom: 3px solid black;
 }
 
-#boxes .box p{
+#indexInfo .box p{
     text-align: left;
 }
 
@@ -184,4 +186,28 @@ header nav {
     width: 35%;
     padding: 10px;
     margin: 25px;
+}
+
+/*Confirmation Page Box*/
+#confirmationInfo{
+    text-align: center;
+}
+
+#confirmationInfo h2{
+    text-align: left;
+}
+
+#confirmationInfo .box{
+    width: 35%;
+    display: inline-block;
+    padding: 10px; 
+    margin: 25px;
+}
+
+#confirmationInfo .box h3{
+    text-align: center;
+}
+
+#confirmationInfo .box p{
+    text-align: left;
 }
