@@ -9,10 +9,6 @@ function redirectSearch() {
     location.href = "searchForColleges.html";
 }
 
-function redirectSearch() {
+function redirectLogin() {
     location.href = "login.html";
-}
-
-function redirectRegister2() {
-    location.href = "register2.html";
 }
