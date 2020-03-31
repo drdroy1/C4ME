@@ -21,6 +21,7 @@ with open('tmp/data.csv', 'r') as csvfile:
 	
 		thisdict['unitId'] = nlist[0]
 		thisdict['college'] = nlist[3]
+		thisdict['ad_rate'] = nlist[37]
 		thisdict['city'] = nlist[4]
 		thisdict['zip'] = nlist[6]
 		thisdict['cost'] = nlist[316]
