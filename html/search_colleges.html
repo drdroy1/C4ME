@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content="Helps high school students decide where to apply for college" />
+    <meta name="keywords" content="" />
+    <meta name="author" content="Andrew Cao, Qihong Jiang, Maggie Zhou" />
+    <title>C4me | Student</title>
+    <link rel="stylesheet" href="../css/style.css" />
+</head>
+
+<body>
+    <header>
+        <div class=container>
+            <div class=brand>
+                <img src="../img/c4me_logo_(transparent).png" alt="Logo">
+            </div>
+            <h1>| Student</h1>
+            <nav>
+                <ul>
+                    <li><a href="/messages">Messages</a></li>
+                    <li><a href="/logout">Log Out</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section id="pageName">
+        <div class="container">
+            <h1>College Search</h1>
+        </div>
+    </section>
+
+    <section id="filters">
+        <div class="container">
+            <form method='post' action='/search' id="collegeFilters">
+                <div class="btn-group">
+                    <label for="lax"> Lax </label>
+                    <input type="radio" id="lax" name="type" checked>
+                    <label for="strict">Strict</label>
+                    <input type="radio" id="strict" name="type">
+                </div>
+
+                <label for="collegeName">College Name</label><br>
+                <input type="text" id="collegeName" name="collegeName" placeholder=" Enter College Name"><br><br>
+
+                <label for="admissionRate">Admission Rate</label><br>
+                <input type="range" min="0" max="100" value="100" class="slider" id="admissionRate"
+                    name="admissionRate">
+                <br><br>
+
+                <output for="admissionRate" onforminput="value = admissionRate.valueAsNumber;"></output>
+
+                <label for="cost">Cost</label><br>
+                <input type="range" min="0" max="100000" value="100000" class="slider" id="cost" name="cost"></i>
+                <br><br>
+
+                <label for="location">Location</label><br>
+                <input list="location" type="text" name="loc">
+                <datalist id="location">
+                    <option value="Northeast"></option>
+                    <option value="Midwest"></option>
+                    <option value="South"></option>
+                    <option value="West"></option>
+                </datalist>
+
+                <br><br>
+
+                <label for="major">Major(s)</label><br>
+                <input list="major" type="text" name="m1">
+                <datalist id="major">
+                    <option value="Mathematics"></option>
+                    <option value="Computer Science"></option>
+                    <option value="Chemistry"></option>
+                    <option value="Biology"></option>
+                    <option value="Education"></option>
+                    <option value="English"></option>
+                    <option value="Philosophy"></option>
+                    <option value="Psychology"></option>
+                    <option value="Engineering"></option>
+                    <option value="Music"></option>
+                </datalist>
+
+                <input list="major" type="text" name="m2">
+
+                <br><br>
+
+                <label for="rank">Rank</label><br>
+                <input type="range" min="0" max="1000" value="0" class="slider" id="rank" name="rank"></i>
+                <br><br>
+
+                <label for="size">Size</label><br>
+                <input type="range" min="0" max="100000" value="0" class="slider" id="size" name="size"></i>
+                <br><br>
+
+                <table>
+                    <tr>
+                        <th><label for="math">SAT Math</label></th>
+                        <th><label for="reading">SAT EBRW</label></th>
+                        <th><label for="act">ACT Composite</label></th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input list="math" type="text" name="math">
+                            <datalist id="math">
+                                <option value="0-100"></option>
+                                <option value="101-200"></option>
+                                <option value="201-300"></option>
+                                <option value="301-400"></option>
+                                <option value="401-500"></option>
+                                <option value="501-600"></option>
+                                <option value="601-700"></option>
+                                <option value="701-800"></option>
+                            </datalist>
+                        </td>
+                        <td>
+                            <input list="reading" type="text" name="reading">
+                            <datalist id="reading">
+                                <option value="0-100"></option>
+                                <option value="101-200"></option>
+                                <option value="201-300"></option>
+                                <option value="301-400"></option>
+                                <option value="401-500"></option>
+                                <option value="501-600"></option>
+                                <option value="601-700"></option>
+                                <option value="701-800"></option>
+                            </datalist>
+                        </td>
+                        <td>
+                            <input list="act" type="text" name="act">
+                            <datalist id="act">
+                                <option value="1-4"></option>
+                                <option value="5-8"></option>
+                                <option value="9-12"></option>
+                                <option value="13-16"></option>
+                                <option value="17-20"></option>
+                                <option value="21-24"></option>
+                                <option value="25-28"></option>
+                                <option value="29-32"></option>
+                                <option value="33-36"></option>
+                            </datalist>
+                        </td>
+                    </tr>
+                </table>
+
+                <input type="submit" id="searchBtn" value="Search" style="text-align: center;">
+            </form>
+        </div>
+    </section>
+
+
+</body>
+
+</html>
