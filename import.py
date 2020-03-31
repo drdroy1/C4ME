@@ -26,8 +26,8 @@ with open('tmp/data.csv', 'r') as csvfile:
 		thisdict['cost'] = nlist[316]
 		thisdict['gRate'] = nlist[387]
 		thisdict['act_e'] = nlist[57]
-		thisdict['act_f'] = nlist[58]  
-		thisdict['act_g'] = nlist[59]
+		thisdict['act_m'] = nlist[58]  
+		thisdict['act_w'] = nlist[59]
 		thisdict['sat_avg'] = nlist[60]  			
 		
 		thisdict['sat_25_R'] = nlist[39]
