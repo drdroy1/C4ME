@@ -207,3 +207,17 @@ header nav {
 #confirmationInfo .box p{
     text-align: left;
 }
+
+.table{
+    overflow-y:auto;
+}
+
+.bottomButtons{
+    text-align: center;
+}
+
+.bottomButtons .modifiButtons{
+    width: 12%;
+    margin: 10px;
+    padding: 5px;
+}
