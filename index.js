@@ -24,20 +24,20 @@ const autoIndex = require('mongodb-autoincrement');
 /** additional functions
  *  redirect login and home page
  */
-const redirectLogin = function(req, res, next){
-	if(!req.session.userId){
+const redirectLogin = function (req, res, next) {
+	if (!req.session.userId) {
 		res.redirect('/login');
 	}
-	else{
+	else {
 		next();
 	}
 };
 
-const redirectAdmin = function(req, res, next){
-	if(req.session.userId){
+const redirectAdmin = function (req, res, next) {
+	if (req.session.userId) {
 		res.redirect('/admin');
 	}
-	else{
+	else {
 		next();
 	}
 };
@@ -45,7 +45,7 @@ const redirectAdmin = function(req, res, next){
 /** additional functionality to app
  *  app.use()
  */
-app.use(bodyParser.urlencoded({ extended:true }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static('css'));
 app.use(express.static('img'));
@@ -55,7 +55,7 @@ app.use(session({
 	resave: false,
 	saveUninitialized: false,
 	secret: 'key',
-	cookie:{
+	cookie: {
 		sameSite: true,
 		secure: false
 	}
@@ -64,45 +64,41 @@ app.use(session({
 /** Handling HTTP GET request
  *  @params
  */
-app.get('/', redirectAdmin, function(req, res){
+app.get('/', redirectAdmin, function (req, res) {
 	res.sendFile(__dirname + '/html/index.html');
 });
 
-app.get('/register', function(req, res){
+app.get('/register', function (req, res) {
 	res.sendFile(__dirname + '/html/register1.html');
 });
 
-app.get('/login', redirectAdmin, function(req, res){
+app.get('/login', redirectAdmin, function (req, res) {
 	res.sendFile(__dirname + '/html/login.html');
 });
 
-app.get('/admin', redirectLogin, function(req, res){
-<<<<<<< HEAD
+app.get('/admin', redirectLogin, function (req, res) {
 	res.sendFile(__dirname + '/html/admin_index.html');
-=======
-	res.sendFile(__dirname + '/html/ad.html');
->>>>>>> fc98279e7805ca9717ac398caf10b50d253136ec
 });
 
-app.get('/logout', function(req, res){
+app.get('/logout', function (req, res) {
 	console.log(req.session);
-	if(req.session != null){
-		mongoClient.connect(mongodb, function(err, db){
+	if (req.session != null) {
+		mongoClient.connect(mongodb, function (err, db) {
 			req.session.destroy();
 			res.redirect('/login');
 		});
 	}
 });
 
-app.get('/css/style.css', function(req, res){
-	res.writeHead(200,{'Content-type' : 'text/css'});
-        let fileContents = fs.readFileSync('css/style.css', {encoding: 'utf8'});
-        res.write(fileContents);
-        res.end();
+app.get('/css/style.css', function (req, res) {
+	res.writeHead(200, { 'Content-type': 'text/css' });
+	let fileContents = fs.readFileSync('css/style.css', { encoding: 'utf8' });
+	res.write(fileContents);
+	res.end();
 });
 
-app.get('/img/:path', function(req, res){
-	let filePath = path.join( 'img/' + req.params.path);
+app.get('/img/:path', function (req, res) {
+	let filePath = path.join('img/' + req.params.path);
 	console.log(filePath)
 	let fileContents = fs.readFileSync(filePath);
 	res.write(fileContents)
@@ -113,62 +109,62 @@ app.get('/img/:path', function(req, res){
  *
  */
 
-app.post('/register', function(req, res){
+app.post('/register', function (req, res) {
 	let username = req.body.username;
 	let password = req.body.password;
 	let fName = req.body.firstName;
 	let lName = req.body.lastName;
 	let userType = req.body.userType;
 	let msg = '';
-	mongoClient.connect(mongodb, function(err, db){
+	mongoClient.connect(mongodb, function (err, db) {
 		if (err) throw err;
 		let currentDB = db.db('c4me')
-		currentDB.collection('account').findOne({username: username}, function(err, result){
-			if(result != null){
+		currentDB.collection('account').findOne({ username: username }, function (err, result) {
+			if (result != null) {
 				console.log("Someone with that username already exists");
 				msg = 'Already Registerd. Please Login';
 				res.redirect('/register');
 			}
-			else{
-				let newUser = { username: username, password: password, fName: fName, lName: lName, userType: userType};
-				currentDB.collection('account').insertOne(newUser, function(err, result){
+			else {
+				let newUser = { username: username, password: password, fName: fName, lName: lName, userType: userType };
+				currentDB.collection('account').insertOne(newUser, function (err, result) {
 					if (err) throw err;
 					console.log(newUser)
-					res.redirect('/login');	
+					res.redirect('/login');
 				});
 			}
 		});
 	});
 });
 
-app.post('/login', function(req, res){
+app.post('/login', function (req, res) {
 	let username = req.body.username;
 	let password = req.body.password;
 	let msg = '';
-	mongoClient.connect(mongodb, function(err, db){
+	mongoClient.connect(mongodb, function (err, db) {
 		if (err) throw err;
 		console.log('Connected to MongoDB');
 		let currentDB = db.db('c4me');
-		currentDB.collection('account').findOne({username:username}, function(err, result){
+		currentDB.collection('account').findOne({ username: username }, function (err, result) {
 			if (err) throw err;
 			console.log('retrieving login info');
-			if(result === null){
+			if (result === null) {
 				console.log('User Not Found');
 				msg = 'User Not Found';
 				res.redirect('/login');
 			}
-			else{
+			else {
 				console.log('User Found');
-				if(result.password === password){
+				if (result.password === password) {
 					req.session.userId = result.username;
-					if(result.userType){
+					if (result.userType) {
 						res.redirect('/admin');
 					}
-					else{
+					else {
 						res.redirect('/student');
 					}
 				}
-				else{
+				else {
 					console.log('Incorrect Password');
 					msg = 'Invalid Username/Password';
 					res.redirect('/login');
