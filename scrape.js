@@ -7,13 +7,9 @@ const fs = require('fs');
 // scraping collegedata.com
 const cd_base_url = 'http://www.collegedata.com/';
 
-fs.readFile('./tmp/colleges.txt', (err, data) => {
-	if(err) {
-		console.error(err);
-		return
-	}
-	console.log(data);
-})
+let f = fs.readFileSync('./tmp/colleges.txt', {encoding: 'utf8'});
+flines = f.split('\n');
+
 
 async function scrape(cname){
 var college = {
