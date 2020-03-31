@@ -16,10 +16,23 @@ app.get('/search', function(req, res){
 });
 
 app.post('/search', function(req, res) {
+	let cname = req.body.collegeName;
+	let adminRate = req.body.admimissionRate;
+	let cost = req.body.cost;
+	let loc = req.body.loc;
+	let size = req.body.size;
+	let m1 = req.body.m1;
+	let m2 = req.body.m2;
 	
+	let query = {cname: cname, size: { $gte: size }, admission:{percent:{$gte:adminRate}}}
+
 	mongoClient.connect(mongodb, function (err, db) {
 		if (err) throw err;
-		
+		let currentDB = db.db('c4me');
+		currentDB.collection('college').find(query).toArray(function(err, result){
+			if (err) throw err;
+			console.log(result)
+		});
 	});
 });
 
