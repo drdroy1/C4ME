@@ -3,6 +3,8 @@ const bodyParser = require('body-parser');
 const axios = require('axios');
 const cheerio = require('cheerio');
 const fs = require('fs');
+const mongoClient = require('mongodb').MongoClient;
+const mongodb = "mongodb://localhost:27017/";
 
 const cd_base_url = 'http://www.collegedata.com/';
 
@@ -16,7 +18,7 @@ app.get('', function(req, res){
 	fsize = flines.length;
 	for(i=0; i<fsize; ++i) {
 		scrape(flines[i]);
-		console.log(flines[i]);
+		//console.log(flines[i]);
 	}
 	//scrape('Stony Brook University');
 
@@ -60,7 +62,8 @@ async function scrape(cname){
 		}
 	}
 
-	college.name = cname;
+	college.name = cname.replace(/\r/g, '');
+	console.log(college.name);
 	c = cname.replace(/ /g, '\-');
 	const fetch_data = async function(){
 	        //let result = await axios.get('http://allv22.all.cs.stonybrook.edu/~stoller/cse416/collegedata/Stony-Brook-University/');
@@ -127,6 +130,24 @@ async function scrape(cname){
 	const $1 = cheerio.load(rresult.data);
 	*/
 	//console.log($1('tr').find('a:contains("'+cname+'")').parent('td.name.namesearch').siblings('td.rank.sorting_1.sorting_2').html());
+	mongoClient.connect(mongodb, function(err, db){
+		if (err) throw err;
+		console.log('Connected to MongoDB');
+		let currentDB = db.db('c4me');
+		currentDB.collection('college').findOne({name:cname}, function(err, result) {
+			if(result != null) {
+				currentDB.collection('college').updateOne({name:cname}, {$set:college}, function(err, result){
+					if (err) throw err;
+					console.log('Found+Update '+result);
+				});
+			} else {
+				currentDB.collection('college').insertOne(college, function(err, result){
+					if (err) throw err;
+					console.log('New '+result);
+				});
+			}
+		});
+	});
 }
 
 function parseTestscores(str) {
