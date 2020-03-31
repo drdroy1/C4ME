@@ -17,7 +17,10 @@
   },
   "homepage": "https://github.com/qihongjiang/CSE-416#readme",
   "dependencies": {
+<<<<<<< HEAD
     "csv-parser": "^2.3.2",
+=======
+>>>>>>> fc98279e7805ca9717ac398caf10b50d253136ec
     "ejs": "^3.0.1",
     "express": "^4.17.1",
     "express-session": "^1.17.0",
