@@ -77,11 +77,7 @@ app.get('/login', redirectAdmin, function(req, res){
 });
 
 app.get('/admin', redirectLogin, function(req, res){
-<<<<<<< HEAD
 	res.sendFile(__dirname + '/html/admin_index.html');
-=======
-	res.sendFile(__dirname + '/html/ad.html');
->>>>>>> fc98279e7805ca9717ac398caf10b50d253136ec
 });
 
 app.get('/logout', function(req, res){
