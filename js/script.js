@@ -8,9 +8,3 @@ function closeNav() {
 function redirectSearch() {
     location.href = "searchForColleges.html";
 }
-
-
-
-function redirectLogin() {
-    location.href = "login.html";
-}

@@ -27,6 +27,16 @@
         </div>
     </header>
 
+    <div class="openbtn" onClick="openNav()">&equiv;</div>
+
+    <section id="sideNav">
+        <div class="closebtn" onClick="closeNav()">&equiv;</div>
+        <h1> Name </h1>
+        <a href="#">Profile</a>
+        <a href="#" style="background-color:white">Search for Colleges</a>
+        <a href="#">Search Similar High Schools</a>
+    </section>
+
     <section id="pageName">
         <div class="container">
             <h1>College Search</h1>
@@ -103,7 +113,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <input list="math" type="text" name="math">
+                            <input list="values" type="text" name="math">
                             <datalist id="math">
                                 <option value="0-100"></option>
                                 <option value="101-200"></option>
@@ -116,17 +126,7 @@
                             </datalist>
                         </td>
                         <td>
-                            <input list="reading" type="text" name="reading">
-                            <datalist id="reading">
-                                <option value="0-100"></option>
-                                <option value="101-200"></option>
-                                <option value="201-300"></option>
-                                <option value="301-400"></option>
-                                <option value="401-500"></option>
-                                <option value="501-600"></option>
-                                <option value="601-700"></option>
-                                <option value="701-800"></option>
-                            </datalist>
+                            <input list="values" type="text" name="reading">
                         </td>
                         <td>
                             <input list="act" type="text" name="act">
@@ -149,8 +149,8 @@
             </form>
         </div>
     </section>
-
-
 </body>
+
+<script src="../js/script.js"></script>
 
 </html>

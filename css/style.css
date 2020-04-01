@@ -226,6 +226,7 @@ header nav {
     float:right;
 }
 
+/*Styling for Filters Page of Students*/
 .slider{
     width: 98%; /* Full-width */
     height: 25px; /* Specified height */
@@ -238,3 +239,4 @@ header nav {
     margin-top:30px;
     padding: 10px 10px 10px 10px;
 }
+
