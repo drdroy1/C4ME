@@ -240,3 +240,6 @@ header nav {
     padding: 10px 10px 10px 10px;
 }
 
+#filters th {
+    font-weight: lighter;
+}
