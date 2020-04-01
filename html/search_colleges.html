@@ -59,9 +59,8 @@
                 <label for="admissionRate">Admission Rate</label><br>
                 <input type="range" min="0" max="1" value="1" step="0.01" class="slider" id="admissionRate"
                     name="admissionRate">
+                <p>Admission Rate: <span id="admissionResult"></span></p>
                 <br>
-
-                <output for="admissionRate" onforminput="value = admissionRate.valueAsNumber;"></output>
 
                 <label for="cost">Cost</label><br>
                 <input list="cost" type="text" name="cost">
@@ -108,11 +107,13 @@
                 <br><br>
 
                 <label for="rank">Rank</label><br>
-                <input type="range" min="0" max="1000" value="0" class="slider" id="rank" name="rank"></i>
+                <input type="range" min="0" max="1000" value="0" step="50" class="slider" id="rank" name="rank"></i>
+                <p>Rank: <span id="rankResult"></span></p>
                 <br><br>
 
                 <label for="size">Size</label><br>
-                <input type="range" min="0" max="100000" value="0" class="slider" id="size" name="size"></i>
+                <input type="range" min="0" max="100000" value="0" step="1000" class="slider" id="size" name="size"></i>
+                <p>Size: <span id="sizeResult"></span></p>
                 <br><br>
 
                 <table>
