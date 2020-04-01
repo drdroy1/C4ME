@@ -70,25 +70,25 @@ app.post('', function(req, res) {
 					let count = 0
 					if(loc === 'Northeast'){
 						if(northeast.includes(locationList[1])){
-							console.log(val.name)	
+							console.log(val)	
 						}
 						count = count + 1
 					}
 					if(loc === 'Midwest'){
 						if(midwest.includes(locationList[1])){
-                                                        console.log(val.name)   
+                                                        console.log(val)   
                                                 }
                                                 count = count + 1
 					}
 					if(loc === 'South'){
 						if(south.includes(locationList[1])){
-                                                        console.log(val.name)   
+                                                        console.log(val)   
                                                 }
                                                 count = count + 1
 					}
 					if(loc === 'West'){
 						if(west.includes(locationList[1])){
-                                                        console.log(val.name)   
+                                                        console.log(val)   
                                                 }
                                                 count = count + 1
 					}

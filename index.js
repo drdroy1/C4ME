@@ -49,6 +49,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static('css'));
 app.use(express.static('img'));
+app.use(express.static('js'));
 
 app.use(session({
 	name: 'sid',
@@ -123,7 +124,7 @@ app.post('/register', function (req, res) {
 			if (result != null) {
 				console.log("Someone with that username already exists");
 				msg = 'Already Registerd. Please Login';
-				res.redirect('/register');
+				res.redirect('/login');
 			}
 			else {
 				let newUser = { username: username, password: password, fName: fName, lName: lName, userType: userType };
