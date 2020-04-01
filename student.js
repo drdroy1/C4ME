@@ -27,19 +27,72 @@ app.post('', function(req, res) {
 	let size = parseInt(req.body.size, 10);
 	let m1 = req.body.m1;
 	let m2 = req.body.m2;
-	
+	let query =  {size: {$gte: size}}
 	//let query = {name: cname, size: { $gte: size }, admission:{percent:{$gte:adminRate}}}	
-	let query = {name:cname, size : {$gte: size}}
-	console.log('query: ' + JSON.stringify(query))
 	
+	if(cname !== ''){
+		query.name = cname;
+	}
+	
+	if(loc === ''){
+		loc = 'Northeast';
+	}
+	
+	if(m1 === ''){
+		m1 = 'Computer Science'
+	}
+
+	console.log(loc);
+		
 	mongoClient.connect(mongodb, function (err, db) {
 		if (err) throw err;
 		let currentDB = db.db('c4me');
-		currentDB.collection('college').find(query).limit(30).toArray(function(err, result){
+		let resultArr = {};
+		currentDB.collection('college').find(query).toArray(function(err, result){
 			if (err) throw err;
 			if(result != null){
-				console.log(result[0].majors)
-				console.log(result[0].majors[0])
+				let resultArr = []
+				let count = 0
+				for( let val of result){
+					let arr = []
+					for( let v of val.majors){
+						arr = arr.concat(v.split('\n'))
+					}
+					val.majors = arr
+					if(arr.includes(m1)||arr.includes(m2)){
+						resultArr[count] = val
+						count = count + 1
+					}
+				}
+				for( let val of resultArr){
+					let locationInfo = val.location.replace(/ /g, '')
+					let locationList = locationInfo.split(',')
+					let count = 0
+					if(loc === 'Northeast'){
+						if(northeast.includes(locationList[1])){
+							console.log(val)	
+						}
+						count = count + 1
+					}
+					if(loc === 'Midwest'){
+						if(midwest.includes(locationList[1])){
+                                                        console.log(val)   
+                                                }
+                                                count = count + 1
+					}
+					if(loc === 'South'){
+						if(south.includes(locationList[1])){
+                                                        console.log(val)   
+                                                }
+                                                count = count + 1
+					}
+					if(loc === 'West'){
+						if(west.includes(locationList[1])){
+                                                        console.log(val)   
+                                                }
+                                                count = count + 1
+					}
+				}
 			}
 		});
 		res.end()
