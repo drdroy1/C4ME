@@ -33,7 +33,7 @@
         <div class="closebtn" onClick="closeNav()">&equiv;</div>
         <h1> Name </h1>
         <a href="#">Profile</a>
-        <a href="#" style="background-color:white">Search for Colleges</a>
+        <a href="search_colleges.html" style="background-color:white">Search for Colleges</a>
         <a href="#">Search Similar High Schools</a>
     </section>
 
@@ -57,8 +57,7 @@
                 <input type="text" id="collegeName" name="collegeName" placeholder=" Enter College Name"><br><br>
 
                 <label for="admissionRate">Admission Rate</label><br>
-                <input type="range" min="0" max="100" value="100" class="slider" id="admissionRate"
-                    name="admissionRate">
+                <input type="range" min="0" max="1" value="1" class="slider" id="admissionRate" name="admissionRate">
                 <br><br>
 
                 <output for="admissionRate" onforminput="value = admissionRate.valueAsNumber;"></output>
@@ -127,6 +126,16 @@
                         </td>
                         <td>
                             <input list="values" type="text" name="reading">
+                            <datalist id="reading">
+                                <option value="0-100"></option>
+                                <option value="101-200"></option>
+                                <option value="201-300"></option>
+                                <option value="301-400"></option>
+                                <option value="401-500"></option>
+                                <option value="501-600"></option>
+                                <option value="601-700"></option>
+                                <option value="701-800"></option>
+                            </datalist>
                         </td>
                         <td>
                             <input list="act" type="text" name="act">
