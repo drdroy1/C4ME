@@ -6,5 +6,5 @@ function closeNav() {
 }
 
 function redirectSearch() {
-    location.href = "searchForColleges.html";
+    location.href = "search_colleges.html";
 }
