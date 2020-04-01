@@ -21,7 +21,6 @@ app.get('', function(req, res){
 		//console.log(flines[i]);
 	}
 	//scrape('Stony Brook University');
-	console.log('Scraping all colleges in college.txt completed');
 
 	res.send('KO')
 	//res.sendFile(__dirname + "login.html");
@@ -148,7 +147,7 @@ async function scrape(cname){
 			} else {
 				currentDB.collection('college').insertOne(college, function(err, result){
 					if (err) throw err;
-					//console.log('New '+result);
+					console.log(result);
 				});
 			}
 		});
