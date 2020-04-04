@@ -91,8 +91,8 @@ app.get('/logout', function (req, res) {
 	}
 });
 
-app.get('/client_side_js/script.js', function(req, res){
-	let fileContents = fs.readFileSync('client_side_js/script.js', { encoding: 'utf8' });
+app.get('/js/script.js', function(req, res){
+	let fileContents = fs.readFileSync('js/script.js', { encoding: 'utf8' });
 	res.write(fileContents);
 	res.end()
 });
