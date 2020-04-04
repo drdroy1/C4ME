@@ -25,7 +25,10 @@
     "express-session": "^1.17.0",
     "fs": "0.0.1-security",
     "mongodb": "^3.5.5",
-    "mongodb-autoincrement": "^1.0.1"
+    "mongodb-autoincrement": "^1.0.1",
+    "mongoose": "^5.9.7",
+    "querystring": "^0.2.0",
+    "url": "^0.11.0"
   },
   "devDependencies": {}
 }

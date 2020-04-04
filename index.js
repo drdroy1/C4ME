@@ -3,7 +3,9 @@
  */
 const express = require('express');
 const session = require('express-session');
+const querystring = require('querystring');
 const bodyParser = require('body-parser');
+const url = require('url');
 const fs = require('fs');
 const path = require('path');
 const ejs = require('ejs');
@@ -73,15 +75,24 @@ app.use(session({
  *  @params
  */
 app.get('/', redirectAdmin, function (req, res) {
-	res.render('index.ejs', {error: msg});
+	res.render('index.ejs');
 });
 
 app.get('/register', function (req, res) {
-	res.render('register.ejs', {error: msg});
+	let err = req.query.error;
+	if( err == undefined){
+                err = {error: ''};
+        }
+	res.render('register.ejs', {error: err});
 });
 
 app.get('/login', redirectAdmin, function (req, res) {
-	res.render('login.ejs', {error: msg});
+	let err = req.query.error;
+	console.log(err);
+	if( err == undefined){
+		err = {error: ''};
+	}
+	res.render('login.ejs', {error: err});
 });
 
 app.get('/admin', redirectLogin, function (req, res) {
@@ -128,15 +139,17 @@ app.post('/register', function (req, res) {
 	let fName = req.body.firstName;
 	let lName = req.body.lastName;
 	let userType = req.body.userType;
-	
+	let redirectMsg = '';
+	let msg = '';
+
 	mongoClient.connect(mongodb, function (err, db) {
 		if (err) throw err;
 		let currentDB = db.db('c4me')
 		currentDB.collection('account').findOne({ username: username }, function (err, result) {
 			if (result != null) {
-				console.log("Someone with that username already exists");
 				msg = 'Already Registerd. Please Login';
-				res.redirect('/login');
+				redirectMsg = url.format({pathname: '/register', query: { error:msg}});
+				res.redirect(redirectMsg);
 			}
 			else {
 				let newUser = { username: username, password: password, fName: fName, lName: lName, userType: userType };
@@ -153,22 +166,20 @@ app.post('/register', function (req, res) {
 app.post('/login', function (req, res) {
 	let username = req.body.username;
 	let password = req.body.password;
-	
+	let redirectMsg = '';
+	let msg = '';
+
 	mongoClient.connect(mongodb, function (err, db) {
 		if (err) throw err;
-		console.log('Connected to MongoDB');
 		let currentDB = db.db('c4me');
 		currentDB.collection('account').findOne({ username: username }, function (err, result) {
 			if (err) throw err;
-			console.log('retrieving login info');
 			if (result === null) {
 				msg = 'User Not Found';
-				console.log('User Not Found with written msg: ' + msg);
-				msg = 'User Not Found';
-				res.redirect('/login');
+				redirectMsg = url.format({pathname: '/login', query: { error:msg}});
+				res.redirect(redirectMsg);
 			}
 			else {
-				console.log('User Found');
 				if (result.password === password) {
 					req.session.userId = result.username;
 					if (result.userType.toLowerCase() === 'administrator') {
@@ -179,9 +190,9 @@ app.post('/login', function (req, res) {
 					}
 				}
 				else {
-					console.log('Incorrect Password');
 					msg = 'Invalid Username/Password';
-					res.redirect('/login');
+					redirectMsg = url.format({pathname: '/login', query: { error:msg}});
+					res.redirect(redirectMsg);
 				}
 			}
 		});
