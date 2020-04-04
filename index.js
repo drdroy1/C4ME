@@ -82,8 +82,11 @@ app.get('/register', function (req, res) {
 	let err = req.query.error;
 	if( err == undefined){
                 err = {error: ''};
+		res.render('register.ejs', {error: ''});
         }
-	res.render('register.ejs', {error: err});
+	else{
+		res.render('register.ejs', {error: err});
+	}
 });
 
 app.get('/login', redirectAdmin, function (req, res) {
@@ -91,8 +94,11 @@ app.get('/login', redirectAdmin, function (req, res) {
 	console.log(err);
 	if( err == undefined){
 		err = {error: ''};
+		res.render('login.ejs', {error: ''});
 	}
-	res.render('login.ejs', {error: err});
+	else{
+		res.render('login.ejs', {error: err});
+	}
 });
 
 app.get('/admin', redirectLogin, function (req, res) {
