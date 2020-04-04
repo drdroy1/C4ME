@@ -6,7 +6,13 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const path = require('path');
+const ejs = require('ejs');
+
+/** initializing application
+ *  msg to be delivered to the client
+ */
 const app = express();
+var msg = ' ';
 
 /** constants
  *
@@ -47,6 +53,7 @@ const redirectAdmin = function (req, res, next) {
  */
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(express.static('views'));
 app.use(express.static('css'));
 app.use(express.static('img'));
 app.use(express.static('js'));
@@ -66,19 +73,24 @@ app.use(session({
  *  @params
  */
 app.get('/', redirectAdmin, function (req, res) {
-	res.sendFile(__dirname + '/html/index.html');
+	//res.sendFile(__dirname + '/html/index.html');
+	res.render('index.ejs', {error: msg});
 });
 
 app.get('/register', function (req, res) {
-	res.sendFile(__dirname + '/html/register1.html');
+	//res.sendFile(__dirname + '/html/register1.html');
+	res.render('register.ejs', {error: msg});
 });
 
 app.get('/login', redirectAdmin, function (req, res) {
-	res.sendFile(__dirname + '/html/login.html');
+	//res.sendFile(__dirname + '/html/login.html');
+	console.log('Messages: '+msg);
+	res.render('login.ejs', {error: msg});
 });
 
 app.get('/admin', redirectLogin, function (req, res) {
-	res.sendFile(__dirname + '/html/admin_index.html');
+	//res.sendFile(__dirname + '/html/admin_index.html');
+	res.render('admin_index.ejs');
 });
 
 app.get('/logout', function (req, res) {
@@ -106,7 +118,6 @@ app.get('/css/style.css', function (req, res) {
 
 app.get('/img/:path', function (req, res) {
 	let filePath = path.join('img/' + req.params.path);
-	console.log(filePath)
 	let fileContents = fs.readFileSync(filePath);
 	res.write(fileContents)
 	res.end()
@@ -156,7 +167,8 @@ app.post('/login', function (req, res) {
 			if (err) throw err;
 			console.log('retrieving login info');
 			if (result === null) {
-				console.log('User Not Found');
+				msg = 'User Not Found';
+				console.log('User Not Found with written msg: ' + msg);
 				msg = 'User Not Found';
 				res.redirect('/login');
 			}
@@ -164,7 +176,7 @@ app.post('/login', function (req, res) {
 				console.log('User Found');
 				if (result.password === password) {
 					req.session.userId = result.username;
-					if (result.userType) {
+					if (result.userType.toLowerCase() === 'administrator') {
 						res.redirect('/admin');
 					}
 					else {
