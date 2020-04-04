@@ -24,5 +24,6 @@
     "fs": "0.0.1-security",
     "mongodb": "^3.5.5",
     "mongodb-autoincrement": "^1.0.1"
-  }
+  },
+  "devDependencies": {}
 }
