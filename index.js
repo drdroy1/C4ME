@@ -1,5 +1,8 @@
 /** import modules 
  *  require should be replaced with import following google js coding convention
+ *  using express to initialize the app
+ *  bodyParser in parsing req body
+ *  fs reading in files, url formatting 
  */
 const express = require('express');
 const session = require('express-session');
@@ -14,7 +17,6 @@ const ejs = require('ejs');
  *  msg to be delivered to the client
  */
 const app = express();
-var msg = ' ';
 
 /** constants
  *
