@@ -73,23 +73,18 @@ app.use(session({
  *  @params
  */
 app.get('/', redirectAdmin, function (req, res) {
-	//res.sendFile(__dirname + '/html/index.html');
 	res.render('index.ejs', {error: msg});
 });
 
 app.get('/register', function (req, res) {
-	//res.sendFile(__dirname + '/html/register1.html');
 	res.render('register.ejs', {error: msg});
 });
 
 app.get('/login', redirectAdmin, function (req, res) {
-	//res.sendFile(__dirname + '/html/login.html');
-	console.log('Messages: '+msg);
 	res.render('login.ejs', {error: msg});
 });
 
 app.get('/admin', redirectLogin, function (req, res) {
-	//res.sendFile(__dirname + '/html/admin_index.html');
 	res.render('admin_index.ejs');
 });
 
@@ -133,7 +128,7 @@ app.post('/register', function (req, res) {
 	let fName = req.body.firstName;
 	let lName = req.body.lastName;
 	let userType = req.body.userType;
-	let msg = '';
+	
 	mongoClient.connect(mongodb, function (err, db) {
 		if (err) throw err;
 		let currentDB = db.db('c4me')
@@ -158,7 +153,7 @@ app.post('/register', function (req, res) {
 app.post('/login', function (req, res) {
 	let username = req.body.username;
 	let password = req.body.password;
-	let msg = '';
+	
 	mongoClient.connect(mongodb, function (err, db) {
 		if (err) throw err;
 		console.log('Connected to MongoDB');
