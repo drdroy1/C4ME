@@ -107,6 +107,10 @@ app.get('/admin', redirectLogin, function (req, res) {
 	res.render('admin_index.ejs');
 });
 
+app.get('/student', redirectLogin, function (req, res) {
+        res.render('student_index.ejs');
+});
+
 app.get('/logout', function (req, res) {
 	console.log(req.session);
 	if (req.session != null) {
