@@ -5,153 +5,184 @@ const cheerio = require('cheerio');
 const fs = require('fs');
 const mongoClient = require('mongodb').MongoClient;
 const mongodb = "mongodb://localhost:27017/";
+const puppeteer = require('puppeteer');
 
 const cd_base_url = 'http://www.collegedata.com/';
+const r_url = 'https://www.timeshighereducation.com/rankings/united-states/2020#!/page/0/length/-1/sort_by/rank/sort_order/asc/cols/stats';
 
 var app = express();
 app.use(bodyParser.urlencoded({ extended:true }));
 app.use(bodyParser.json());
 
 app.get('', function(req, res){
-	let f = fs.readFileSync('./tmp/colleges.txt', 'utf8');
-	flines = f.split('\n');
-	fsize = flines.length;
-	for(i=0; i<fsize; ++i) {
-		scrape(flines[i]);
-		//console.log(flines[i]);
-	}
-	//scrape('Stony Brook University');
+	//scrape_colleges();
 
 	res.send('KO')
 	//res.sendFile(__dirname + "login.html");
 })
 
-async function scrape(cname){
-	let college = {
-		name: '',
-		size: 0,
-		admis_num: -1,
-		admis_percent: -1,
-		cost_gen: -1,
-		cost_instate: -1,
-		cost_outstate: -1,
-		location: '',
-		majors: [],
-		ranking: '',
-		testscores: {
-			avg_gpa: -1,
-			sat_math: {
-				avg: -1,
-				lrange: -1,
-				rrange: -1
+async function scrape_hs(hsname) {
+
+}
+
+async function search_hs(str) {
+
+}
+
+async function scrape_colleges(){
+	let rname_list = [];
+	let rval_list = [];
+
+	const browser =  await puppeteer.launch({
+		headless: true,
+		args: ['--no-sandbox', '--disable-setuid-sandbox']
+	});
+	const page = await browser.newPage();
+	await page.goto(r_url);
+	const content = await page.content();
+	const $1 = cheerio.load(content);
+	
+	// scrape rank from WSJ
+	$1('a.ranking-institution-title').each(function(index){
+		let r = $1(this).parent().prev().text();
+		if(r.indexOf('=') > -1) {
+			r = r.substring(1);
+		}
+		rname_list.push($1(this).text().trim());
+		rval_list.push(r);
+	});
+
+	let f = fs.readFileSync('tmp/colleges.txt', 'utf8');
+	flines = f.split('\n');
+	fsize = flines.length;
+	for(i=0; i<fsize; ++i) {
+		let college = {
+			name: '',
+			size: 0,
+			admis_num: -1,
+			admis_percent: -1,
+			cost_gen: -1,
+			cost_instate: -1,
+			cost_outstate: -1,
+			location: '',
+			majors: [],
+			ranking: '',
+			testscores: {
+				avg_gpa: -1,
+				sat_math: {
+					avg: -1,
+					lrange: -1,
+					rrange: -1
+					},
+				sat_ebrw: {
+					avg: -1,
+					lrange: -1,
+					rrange: -1
 				},
-			sat_ebrw: {
-				avg: -1,
-				lrange: -1,
-				rrange: -1
-			},
-			act_composite: {
-				avg: -1,
-				lrange: -1,
-				rrange: -1
+				act_composite: {
+					avg: -1,
+					lrange: -1,
+					rrange: -1
+				}
 			}
 		}
-	}
+		
+		college.name = flines[i].replace(/\r/g, '');
+		let cname = college.name.replace('SUNY', 'State University of New York');
+		cname = cname.replace(/,/g, '');
+		cname = cname.replace(/ /g, '\-');
 
-	college.name = cname.replace(/\r/g, '');
-	//console.log(college.name);
-	let c = cname.replace(/,/g, '');
-	c = c.replace(/ /g, '\-');
-	const fetch_data = async function(){
-	        //let result = await axios.get('http://allv22.all.cs.stonybrook.edu/~stoller/cse416/collegedata/Stony-Brook-University/');
-		let result = await axios.get(cd_base_url + '/college/' + c)
-			.catch(function(error){
-				//console.log(cname);
-				return;
-			});
-		//console.log(cd_base_url + '/college/' + c);
-        	return cheerio.load(result.data);
-	};	
-	
-	const $ = await fetch_data(); 
-	// adminission info
-	let adminStr = ($("dt:contains('Overall Admission Rate')").next().first().text()).split(' ');
-	college.admis_percent = parseInt(adminStr[0].substring(0, adminStr[0].indexOf('%')))/100;
-	/*
-	if(adminStr.length < 3) {
-		console.log(adminStr.length);
-		console.log(college.name)
-	}
-	*/
-	college.admis_num = parseInt(adminStr[2].replace(/,/g, ''))*college.admis_percent;
-	// college Size
-	college.size = parseInt($('div.d-inline-block.text-left > span.h2').text().replace(/,/g, ''));
-	// standardize test score
-	let gpa = $("dt:contains('Average GPA')").next().first().text();
-	if(gpa != 'Not reported') {
-		college.testscores.avg_gpa = parseFloat(gpa);
-	}
-	
-	let math = ($("dt:contains('SAT Math')").next().first().text()).trim();
-	college.testscores.sat_math = parseTestscores(math);
-	
-	let ebrw = ($("dt:contains('SAT EBRW')").next().first().text()).trim();
-	college.testscores.sat_ebrw = parseTestscores(ebrw);
-
-	let act = ($("dt:contains('ACT Composite')").next().first().text()).trim();
-	college.testscores.act_composite = parseTestscores(act);
-
-	// cost
-	let costStr = ($("dt:contains('Cost of Attendance')").next().first().text()).trim();
-	if(costStr.indexOf('Out-of-state') > -1) {
-		let costSplit = costStr.split('Out-of-state: ');
-
-		college.cost_instate = parseInt(costSplit[0].substring(costSplit[0].indexOf('$')+1).replace(/,/g, ''));
-		college.cost_outstate = parseInt(costSplit[1].substring(1).replace(/,/g, ''));
-	} else {
-		college.cost_gen = parseInt(costStr.substring(1).replace(/,/g, ''));
-	}
-
-	// location
-	college.location = $('#mainContent').next().text();
-
-	// majors
-	let url_id = $("h2:contains('Academics')").next().next().attr('href');
-	let mpath = $(url_id).attr('href');
-	const mresult = await axios.get(cd_base_url + mpath);
-	const $0 = cheerio.load(mresult.data);
-	$('h3:contains("Undergraduate Majors") ~ div.row > div.col-sm-6').each(function(){
-		let x = $(this).text();
-		college.majors.push(x.trim());
-	});
-	//console.log(college.major);
-	
-	// ranking
-	//var rurl = "https://www.timeshighereducation.com/rankings/united-states/2020#!/page/0/length/-1/sort_by/rank/sort_order/asc/cols/stats";
-	/*
-	var rurl = "https://www.timeshighereducation.com/rankings/united-states/2020#survey-answer";
-	const rresult = await axios.get(rurl);
-	const $1 = cheerio.load(rresult.data);
-	*/
-	//console.log($1('tr').find('a:contains("'+cname+'")').parent('td.name.namesearch').siblings('td.rank.sorting_1.sorting_2').html());
-	mongoClient.connect(mongodb, function(err, db){
-		if (err) throw err;
-		//console.log('Connected to MongoDB');
-		let currentDB = db.db('c4me');
-		currentDB.collection('college').findOne({name:cname}, function(err, result) {
-			if(result != null) {
-				currentDB.collection('college').updateOne({name:cname}, {$set:college}, function(err, result){
-					if (err) throw err;
-					//console.log('Found+Update '+result);
-				});
-			} else {
-				currentDB.collection('college').insertOne(college, function(err, result){
-					if (err) throw err;
-					console.log(result);
-				});
+		// fetch with puppeteer
+		await page.goto(cd_base_url + '/college/' + cname);
+		const cd_content = await page.content();
+		const $0 = cheerio.load(cd_content);
+		// found page
+		if($0('li.breadcrumb-item.active').text() == 'College Profile') {
+			// admission info
+			let adminStr = $0("dt:contains('Overall Admission Rate')").next().first().text().split(' ');
+			college.admis_percent = parseInt(adminStr[0].substring(0, adminStr[0].indexOf('%')))/100;
+			//console.log(adminStr);
+			if(adminStr.length > 2) {
+				college.admis_num = parseInt(adminStr[2].replace(/,/g, ''))*college.admis_percent;
 			}
-		});
-	});
+
+			// college size
+			college.size = parseInt($0('div.d-inline-block.text-left > span.h2').text().replace(/,/g, ''));
+			
+			// standardize test score
+			let gpa = $0("dt:contains('Average GPA')").next().first().text();
+			if(gpa != 'Not reported') {
+				college.testscores.avg_gpa = parseFloat(gpa);
+			}
+	
+			let math = ($0("dt:contains('SAT Math')").next().first().text()).trim();
+			college.testscores.sat_math = parseTestscores(math);
+	
+			let ebrw = ($0("dt:contains('SAT EBRW')").next().first().text()).trim();
+			college.testscores.sat_ebrw = parseTestscores(ebrw);
+
+			let act = ($0("dt:contains('ACT Composite')").next().first().text()).trim();
+			college.testscores.act_composite = parseTestscores(act);
+
+			// cost
+			let costStr = ($0("dt:contains('Cost of Attendance')").next().first().text()).trim();
+			if(costStr.indexOf('Out-of-state') > -1) {
+				let costSplit = costStr.split('Out-of-state: ');
+
+				college.cost_instate = parseInt(costSplit[0].substring(costSplit[0].indexOf('$')+1).replace(/,/g, ''));
+				college.cost_outstate = parseInt(costSplit[1].substring(1).replace(/,/g, ''));
+			} else {
+				college.cost_gen = parseInt(costStr.substring(1).replace(/,/g, ''));
+			}
+
+			// location
+			college.location = $0('#mainContent').next().text();
+
+			// majors
+			let url_id = $0("h2:contains('Academics')").next().next().attr('href');
+			let mpath = $0(url_id).attr('href');
+			/*
+			fetch the academics see more page
+			await page.goto(cd_base_url + mpath);
+			*/
+			$0('h3:contains("Undergraduate Majors") ~ div.row > div.col-sm-6').each(function(){
+				let x = $0(this).text();
+				college.majors.push(x.trim());
+			});
+
+			// ranking
+			let rindex = rname_list.indexOf(college.name);
+			if(rindex > -1) {
+				college.ranking = rval_list[rindex];
+			}
+
+			// adding to db
+			mongoClient.connect(mongodb, function(err, db){
+				if (err) throw err;
+				let currentDB = db.db('c4me');
+				currentDB.collection('college').findOneAndDelete({name:college.name}, function(err, result) {
+					if (err) throw err;
+					if (result != null) {
+						console.log(result);
+					} else {
+						console.log('Not Found');
+					}
+				});
+				currentDB.collection('college').insertOne(college, function(err, result) {
+					if (err) throw err;
+					if (result != null) {
+						console.log(result);
+					} else {
+						console.log('Could not add');
+					}
+				});
+			});
+			console.log('Done '+college.name);
+		} else {
+			console.log('Error: Could not load <' + cname + '>');
+		}
+
+	}
 }
 
 function parseTestscores(str) {
