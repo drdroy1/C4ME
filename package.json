@@ -19,15 +19,22 @@
   "dependencies": {
     "axios": "^0.19.2",
     "cheerio": "^1.0.0-rc.3",
+    "chromium": "^2.1.2",
+    "crypto": "^1.0.1",
     "csv-parser": "^2.3.2",
     "ejs": "^3.0.1",
     "express": "^4.17.1",
     "express-session": "^1.17.0",
     "fs": "0.0.1-security",
+    "headless-chrome-crawler": "^1.8.0",
+    "jquery": "^3.4.1",
     "mongodb": "^3.5.5",
     "mongodb-autoincrement": "^1.0.1",
     "mongoose": "^5.9.7",
+    "puppeteer": "^2.1.1",
     "querystring": "^0.2.0",
+    "redis": "^3.0.2",
+    "request": "^2.88.2",
     "url": "^0.11.0"
   },
   "devDependencies": {}
