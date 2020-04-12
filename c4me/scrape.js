@@ -9,6 +9,8 @@ const puppeteer = require('puppeteer');
 
 const cd_base_url = 'http://www.collegedata.com/';
 const r_url = 'https://www.timeshighereducation.com/rankings/united-states/2020#!/page/0/length/-1/sort_by/rank/sort_order/asc/cols/stats';
+//const shs_url = 'https://www.usnews.com/education/best-high-schools/search?ranked=true&name=';
+const hs_url = 'https://www.niche.com/k12/';
 
 var app = express();
 app.use(bodyParser.urlencoded({ extended:true }));
@@ -16,17 +18,60 @@ app.use(bodyParser.json());
 
 app.get('', function(req, res){
 	//scrape_colleges();
+	//search_hs('Townsend');
+	search_hs('francis');
 
 	res.send('KO')
 	//res.sendFile(__dirname + "login.html");
 })
 
-async function scrape_hs(hsname) {
+async function scrape_hs(hsname, city, state) {
 
 }
 
-async function search_hs(str) {
+const shs_url0 = 'https://nces.ed.gov/ccd/schoolsearch/school_list.asp?Search=1&InstName=';
+const shs_url1 = '&SchoolID=&Address=&City=&State=&Zip=&Miles=&County=&PhoneAreaCode=&Phone=&DistrictName=&DistrictID=&SchoolType=1&SchoolType=2&SchoolType=3&SchoolType=4&SpecificSchlTypes=all&IncGrade=-1&LoGrade=10&HiGrade=13&SchoolPageNum=';
 
+async function search_hs(str) {
+	var nbsp = String.fromCharCode(160);
+	let sname_list = [];
+	let sloc_list = [];
+	let i = 1, pages = 1;
+
+	const browser = await puppeteer.launch({
+		headless: true,
+		args: ['--no-sandbox', '--disable-setuid-sandbox']
+	});
+	const page = await browser.newPage();
+	let s = str.replace(/ /g, '+');
+	await page.goto(shs_url0 + s + shs_url1 + i);
+	let shs_content = await page.content();
+	let $ = cheerio.load(shs_content);
+	
+	let x = $('font > strong > font').first().text();
+	if(x != '') {
+		let y = x.split(nbsp);
+		pages = parseInt(x[x.length-1]);
+	}
+	console.log(i-1 + "-" + pages);
+	// fix bug
+	
+	do {
+		$('font > a > strong').each(function(index) {
+			sname_list.push($(this).text());
+			let addr = $(this).parent().siblings('font').text();
+			let a = addr.indexOf(',');
+			let b = addr.lastIndexOf(nbsp);
+			let c = addr.substring(a+2, b);
+			sloc_list.push(c);
+			console.log(sname_list[sname_list.length -1] + "|" + c);
+		});
+		i++;
+		await page.goto(shs_url0 + s + shs_url1 + i);
+		shs_content = await page.content();
+		$ = cheerio.load(shs_content);
+	} while (i <= pages);
+	console.log('Completed');
 }
 
 async function scrape_colleges(){
