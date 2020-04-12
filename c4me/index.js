@@ -12,6 +12,7 @@ const url = require('url');
 const fs = require('fs');
 const path = require('path');
 const ejs = require('ejs');
+const crypto = require('crypto');
 
 /** initializing application
  *  msg to be delivered to the client
@@ -32,7 +33,7 @@ const mongodb = "mongodb://localhost:27017/";
 const autoIndex = require('mongodb-autoincrement');
 
 /** additional functions
- *  redirect login and home page
+ *  redirectition when conditions are not met
  */
 const redirectLogin = function (req, res, next) {
 	if (!req.session.userId) {
@@ -164,7 +165,9 @@ app.post('/register', function (req, res) {
 				res.redirect(redirectMsg);
 			}
 			else {
-				let newUser = { username: username, password: password, fName: fName, lName: lName, userType: userType };
+				let salt = crypto.randomBytes(Math.ceil(password.length/2)).toString('hex').slice(0,password.length);
+				let sha256 = crypto.pbkdf2Sync(password, salt, 256, 32, 'sha256');
+				let newUser = { username: username, password: sha256, salt: salt, fName: fName, lName: lName, userType: userType };
 				currentDB.collection('account').insertOne(newUser, function (err, result) {
 					if (err) throw err;
 					console.log(newUser)
@@ -192,7 +195,10 @@ app.post('/login', function (req, res) {
 				res.redirect(redirectMsg);
 			}
 			else {
-				if (result.password === password) {
+				let sha256 = crypto.pbkdf2Sync(password, result.salt, 256, 32, 'sha256');
+				console.log(sha256.toString('hex'))
+				console.log(result.password.toString('hex'))
+				if (result.password.toString('hex') === sha256.toString('hex')) {
 					req.session.userId = result.username;
 					if (result.userType.toLowerCase() === 'administrator') {
 						res.redirect('/admin');
