@@ -27,7 +27,9 @@ app.get('', function(req, res){
 	//scrape_hs('townsend harris high school', 'flushing', 'ny');
 	//scrape_hs('academic magnet high school', 'north charleston', 'sc');
 	//console.log(toTitle('academic magnet HIgh SChool')+'|');
-	find_similarhs('academic magnet high school', 'north charleston', 'sc');
+	//find_similarhs('academic magnet high school', 'north charleston', 'sc');
+	find_similarhs('glendale high school', 'glendale', 'az');
+	find_similarhs('glenbrook south high school', 'glenview', 'il');
 	res.send('KO')
 	//res.sendFile(__dirname + "login.html");
 })
@@ -47,7 +49,7 @@ function find_similarhs(hsname, city, state) {
 			} else {
 				console.log('!NULL');
 				//console.log(result);
-				simhs_algo(result);
+				unsorted_hs_list = simhs_algo(result);
 			}
 		});
 	});
@@ -55,7 +57,14 @@ function find_similarhs(hsname, city, state) {
 
 function simhs_algo(hs_doc) {
 	let hslist = [];
-	//console.log('given hs:\n'+hs_doc);
+	let total_pt = {
+		prof: 5,
+		sat: 5,
+		act: 5,
+		grad: 5,
+		ap: 3,
+		size: 3
+	}
 
 	mongoClient.connect(mongodb, function(err, db){
 		if(err) throw err;
@@ -65,26 +74,56 @@ function simhs_algo(hs_doc) {
 			if(result != null) {
 				let resultArr = [], arrlen = 0;
 				for(let val of result) {
-					let obj = {
-						name: val.name,
-						score: 0
+					if(val.name != hs_doc.name) {
+						let obj = {
+							data:  val,
+							score: 0
+						}
+
+						// reading prof %
+						obj.score += get_score(hs_doc.reading_prof, val.reading_prof, 0.1, 1-total_pt.prof);
+
+						// math prof %
+						obj.score += get_score(hs_doc.math_prof, val.math_prof, 0.1, 1-total_pt.prof);
+
+						// grad rate
+						obj.score += get_score(hs_doc.grad_rate, val.grad_rate, 0.1, 1-total_pt.grad);
+
+						// ap enrollment %
+						obj.score += get_score(hs_doc.ap_enroll, val.ap_enroll, 0.1, 1-total_pt.ap);
+
+						// avg sat
+						obj.score += get_score(hs_doc.avg_sat, val.avg_sat, 50, 1-total_pt.sat);
+					
+						// avg act
+						obj.score += get_score(hs_doc.avg_act, val.avg_act, 3, 1-total_pt.act);
+
+						// size
+						obj.score += get_score(hs_doc.size, val.size, 500, 1-total_pt.size);
+					
+						// similar hs []
+						if(hs_doc.similar_hs.indexOf(val.name) > -1) {
+							obj.score += 0.5;
+						}
+						console.log(obj.score);
+						hslist.push(obj);
 					}
-					let range=0, offset=0;
-					// reading prof %
-					console.log(hs_doc.reading_prof + ' ' + val.reading_prof);
-					offset = Math.abs(hs_doc.reading_prof - val.reading_prof);
-					console.log(offset);
-					// math prof %
-					// avg sat
-					// avg act
-					// ap enrollment %
-					// size
-					// similar hs []
 				}
+				console.log(hslist);
 			}
 		});
 	});
 
+}
+
+function get_score(f1, f2, range, bound) {
+	let offset = Math.abs(f1 - f2);
+	for(i=1; i>bound; i--) {
+		offset -= range;
+		if(offset <= 0 || i == bound+1) {
+			return i;
+		}
+	}
 }
 
 async function scrape_hs(hsname, city, state) {

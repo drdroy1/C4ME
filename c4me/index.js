@@ -197,8 +197,9 @@ app.post('/login', function (req, res) {
 						res.redirect('/admin');
 					}
 					else {
-						console.log('Redirect Login Student');
-						res.redirect('/student');
+						console.log(req.session.userId);
+						let redirect = url.format({pathname: '/student', query: { sessionId: req.session.userId }});
+						res.redirect(redirect);
 					}
 				}
 				else {
