@@ -20,26 +20,149 @@ app.use(bodyParser.json());
 
 app.get('', function(req, res){
 	//scrape_colleges();
+
 	//search_hs('Townsend');
 	//search_hs('francis lewis');
-	//scrape_hs('townsend harris high school', 'flushing', 'ny');
-	scrape_hs('academic magnet high school', 'north charleston', 'sc');
 
+	//scrape_hs('townsend harris high school', 'flushing', 'ny');
+	//scrape_hs('academic magnet high school', 'north charleston', 'sc');
+	//console.log(toTitle('academic magnet HIgh SChool')+'|');
+	//find_similarhs('academic magnet high school', 'north charleston', 'sc');
+	find_similarhs('glendale high school', 'glendale', 'az');
+	find_similarhs('glenbrook south high school', 'glenview', 'il');
 	res.send('KO')
 	//res.sendFile(__dirname + "login.html");
 })
+
+function find_similarhs(hsname, city, state) {
+	let hs_name = toTitle(hsname);
+	//console.log(hs_name);
+	mongoClient.connect(mongodb, function(err, db){
+		if(err) throw err;
+		let currentDB = db.db('c4me');
+		currentDB.collection('high_school').findOne({name: hs_name}, function(err, result){
+			if(err) throw err;
+			if(result == null) {
+				scrape_hs(hsname, city, state).then(function(response){
+					console.log('NULL');
+				});
+			} else {
+				console.log('!NULL');
+				//console.log(result);
+				unsorted_hs_list = simhs_algo(result);
+			}
+		});
+	});
+}
+
+function simhs_algo(hs_doc) {
+	let hslist = [];
+	let total_pt = {
+		prof: 5,
+		sat: 5,
+		act: 5,
+		grad: 5,
+		ap: 3,
+		size: 3
+	}
+
+	mongoClient.connect(mongodb, function(err, db){
+		if(err) throw err;
+		let currentDB = db.db('c4me');
+		currentDB.collection('high_school').find({}).toArray(function(err, result){
+			if(err) throw err;
+			if(result != null) {
+				let resultArr = [], arrlen = 0;
+				for(let val of result) {
+					if(val.name != hs_doc.name) {
+						let obj = {
+							data:  val,
+							score: 0
+						}
+
+						// reading prof %
+						obj.score += get_score(hs_doc.reading_prof, val.reading_prof, 0.1, 1-total_pt.prof);
+
+						// math prof %
+						obj.score += get_score(hs_doc.math_prof, val.math_prof, 0.1, 1-total_pt.prof);
+
+						// grad rate
+						obj.score += get_score(hs_doc.grad_rate, val.grad_rate, 0.1, 1-total_pt.grad);
+
+						// ap enrollment %
+						obj.score += get_score(hs_doc.ap_enroll, val.ap_enroll, 0.1, 1-total_pt.ap);
+
+						// avg sat
+						obj.score += get_score(hs_doc.avg_sat, val.avg_sat, 50, 1-total_pt.sat);
+					
+						// avg act
+						obj.score += get_score(hs_doc.avg_act, val.avg_act, 3, 1-total_pt.act);
+
+						// size
+						obj.score += get_score(hs_doc.size, val.size, 500, 1-total_pt.size);
+					
+						// similar hs []
+						if(hs_doc.similar_hs.indexOf(val.name) > -1) {
+							obj.score += 0.5;
+						}
+						console.log(obj.score);
+						hslist.push(obj);
+					}
+				}
+				console.log(hslist);
+			}
+		});
+	});
+
+}
+
+function get_score(f1, f2, range, bound) {
+	let offset = Math.abs(f1 - f2);
+	for(i=1; i>bound; i--) {
+		offset -= range;
+		if(offset <= 0 || i == bound+1) {
+			return i;
+		}
+	}
+}
 
 async function scrape_hs(hsname, city, state) {
 	let hs = {
 		reading_prof: -1,
 		math_prof: -1,
+		grad_rate: -1,
 		avg_sat: -1,
 		avg_act: -1,
 		ap_enroll: -1,
 		size: -1,
 		similar_hs: []
 	}
+	let hs_name = toTitle(hsname);
+/*
+	let found = false;
 
+	mongoClient.connect(mongodb, function(err, db){
+		if(err) throw err;
+		let currentDB = db.db('c4me');
+		currentDB.collection('high_school').find({name: hs_name}, function(err, result){
+			if(err) throw err;
+			if(result != null) {
+				console.log('IF');
+				found = true;
+				return;
+			} else {
+				console.log('ELSE');
+			}
+		});
+	});
+	console.log(found);
+	if(found) {
+		console.log('returning...');
+		return;
+	} else {
+		console.log('scraping...');
+	}
+*/
 	const browser = await puppeteer.launch({
 		headless: true,
 		args: ['--no-sandbox', '--disable-setuid-sandbox']
@@ -49,7 +172,7 @@ async function scrape_hs(hsname, city, state) {
 	console.log(nmirror_url + path);
 	await page.goto(nmirror_url + path);
 	const hs_content = await page.content();
-	console.log(hs_content);
+	//console.log(hs_content);
 
 /*	
 	let path = hsname.replace(/ /g, '-') + '-' + city.replace(/ /g, '-') + '-' + state;
@@ -59,9 +182,85 @@ async function scrape_hs(hsname, city, state) {
 
 	// % reading proficient
 	let rpstr = $('span:contains("Percent Proficient - Reading")').parent().siblings('div.scalar__value').find('span').text();
-	rpstr = rpstr.replace('%', '');
-	hs.reading_prof = parseInt(rpstr)/100;
-	console.log(hs.reading_prof);
+	if(rpstr != undefined) {
+		rpstr = rpstr.replace('%', '');
+		hs.reading_prof = parseInt(rpstr)/100;
+		console.log('Reading Prof %: ' + hs.reading_prof);
+	}
+
+	// $ math proficient
+	let mpstr = $('span:contains("Percent Proficient - Math")').parent().siblings('div.scalar__value').find('span').text();
+	if(mpstr != undefined) {
+		mpstr = mpstr.replace('%', '');
+		hs.math_prof = parseInt(mpstr)/100;
+		console.log('Math Prof %: ' + hs.math_prof);
+	}
+
+	// avg grad rate
+	let grad_str = $('span:contains("Average Graduation Rate")').parent().siblings('div.scalar__value').find('span').text().replace('%', '');
+	hs.grad_rate = parseInt(grad_str)/100;
+	console.log(hs.grad_rate);
+
+	// avg sat
+	let sat = $('span:contains("Average SAT")').parent().siblings('div.scalar__value').text();
+	if(sat != undefined) {
+		sat = sat.replace($('span:contains("Average SAT")').parent().siblings('div.scalar__value').children().text(), '');
+		hs.avg_sat = parseInt(sat);
+	}
+
+	// avg act
+	let act = $('span:contains("Average ACT")').parent().siblings('div.scalar__value').text();
+	if(act != undefined) {
+		act = act.replace($('span:contains("Average ACT")').parent().siblings('div.scalar__value').children().text(), '');
+		hs.avg_act = parseInt(act);
+	}
+
+	// % ap enrollment
+	let ap_str = $('span:contains("AP Enrollment")').parent().siblings('div.scalar__value').text().replace('%', '');
+	if(ap_str != undefined) {
+		hs.ap_enroll = parseInt(ap_str)/100;
+		console.log('AP Enrollment %: '+hs.ap_enroll);
+	}
+
+	// size
+	let size_str = $('span:contains("Students")').parent().siblings('div.scalar__value').children().text();
+	if(size_str != undefined) {
+		hs.size = parseInt(size_str);
+		console.log('Size: '+hs.size);
+	}
+
+	// similar hs
+	hs.name = hs_name;
+	$('div.similar-entities__title:contains("Schools like ' + hs_name +'")').siblings('ul.similar-entities').find('li').find('a.chip__name').each(function(index) {
+		hs.similar_hs.push($(this).text());
+		console.log($(this).text());
+	});
+
+	mongoClient.connect(mongodb, function(err, db){
+		if(err) throw err;
+		let currentDB = db.db('c4me');
+		currentDB.collection('high_school').insertOne(hs, function(err, result){
+			if(err) throw err;
+			if(result != null) {
+				//console.log(result);
+				console.log(hs);
+			} else {
+				console.log('Could not add');
+			}
+		});
+	});
+	console.log('Complete');
+	return hs;
+}
+
+function toTitle(str) {
+	let arr = str.split(' ');
+	let result = '', x = '';
+	for(let i=0; i<arr.length; i++) {
+		x = arr[i].charAt(0).toUpperCase() + arr[i].substring(1).toLowerCase();
+		result += (x + ' ');
+	}
+	return result.trim();
 }
 
 async function search_hs(str) {
