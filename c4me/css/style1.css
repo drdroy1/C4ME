@@ -1,10 +1,91 @@
 
-.navbar-brand img{
-  height: 50px;
-  width: 100px;
-  vertical-align: middle;
+/*Global*/
+body{
+  overflow-x: hidden;
+  font-family: Arial, Helvetica;
+  font-size: 15px;
+  line-height: 1.5;
+  padding: 0;
+  margin: 0;
 }
 
+a{
+  text-decoration: none;
+  color: #000000;
+  font-size: 16px;
+}
+
+.container{
+  width: 85%;
+  margin: auto;
+  overflow: hidden;
+}
+
+#pageName{
+  padding-top: 50px;
+  text-align: center;
+}
+
+/* Header + Nav*/
+header{
+  background: #FFFFFF;
+  padding-top: 0px;
+  min-height: 50px;
+}
+
+header img{
+  height: 3rem;
+  vertical-align: middle;
+  margin: 0;
+  padding: 0;
+}
+
+header h1{
+  display: inline;
+  font-weight: lighter;
+  color: #7bd1ff;
+  margin: 0; 
+}
+
+header ul{
+  margin: 0;
+  padding: 0;
+}
+
+header li {
+  display: inline;
+  padding: 0 20px 0 20px;
+}
+
+#loginRegisterForm label{
+  font-weight:bold;
+}
+
+#loginRegisterBoxLeft .box{
+  position: absolute;
+  width: 35%;
+  padding: 10px;
+  margin: 25px;
+}
+
+#loginRegisterBoxRight .box{
+  float:right;
+  width: 35%;
+  padding: 10px;
+  margin: 25px;
+}
+
+
+/* Home Page Items*/
+.carousel-item {
+  height: 95vh;
+}
+
+.carousel-caption{
+  width: 100%;
+  right: 0;
+  left: 0;
+}
 
 
 
