@@ -14,11 +14,16 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.get('', function(req, res){
+app.get('', function(req,res){
+	console.log('student');
+	res.render('student_index.ejs');
+});
+
+app.get('/search', function(req, res){
 	res.render('search_colleges.ejs');
 });
 
-app.post('', function(req, res) {
+app.post('/search', function(req, res) {
 	console.log(req.body)
 	let cname = req.body.collegeName;
 	let adminRate = parseInt(req.body.admimissionRate, 10);

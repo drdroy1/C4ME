@@ -92,11 +92,6 @@ app.get('/register', function (req, res) {
 	}
 });
 
-app.get('/admin', function(req, res){
-        console.log('Hi')
-        res.render('admin_index.ejs');
-});
-
 app.get('/login', redirectAdmin, function (req, res) {
 	let err = req.query.error;
 	console.log(err);
@@ -107,10 +102,6 @@ app.get('/login', redirectAdmin, function (req, res) {
 	else{
 		res.render('login.ejs', {error: err});
 	}
-});
-
-app.get('/student', redirectLogin, function (req, res) {
-        res.render('student_index.ejs');
 });
 
 app.get('/logout', function (req, res) {
@@ -207,6 +198,8 @@ app.post('/login', function (req, res) {
 					}
 					else {
 						console.log('Redirect Login Student');
+						console.log('https://'+req.hostname+':80'+'/student');
+						res.redirect('https://'+req.hostname+':80'+'/student');
 						res.redirect('/student');
 					}
 				}
