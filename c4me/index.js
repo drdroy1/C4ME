@@ -120,9 +120,9 @@ app.get('/js/script.js', function(req, res){
 	res.end()
 });
 
-app.get('/css/style1.css', function (req, res) {
+app.get('/css/style.css', function (req, res) {
 	res.writeHead(200, { 'Content-type': 'text/css' });
-	let fileContents = fs.readFileSync('css/style1.css', { encoding: 'utf8' });
+	let fileContents = fs.readFileSync('css/style.css', { encoding: 'utf8' });
 	res.write(fileContents);
 	res.end();
 });
