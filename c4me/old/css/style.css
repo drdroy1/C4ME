@@ -130,7 +130,7 @@ header nav {
 }
 
 #pageName{
-    padding-top: 50px;
+    margin: 50px 0 50px 0;
     text-align: center;
 }
 
@@ -142,28 +142,8 @@ header nav {
 
 
 /*Information for Homepage*/
-#indexInfo{
-    margin-top: 50px;
-    text-align: center;
-}
 
-#indexInfo .box{
-    width: 35%;
-    display: inline-block;
-    padding: 10px;
-    border: 3px solid black; 
-    margin: 25px;
-    background-color:white;
-}
 
-#indexInfo .box h3{
-    text-align: center;
-    border-bottom: 3px solid black;
-}
-
-#indexInfo .box p{
-    text-align: left;
-}
 
 #loginRegisterForm label{
     font-weight:bold;
@@ -174,9 +154,6 @@ header nav {
     height: 30px;
 }
 
-#loginRegisterForm #loginRegisterBtn{
-    padding: 5px 0 5px 0;
-}
 
 #loginRegisterBox .box{
     float:right;
