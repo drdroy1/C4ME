@@ -15,7 +15,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.get('', function(req, res){
-	res.sendFile(__dirname + '/html/search_colleges.html');
+	res.render('search_colleges.ejs');
 });
 
 app.post('', function(req, res) {

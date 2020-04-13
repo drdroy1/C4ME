@@ -92,6 +92,11 @@ app.get('/register', function (req, res) {
 	}
 });
 
+app.get('/admin', function(req, res){
+        console.log('Hi')
+        res.render('admin_index.ejs');
+});
+
 app.get('/login', redirectAdmin, function (req, res) {
 	let err = req.query.error;
 	console.log(err);
@@ -102,10 +107,6 @@ app.get('/login', redirectAdmin, function (req, res) {
 	else{
 		res.render('login.ejs', {error: err});
 	}
-});
-
-app.get('/admin', redirectLogin, function (req, res) {
-	res.render('admin_index.ejs');
 });
 
 app.get('/student', redirectLogin, function (req, res) {
@@ -201,9 +202,11 @@ app.post('/login', function (req, res) {
 				if (result.password.toString('hex') === sha256.toString('hex')) {
 					req.session.userId = result.username;
 					if (result.userType.toLowerCase() === 'administrator') {
+						console.log('Redirect Login Admin');
 						res.redirect('/admin');
 					}
 					else {
+						console.log('Redirect Login Student');
 						res.redirect('/student');
 					}
 				}

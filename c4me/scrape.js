@@ -11,7 +11,8 @@ const cd_base_url = 'http://www.collegedata.com/';
 const r_url = 'https://www.timeshighereducation.com/rankings/united-states/2020#!/page/0/length/-1/sort_by/rank/sort_order/asc/cols/stats';
 const shs_url0 = 'https://nces.ed.gov/ccd/schoolsearch/school_list.asp?Search=1&InstName=';
 const shs_url1 = '&SchoolID=&Address=&City=&State=&Zip=&Miles=&County=&PhoneAreaCode=&Phone=&DistrictName=&DistrictID=&SchoolType=1&SchoolType=2&SchoolType=3&SchoolType=4&SpecificSchlTypes=all&IncGrade=-1&LoGrade=10&HiGrade=13&SchoolPageNum=';
-const hs_url = 'https://www.niche.com/k12/';
+//const hs_url = 'https://www.niche.com/k12/';
+const nmirror_url = 'http://allv22.all.cs.stonybrook.edu/~stoller/cse416/niche/';
 
 var app = express();
 app.use(bodyParser.urlencoded({ extended:true }));
@@ -21,7 +22,8 @@ app.get('', function(req, res){
 	//scrape_colleges();
 	//search_hs('Townsend');
 	//search_hs('francis lewis');
-	scrape_hs('townsend harris high school', 'flushing', 'ny');
+	//scrape_hs('townsend harris high school', 'flushing', 'ny');
+	scrape_hs('academic magnet high school', 'north charleston', 'sc');
 
 	res.send('KO')
 	//res.sendFile(__dirname + "login.html");
@@ -51,7 +53,7 @@ async function scrape_hs(hsname, city, state) {
 */
 	
 	let path = hsname.replace(/ /g, '-') + '-' + city.replace(/ /g, '-') + '-' + state;
-	const hs_content = await axios.get(hs_url + path);
+	const hs_content = await axios.get(nmirror_url + path);
 	console.log(hs_content);
 
 	const $ = cheerio.load(hs_content);
