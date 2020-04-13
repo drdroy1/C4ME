@@ -39,28 +39,26 @@ async function scrape_hs(hsname, city, state) {
 		size: -1,
 		similar_hs: []
 	}
-/*
+
 	const browser = await puppeteer.launch({
 		headless: true,
 		args: ['--no-sandbox', '--disable-setuid-sandbox']
 	});
 	const page = await browser.newPage();
 	let path = hsname.replace(/ /g, '-') + '-' + city.replace(/ /g, '-') + '-' + state;
-	console.log(hs_url + path);
-	await page.goto(hs_url + path);
+	console.log(nmirror_url + path);
+	await page.goto(nmirror_url + path);
 	const hs_content = await page.content();
 	console.log(hs_content);
-*/
-	
+
+/*	
 	let path = hsname.replace(/ /g, '-') + '-' + city.replace(/ /g, '-') + '-' + state;
 	const hs_content = await axios.get(nmirror_url + path);
-	console.log(hs_content);
-
+*/
 	const $ = cheerio.load(hs_content);
 
 	// % reading proficient
 	let rpstr = $('span:contains("Percent Proficient - Reading")').parent().siblings('div.scalar__value').find('span').text();
-	console.log(rpstr);
 	rpstr = rpstr.replace('%', '');
 	hs.reading_prof = parseInt(rpstr)/100;
 	console.log(hs.reading_prof);

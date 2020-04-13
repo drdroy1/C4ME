@@ -5,14 +5,20 @@ const bodyParser = require('body-parser');
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-//app.use(express.static('views'));
-//app.use(express.static('css'));
-//app.use(express.static('img'));
-//app.use(express.static('js'));
+
+const mongoClient = require('mongodb').MongoClient;
+const mongodb = "mongodb://localhost:27017/";
 
 app.get('', function(req, res){
-        console.log('Hi')
         res.render('admin_index.ejs');
+});
+
+app.delete('', function(req, res){
+	mongoClient.connect(mongodb, function(err, db){
+		if (err) throw err;
+		let currentDB = db.db('c4me')
+		currentDB.collection('profile').remove({});
+	});
 });
 
 app.listen(8082);
