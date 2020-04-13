@@ -198,8 +198,6 @@ app.post('/login', function (req, res) {
 					}
 					else {
 						console.log('Redirect Login Student');
-						console.log('https://'+req.hostname+':80'+'/student');
-						res.redirect('https://'+req.hostname+':80'+'/student');
 						res.redirect('/student');
 					}
 				}

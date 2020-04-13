@@ -13,6 +13,16 @@ app.get('', function(req, res){
         res.render('admin_index.ejs');
 });
 
+app.get('/view', function(req, res){
+	mongoClient.connect(mongodb, function(err, db){
+		if (err) throw err;
+		let currentDB = db.db('c4me')
+		let result = currentDB.collection('decision').find({}).toArray();
+		console.log(result)	
+		res.end();
+	});
+});
+
 app.delete('', function(req, res){
 	mongoClient.connect(mongodb, function(err, db){
 		if (err) throw err;

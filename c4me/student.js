@@ -23,6 +23,10 @@ app.get('/search', function(req, res){
 	res.render('search_colleges.ejs');
 });
 
+app.get('/update', function(req, res){
+	res.render('edit_form.ejs');
+});
+
 app.post('/search', function(req, res) {
 	console.log(req.body)
 	let cname = req.body.collegeName;
@@ -52,12 +56,13 @@ app.post('/search', function(req, res) {
 	mongoClient.connect(mongodb, function (err, db) {
 		if (err) throw err;
 		let currentDB = db.db('c4me');
-		let resultArr = {};
+		let resultArr = [];
+		let newArr = []
+		let count = 0
+
 		currentDB.collection('college').find(query).toArray(function(err, result){
 			if (err) throw err;
 			if(result != null){
-				let resultArr = []
-				let count = 0
 				for( let val of result){
 					let arr = []
 					for( let v of val.majors){
@@ -69,38 +74,50 @@ app.post('/search', function(req, res) {
 						count = count + 1
 					}
 				}
+				count = 0
 				for( let val of resultArr){
 					let locationInfo = val.location.replace(/ /g, '')
 					let locationList = locationInfo.split(',')
-					let count = 0
 					if(loc === 'Northeast'){
 						if(northeast.includes(locationList[1])){
-							console.log(val)	
+							newArr[count] = val
 						}
-						count = count + 1
 					}
 					if(loc === 'Midwest'){
 						if(midwest.includes(locationList[1])){
-                                                        console.log(val)   
+                                                        newArr[count] = val
                                                 }
-                                                count = count + 1
 					}
 					if(loc === 'South'){
 						if(south.includes(locationList[1])){
-                                                        console.log(val)   
+                                                        newArr[count] = val
                                                 }
-                                                count = count + 1
 					}
 					if(loc === 'West'){
 						if(west.includes(locationList[1])){
-                                                        console.log(val)   
+                                                        newArr[count] = val  
                                                 }
-                                                count = count + 1
 					}
+					count = count + 1
 				}
 			}
 		});
-		res.end()
+		res.json({results: newArr});
+	});
+});
+
+app.post('/update', function(req, res){
+	let fname = req.body.firstName;
+	let lname = req.body.lastName;
+	mongoClient.connect(mongodb, function(err, db){
+		let currentDB = db.db('c4me')
+		currentDB.collection('profile').findOne({ fName: fname, lName: lname}, function(err, result){
+			if(result != null){
+				let query = {}
+				currentDB.collection('profile').updateOne({ fName: fname, lName: lname}, $set: query})
+			}
+		});
+		db.close();
 	});
 });
 
