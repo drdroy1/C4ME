@@ -33,6 +33,10 @@ app.get('/search', function(req, res){
 	res.render('search_colleges.ejs');
 });
 
+app.get('/result', function(req, res){
+	res.render('search_results.ejs', req.query.results);
+}); 
+
 app.get('/update', function(req, res){
 	console.log(req.session.userId);
 	res.render('edit_form.ejs');
@@ -113,7 +117,8 @@ app.post('/search', function(req, res) {
 				}
 			}
 		});
-		res.json({results: newArr});
+		let redirect = url.format({pathname: '/student/result', query: {results: newArr}});
+		res.redirect(redirect);
 	});
 });
 
@@ -149,7 +154,8 @@ app.post('/compute', function(req, res){
 				let score = 0;
 
 				for( let val of table){
-										
+					dict[val.collegeName] = score;
+					score = 0 			
 				}
 			});
 		});

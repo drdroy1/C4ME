@@ -193,11 +193,10 @@ app.post('/login', function (req, res) {
 				if (result.password.toString('hex') === sha256.toString('hex')) {
 					req.session.userId = result.username;
 					if (result.userType.toLowerCase() === 'administrator') {
-						console.log('Redirect Login Admin');
-						res.redirect('/admin');
+						let redirect = url.format({pathname: '/admin', query: { sessionId: req.session.userId }});
+						res.redirect(redirect);
 					}
 					else {
-						console.log(req.session.userId);
 						let redirect = url.format({pathname: '/student', query: { sessionId: req.session.userId }});
 						res.redirect(redirect);
 					}
