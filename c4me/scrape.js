@@ -63,18 +63,12 @@ function find_similarhs(hsname, city, state) {
 			if(result == null) {
 				scrape_hs(hsname, city, state).then(function(response){
 					console.log('completed scrape ---> calculating...');
-					simhs_algo(result).then(function(response){
-						console.log(response);
-						console.log('sending unsorted list to front end...');
-					});
+					simhs_algo(result);
 				});
 			} else {
 				console.log('!NULL');
 				//console.log(result);
-				simhs_algo(result).then(function(response){
-					console.log(response);
-					console.log('sending unsorted list to front end...');
-				});
+				simhs_algo(result);
 			}
 		});
 	});
@@ -134,6 +128,7 @@ function simhs_algo(hs_doc) {
 						hslist.push(obj);
 					}
 				}
+				console.log('sending unsorted list to front end...');
 				console.log(hslist);
 			}
 		});
