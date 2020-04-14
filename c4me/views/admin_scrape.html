@@ -66,21 +66,12 @@
         <div class="justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
             <section id="pageName">
                 <div class="container md-4">
-                    <h1> Scrape Colleges (or not)</h1>
+                    <h1> Scrape Colleges</h1>
                 </div>
             </section>
         </div>
         <section id="info">
-            <div class="form-group form-inline">
-                <label for="home" class="mr-3">Home Phone</label>
-                <input type="text" id="home" class="form-control" name="home">
-            </div>
-            <div class="form-group form-inline">
-                <label for="mobile" class="mr-3">Mobile Phone</label>
-                <input type="text" id="mobile" class="form-control" name="mobile">
-            </div>
-
-            <form method='post' action='#' id="scrapeImport" class="main-form">
+            <form method='post' action='/scrape' id="scrapeImport" class="main-form mx-auto" style="width:200px;">
                 <button type="submit" class="btn btn-primary" value="Scrape">Scrape</button>
                 <button type="submit" class="btn btn-primary" value="Import">Import</button>
             </form>
