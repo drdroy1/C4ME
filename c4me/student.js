@@ -34,7 +34,7 @@ app.get('/search', function(req, res){
 });
 
 app.get('/result', function(req, res){
-	res.render('search_results.ejs', req.query.results);
+	res.render('student_search_colleges_results.ejs', req.query.results);
 }); 
 
 app.get('/edit', function(req, res){
