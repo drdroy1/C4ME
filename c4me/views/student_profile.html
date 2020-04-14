@@ -40,7 +40,7 @@
     <div class="container-fluid">
         <div class="row">
             <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-                <div class="sidebar-sticky" id="sideNav">
+                <div class="sidebar-sticky">
                     <ul class="nav flex-column">
                         <li class="nav-item">
                             <a class="nav-link active" href="#">
@@ -59,128 +59,133 @@
                         </li>
                     </ul>
             </nav>
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+                <div
+                    class="justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <section id="pageName">
+                        <div class="container md-4">
+                            <h1> Student Profile</h1>
+                        </div>
+                    </section>
+                </div>
+                <section id="info">
+                    <nav>
+                        <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                            <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home"
+                                role="tab" aria-controls="nav-home" aria-selected="true">General Info</a>
+                            <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile"
+                                role="tab" aria-controls="nav-profile" aria-selected="false">College Application</a>
+                            <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact"
+                                role="tab" aria-controls="nav-contact" aria-selected="false">Security</a>
+                        </div>
+                    </nav>
+                    <div class="tab-content" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="nav-home" role="tabpanel"
+                            aria-labelledby="nav-home-tab">
+                            <div class="tab-content" id="nav-tabContent">
+                                <div class="tab-pane fade show active border border-secondary pt-3" id="nav-general"
+                                    role="tabpanel" aria-labelledby="nav-general-tab">
+                                    <div class="container">
+                                        <h3>Personal Information</h3>
+                                        <ul>
+                                            <li>First Name:</li>
+                                            <li>Last Name:</li>
+                                            <li>Graduation Year:</li>
+                                            <li>ID Number:</li>
+                                            <li>Last Name:</li>
+                                        </ul>
+
+                                        <br>
+                                        <div class="border-bottom border-dark"></div>
+                                        <br>
+
+                                        <h3>Contact Information</h3>
+                                        <ul>
+                                            <li>Email:</li>
+                                            <li>Home Phone:</li>
+                                            <li>Mobile Phone:</li>
+                                            <li>Address:</li>
+                                        </ul>
+
+                                        <br>
+                                        <div class="border-bottom border-dark"></div>
+                                        <br>
+
+                                        <h3>Academics</h3>
+                                        <ul>
+                                            <li>Current School:</li>
+                                            <li>GPA</li>
+                                            <li>SAT Math:</li>
+                                            <li>SAT EBRW:</li>
+                                            <li>ACT Composite:</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">First</th>
+                                        <th scope="col">Last</th>
+                                        <th scope="col">Handle</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">1</th>
+                                        <td>Mark</td>
+                                        <td>Otto</td>
+                                        <td>@mdo</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">2</th>
+                                        <td>Jacob</td>
+                                        <td>Thornton</td>
+                                        <td>@fat</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">3</th>
+                                        <td>Larry</td>
+                                        <td>the Bird</td>
+                                        <td>@twitter</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+                            <form>
+                                <div class="form-group row">
+                                    <label for="staticEmail" class="col-sm-2 col-form-label">Email</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" readonly class="form-control-plaintext" id="staticEmail"
+                                            value="email@example.com">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
+                                    <div class="col-sm-10">
+                                        <input type="password" class="form-control" id="inputPassword"
+                                            placeholder="Password">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+                <br>
+                <button type="submit" class="btn btn-secondary pl-4 pr-4" value="Edit">Edit</button>
+                <br>
+                <br>
+            </main>
         </div>
     </div>
 
-    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-        <div class="justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <section id="pageName">
-                <div class="container md-4">
-                    <h1> Student Profile</h1>
-                </div>
-            </section>
-        </div>
-        <section id="info">
-            <nav>
-                <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
-                    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab"
-                        aria-controls="nav-home" aria-selected="true">General Info</a>
-                    <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab"
-                        aria-controls="nav-profile" aria-selected="false">College Application</a>
-                    <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab"
-                        aria-controls="nav-contact" aria-selected="false">Security</a>
-                </div>
-            </nav>
-            <div class="tab-content" id="nav-tabContent">
-                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                    <div class="tab-content" id="nav-tabContent">
-                        <div class="tab-pane fade show active border border-secondary pt-3" id="nav-general"
-                            role="tabpanel" aria-labelledby="nav-general-tab">
-                            <div class="container">
-                                <h3>Personal Information</h3>
-                                <ul>
-                                    <li>First Name:</li>
-                                    <li>Last Name:</li>
-                                    <li>Graduation Year:</li>
-                                    <li>ID Number:</li>
-                                    <li>Last Name:</li>
-                                </ul>
 
-                                <br>
-                                <div class="border-bottom border-dark"></div>
-                                <br>
-
-                                <h3>Contact Information</h3>
-                                <ul>
-                                    <li>Email:</li>
-                                    <li>Home Phone:</li>
-                                    <li>Mobile Phone:</li>
-                                    <li>Address:</li>
-                                </ul>
-
-                                <br>
-                                <div class="border-bottom border-dark"></div>
-                                <br>
-
-                                <h3>Academics</h3>
-                                <ul>
-                                    <li>Current School:</li>
-                                    <li>GPA</li>
-                                    <li>SAT Math:</li>
-                                    <li>SAT EBRW:</li>
-                                    <li>ACT Composite:</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">First</th>
-                                <th scope="col">Last</th>
-                                <th scope="col">Handle</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">3</th>
-                                <td>Larry</td>
-                                <td>the Bird</td>
-                                <td>@twitter</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
-                    <form>
-                        <div class="form-group row">
-                            <label for="staticEmail" class="col-sm-2 col-form-label">Email</label>
-                            <div class="col-sm-10">
-                                <input type="text" readonly class="form-control-plaintext" id="staticEmail"
-                                    value="email@example.com">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
-                            <div class="col-sm-10">
-                                <input type="password" class="form-control" id="inputPassword" placeholder="Password">
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </section>
-
-        <br>
-        <button type="submit" class="btn btn-secondary pl-4 pr-4" value="Edit">Edit</button>
-        <br>>
-    </main>
 
 </body>
 

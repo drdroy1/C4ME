@@ -18,7 +18,7 @@ var app = express();
 app.use(bodyParser.urlencoded({ extended:true }));
 app.use(bodyParser.json());
 
-app.get('', function(req, res){
+app.post('', function(req, res){
 	//import_hs_path();
 	//scrape_colleges();
 
@@ -36,7 +36,7 @@ app.get('', function(req, res){
 		currentDB.collection('hs_mirrorPaths').findOne({path: path}, function(err, result){
 			if(err) throw err;
 			if(result != null) {
-				find_similarhs(hsname, city, state);
+				find_similarhs(hsname, city, state, res);
 			}
 		});
 	});
@@ -48,11 +48,11 @@ app.get('', function(req, res){
 	//find_similarhs('glendale high school', 'glendale', 'az');
 	//find_similarhs('glenbrook south high school', 'glenview', 'il');
 	
-	res.send('KO')
+	//res.send('KO')
 	//res.sendFile(__dirname + "login.html");
 })
 
-function find_similarhs(hsname, city, state) {
+function find_similarhs(hsname, city, state, res) {
 	let hs_name = toTitle(hsname);
 
 	mongoClient.connect(mongodb, function(err, db){
@@ -63,18 +63,18 @@ function find_similarhs(hsname, city, state) {
 			if(result == null) {
 				scrape_hs(hsname, city, state).then(function(response){
 					console.log('completed scrape ---> calculating...');
-					simhs_algo(result);
+					simhs_algo(result, res);
 				});
 			} else {
 				console.log('!NULL');
 				//console.log(result);
-				simhs_algo(result);
+				simhs_algo(result, res);
 			}
 		});
 	});
 }
 
-function simhs_algo(hs_doc) {
+function simhs_algo(hs_doc, res) {
 	let hslist = [];
 	let total_pt = {
 		prof: 5,
@@ -129,6 +129,7 @@ function simhs_algo(hs_doc) {
 					}
 				}
 				console.log('sending unsorted list to front end...');
+				res.send(hslist);
 				console.log(hslist);
 			}
 		});
