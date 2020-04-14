@@ -19,24 +19,42 @@ app.use(bodyParser.urlencoded({ extended:true }));
 app.use(bodyParser.json());
 
 app.get('', function(req, res){
+	//import_hs_path();
 	//scrape_colleges();
 
 	//search_hs('Townsend');
 	//search_hs('francis lewis');
 
+	let hsname = 'bard high school early college', city = 'new york', state = 'ny';
+	//let hsname = 'academic magnet high school', city = 'north charleston', state = 'sc';
+	//let hsname = 'glendale high school', city = 'glendale', state = 'az';
+	//let hsname = 'glenbrook south high school', city = 'glenview', state = 'il';
+	let path = hsname.replace(/ /g, '-') + '-' + city.replace(/ /g, '-') + '-' + state;
+	mongoClient.connect(mongodb, function(err, db) {
+		if(err) throw err;
+		let currentDB = db.db('c4me');
+		currentDB.collection('hs_mirrorPaths').findOne({path: path}, function(err, result){
+			if(err) throw err;
+			if(result != null) {
+				find_similarhs(hsname, city, state);
+			}
+		});
+	});
+
 	//scrape_hs('townsend harris high school', 'flushing', 'ny');
 	//scrape_hs('academic magnet high school', 'north charleston', 'sc');
 	//console.log(toTitle('academic magnet HIgh SChool')+'|');
 	//find_similarhs('academic magnet high school', 'north charleston', 'sc');
-	find_similarhs('glendale high school', 'glendale', 'az');
-	find_similarhs('glenbrook south high school', 'glenview', 'il');
+	//find_similarhs('glendale high school', 'glendale', 'az');
+	//find_similarhs('glenbrook south high school', 'glenview', 'il');
+	
 	res.send('KO')
 	//res.sendFile(__dirname + "login.html");
 })
 
 function find_similarhs(hsname, city, state) {
 	let hs_name = toTitle(hsname);
-	//console.log(hs_name);
+
 	mongoClient.connect(mongodb, function(err, db){
 		if(err) throw err;
 		let currentDB = db.db('c4me');
@@ -44,12 +62,13 @@ function find_similarhs(hsname, city, state) {
 			if(err) throw err;
 			if(result == null) {
 				scrape_hs(hsname, city, state).then(function(response){
-					console.log('NULL');
+					console.log('completed scrape ---> calculating...');
+					simhs_algo(result);
 				});
 			} else {
 				console.log('!NULL');
 				//console.log(result);
-				unsorted_hs_list = simhs_algo(result);
+				simhs_algo(result);
 			}
 		});
 	});
@@ -109,6 +128,7 @@ function simhs_algo(hs_doc) {
 						hslist.push(obj);
 					}
 				}
+				console.log('sending unsorted list to front end...');
 				console.log(hslist);
 			}
 		});
@@ -124,6 +144,31 @@ function get_score(f1, f2, range, bound) {
 			return i;
 		}
 	}
+}
+
+// importing highschools.txt to db
+function import_hs_path() {
+	let f = fs.readFileSync('./tmp/highschools.txt', 'utf8');
+	flines = f.split('\n');
+	fsize = flines.length;
+
+	mongoClient.connect(mongodb, function(err, db){
+		if(err) throw err;
+		let currentDB = db.db('c4me');
+		for(let i=0; i<fsize; ++i) {
+			//console.log(flines[i]);
+			currentDB.collection('hs_mirrorPaths').findOne({path: flines[i]}, function(err, result){
+				if(err) throw err;
+				if(result == null) {
+					currentDB.collection('hs_mirrorPaths').insertOne({path: flines[i]}, function(err, result){
+						if(err) throw err;
+						console.log('Added path to hs_mirrosPaths');
+						console.log('\t'+result);
+					});
+				}
+			});
+		}
+	});
 }
 
 async function scrape_hs(hsname, city, state) {
