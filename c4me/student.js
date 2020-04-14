@@ -1,6 +1,9 @@
 const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
+const url = require('url');
+const path = require('path');
+
 const mongoClient = require('mongodb').MongoClient;
 const mongodb = "mongodb://localhost:27017/";
 
@@ -34,7 +37,8 @@ app.get('/search', function(req, res){
 });
 
 app.get('/result', function(req, res){
-	res.render('student_search_colleges_results.ejs', req.query.results);
+	console.log(req.query.results);
+	res.render('student_search_colleges_results.ejs', {newArr: req.query.results});
 }); 
 
 app.get('/edit', function(req, res){
@@ -77,6 +81,7 @@ app.post('/search', function(req, res) {
 		currentDB.collection('college').find(query).toArray(function(err, result){
 			if (err) throw err;
 			if(result != null){
+				console.log('adiaiojsjaido')
 				for( let val of result){
 					let arr = []
 					for( let v of val.majors){
@@ -94,30 +99,35 @@ app.post('/search', function(req, res) {
 					let locationList = locationInfo.split(',')
 					if(loc === 'Northeast'){
 						if(northeast.includes(locationList[1])){
-							newArr[count] = val
+							console.log(val)
+							newArr[count] = val.name
 						}
 					}
 					if(loc === 'Midwest'){
 						if(midwest.includes(locationList[1])){
-                                                        newArr[count] = val
+                                                        console.log(val)
+							newArr[count] = val.name
                                                 }
 					}
 					if(loc === 'South'){
 						if(south.includes(locationList[1])){
-                                                        newArr[count] = val
+                                                        console.log(val)
+							newArr[count] = val.name
                                                 }
 					}
 					if(loc === 'West'){
 						if(west.includes(locationList[1])){
-                                                        newArr[count] = val  
+							console.log(val)
+                                                        newArr[count] = val.name
                                                 }
 					}
 					count = count + 1
 				}
+				let redirect = url.format({pathname: '/student/result', query: {results: newArr}});
+				console.log('result array is : ' + newArr);
+				res.redirect(redirect);
 			}
 		});
-		let redirect = url.format({pathname: '/student/result', query: {results: newArr}});
-		res.redirect(redirect);
 	});
 });
 

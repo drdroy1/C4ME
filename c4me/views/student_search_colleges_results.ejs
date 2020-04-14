@@ -75,10 +75,10 @@
                 <!-- PUT TABLE HERE PLS-->
                 <% newArr.forEach(function(newArr) { %>
 				    <tr>
-					    <td><%= newArr.name %></td>
-                        <td><%= newArr.cost_instate %></td>
-                        <td><%= newArr.cost_outstate %></td>
-					    <td><a href="/view?url=<%= jobs.url%>">View Similar Students</a></td>
+					    	<td><%= newArr %></td>
+                        			<td><%= newArr.cost_instate %></td>
+ 			                       	<td><%= newArr.cost_outstate %></td>
+					    	<td><a href="/view?url=<%= newArr.name%>">View Similar Students</a></td>
 				    </tr>
 			    <% }); %>
             </div>
