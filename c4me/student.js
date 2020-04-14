@@ -37,8 +37,7 @@ app.get('/result', function(req, res){
 	res.render('search_results.ejs', req.query.results);
 }); 
 
-app.get('/update', function(req, res){
-	console.log(req.session.userId);
+app.get('/edit', function(req, res){
 	res.render('edit_form.ejs');
 });
 
@@ -122,7 +121,7 @@ app.post('/search', function(req, res) {
 	});
 });
 
-app.post('/update', function(req, res){
+app.post('/edit', function(req, res){
 	let fname = req.body.firstName;
 	let lname = req.body.lastName;
 	mongoClient.connect(mongodb, function(err, db){
