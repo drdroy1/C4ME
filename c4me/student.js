@@ -30,7 +30,7 @@ app.get('', function(req,res){
 });
 
 app.get('/search', function(req, res){
-	res.render('search_colleges.ejs');
+	res.render('student_search_colleges.ejs');
 });
 
 app.get('/result', function(req, res){
