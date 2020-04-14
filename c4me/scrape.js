@@ -19,6 +19,7 @@ app.use(bodyParser.urlencoded({ extended:true }));
 app.use(bodyParser.json());
 
 app.get('', function(req, res){
+	import_hs_path();
 	//scrape_colleges();
 
 	//search_hs('Townsend');
@@ -28,11 +29,37 @@ app.get('', function(req, res){
 	//scrape_hs('academic magnet high school', 'north charleston', 'sc');
 	//console.log(toTitle('academic magnet HIgh SChool')+'|');
 	//find_similarhs('academic magnet high school', 'north charleston', 'sc');
-	find_similarhs('glendale high school', 'glendale', 'az');
-	find_similarhs('glenbrook south high school', 'glenview', 'il');
+	//find_similarhs('glendale high school', 'glendale', 'az');
+	//find_similarhs('glenbrook south high school', 'glenview', 'il');
+	
 	res.send('KO')
 	//res.sendFile(__dirname + "login.html");
 })
+
+// importing highschools.txt to db
+function import_hs_path() {
+	let f = fs.readFileSync('./tmp/highschools.txt', 'utf8');
+	flines = f.split('\n');
+	fsize = flines.length;
+
+	mongoClient.connect(mongodb, function(err, db){
+		if(err) throw err;
+		let currentDB = db.db('c4me');
+		for(let i=0; i<fsize; ++i) {
+			//console.log(flines[i]);
+			currentDB.collection('hs_mirrorPaths').findOne({path: flines[i]}, function(err, result){
+				if(err) throw err;
+				if(result == null) {
+					currentDB.collection('hs_mirrorPaths').insertOne({path: flines[i]}, function(err, result){
+						if(err) throw err;
+						console.log('Added path to hs_mirrosPaths');
+						console.log('\t'+result);
+					});
+				}
+			});
+		}
+	});
+}
 
 function find_similarhs(hsname, city, state) {
 	let hs_name = toTitle(hsname);
