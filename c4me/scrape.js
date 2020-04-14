@@ -18,9 +18,13 @@ var app = express();
 app.use(bodyParser.urlencoded({ extended:true }));
 app.use(bodyParser.json());
 
+app.get('/hs', function(req, res){
+	res.render('admin_scrape.ejs');
+});
+
 app.post('/college', function(err, res){
 	//scrape_colleges();
-});
+})
 
 app.post('', function(req, res){
 	//import_hs_path();
@@ -54,7 +58,12 @@ app.post('', function(req, res){
 	//res.send('KO')
 	//res.sendFile(__dirname + "login.html");
 })
-
+/*
+app.get('/result', function(req, res){
+	console.log(req.query.results);
+	res.render('admin_scrape_result.ejs', {scrapedCollegeData: req.query.results});
+});
+*/
 function find_similarhs(hsname, city, state, res) {
 	let hs_name = toTitle(hsname);
 
@@ -132,8 +141,9 @@ function simhs_algo(hs_doc, res) {
 					}
 				}
 				console.log('sending unsorted list to front end...');
-				res.send(hslist);
-				console.log(hslist);
+				let redirect = url.format({pathname: '/scrape/result', query: {results: hslist}});
+				console.log('result array is : ' + hslist);
+				res.redirect(redirect);
 			}
 		});
 	});

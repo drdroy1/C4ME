@@ -72,6 +72,11 @@
         </div>
         <section id="info">
             <!-- PUT RESULTS OF SCRAPE HERE -->
+	    <% newArr.forEach(function(scrapedCollegeData){ %>
+	    	<tr>
+			<td><%= scrapedCollegeData %></td>
+		</tr>
+	    <% }); %>
         </section>
     </main>
 </body>
