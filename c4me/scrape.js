@@ -18,9 +18,12 @@ var app = express();
 app.use(bodyParser.urlencoded({ extended:true }));
 app.use(bodyParser.json());
 
+app.post('/college', function(err, res){
+	//scrape_colleges();
+});
+
 app.post('', function(req, res){
 	//import_hs_path();
-	//scrape_colleges();
 
 	//search_hs('Townsend');
 	//search_hs('francis lewis');
