@@ -71,10 +71,19 @@
             </section>
         </div>
         <section id="info">
-            <div class="container mx-auto" style="width: 500px;">
+            <div class="form-group form-inline">
+                <label for="home" class="mr-3">Home Phone</label>
+                <input type="text" id="home" class="form-control" name="home">
+            </div>
+            <div class="form-group form-inline">
+                <label for="mobile" class="mr-3">Mobile Phone</label>
+                <input type="text" id="mobile" class="form-control" name="mobile">
+            </div>
+
+            <form method='post' action='#' id="scrapeImport" class="main-form">
                 <button type="submit" class="btn btn-primary" value="Scrape">Scrape</button>
                 <button type="submit" class="btn btn-primary" value="Import">Import</button>
-            </div>
+            </form>
         </section>
     </main>
 
