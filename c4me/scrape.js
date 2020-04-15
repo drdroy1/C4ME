@@ -33,11 +33,12 @@ app.get('', function(req, res){
 	//search_hs('Townsend');
 	//search_hs('francis lewis');
 
-	//let hsname = 'bard high school early college', city = 'new york', state = 'ny';
+	let hsname = 'bard high school early college', city = 'new york', state = 'ny';
 	//let hsname = 'academic magnet high school', city = 'north charleston', state = 'sc';
 	//let hsname = 'glendale high school', city = 'glendale', state = 'az';
 	//let hsname = 'glenbrook south high school', city = 'glenview', state = 'il';
-	let hsname = 'brooklyn technical high school', city = 'brooklyn', state = 'ny';
+	//let hsname = 'brooklyn technical high school', city = 'brooklyn', state = 'ny';
+	//let hsname = 'townsend harris high school', city = 'flushing', state = 'ny';
 	let path = hsname.replace(/ /g, '-') + '-' + city.replace(/ /g, '-') + '-' + state;
 	mongoClient.connect(mongodb, function(err, db) {
 		if(err) throw err;
@@ -45,8 +46,10 @@ app.get('', function(req, res){
 		currentDB.collection('hs_mirrorPaths').findOne({path: path}, function(err, result){
 			if(err) throw err;
 			if(result != null) {
-				//find_similarhs(hsname, city, state, res);
-				scrapeHS(hsname, city, state);
+				find_similarhs(hsname, city, state, res);
+				//scrapeHS(hsname, city, state);
+			} else {
+				console.log('Error: <'+toTitle(hsname)+'> not in highschools.txt');
 			}
 		});
 	});
@@ -69,18 +72,15 @@ app.get('/hs/result', function(req, res){
 
 function scrapeHS(hsname, city, state) {
 	let hs_name = toTitle(hsname);
-	let path = hsname + ' ' + city + ' ' + state;
-	path.replace(/ /g, '-');
 	mongoClient.connect(mongodb, function(err, db){
 		if(err) throw err;
 		let currentDB = db.db('c4me');
 		currentDB.collection('high_school').findOne({name: hs_name}, function(err, result){
 			if(err) throw err;
 			if(result == null) {
-				currentDB.collection('hs_mirrorPaths').findOne({path: path}, function(err, result){
 				scrape_hs(hsname, city, state);
 			} else {
-				console.log('scrape hs: !NULL');
+				console.log('Scraped: HS <'+hs_name+'> found in db');
 			}
 		});
 	});
@@ -101,7 +101,7 @@ function find_similarhs(hsname, city, state, res) {
 					simhs_algo(result, res);
 				});
 			} else {
-				console.log('!NULL');
+				console.log('find_similarhs(): HS <'+hs_name+'> found in db');
 				//console.log(result);
 				simhs_algo(result, res);
 			}
