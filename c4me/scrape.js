@@ -27,11 +27,15 @@ app.post('/college', function(err, res){
 	scrape_colleges(res);
 })
 
+app.get('/search_hs'), function(req, res){
+	search_hs('Townsend').then(function(response){
+		res.send(response);
+	});
+	//search_hs('francis lewis');
+}
+
 app.get('', function(req, res){
 	//import_hs_path();
-
-	//search_hs('Townsend');
-	//search_hs('francis lewis');
 
 	let hsname = 'bard high school early college', city = 'new york', state = 'ny';
 	//let hsname = 'academic magnet high school', city = 'north charleston', state = 'sc';
@@ -39,6 +43,7 @@ app.get('', function(req, res){
 	//let hsname = 'glenbrook south high school', city = 'glenview', state = 'il';
 	//let hsname = 'brooklyn technical high school', city = 'brooklyn', state = 'ny';
 	//let hsname = 'townsend harris high school', city = 'flushing', state = 'ny';
+
 	let path = hsname.replace(/ /g, '-') + '-' + city.replace(/ /g, '-') + '-' + state;
 	mongoClient.connect(mongodb, function(err, db) {
 		if(err) throw err;
@@ -375,6 +380,7 @@ async function search_hs(str) {
 	}
 	//console.log(i-1 + "-" + pages);
 	
+	let output = '';
 	do {
 		$('font > a > strong').each(function(index) {
 			sname_list.push($(this).text());
@@ -383,13 +389,15 @@ async function search_hs(str) {
 			let b = addr.lastIndexOf(nbsp);
 			let c = addr.substring(a+2, b);
 			sloc_list.push(c);
-			//console.log(sname_list[sname_list.length -1] + "|" + c);
+			console.log(sname_list[sname_list.length -1] + "\t|\t" + c);
+			output += sname_list[sname_list.length -1] + "\t|\t" + c +'\n';
 		});
 		i++;
 		await page.goto(shs_url0 + s + shs_url1 + i);
 		shs_content = await page.content();
 		$ = cheerio.load(shs_content);
 	} while (i <= pages);
+	return output;
 	//console.log('Completed');
 }
 
