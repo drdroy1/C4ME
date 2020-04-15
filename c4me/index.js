@@ -160,6 +160,8 @@ app.post('/register', function (req, res) {
 				let salt = crypto.randomBytes(Math.ceil(password.length/2)).toString('hex').slice(0,password.length);
 				let sha256 = crypto.pbkdf2Sync(password, salt, 256, 32, 'sha256');
 				let newUser = { username: username, password: sha256, salt: salt, fName: fName, lName: lName, userType: userType };
+				let newProfile = { userId: req.body.username, fName: fName, lName: lName}
+				currentDB.collection('profile').insertOne(newProfile);
 				currentDB.collection('account').insertOne(newUser, function (err, result) {
 					if (err) throw err;
 					console.log(newUser)
