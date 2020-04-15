@@ -37,12 +37,18 @@ app.get('/search', function(req, res){
 });
 
 app.get('/result', function(req, res){
-	console.log(req.query.results);
+	for(let val of req.query.results){
+		console.log(val)
+	}
 	res.render('student_search_colleges_results.ejs', {newArr: req.query.results});
 }); 
 
+app.get('/profile', function(req, res){
+	res.render('student_profile.ejs');
+});
+
 app.get('/edit', function(req, res){
-	res.render('edit_form.ejs');
+	res.render('student_profile_edit.ejs');
 });
 
 app.post('/search', function(req, res) {
@@ -100,32 +106,37 @@ app.post('/search', function(req, res) {
 					if(loc === 'Northeast'){
 						if(northeast.includes(locationList[1])){
 							console.log(val)
-							newArr[count] = val.name
+							newArr[count] = val
+							count = count + 1
 						}
 					}
 					if(loc === 'Midwest'){
 						if(midwest.includes(locationList[1])){
                                                         console.log(val)
-							newArr[count] = val.name
+							newArr[count] = val
+							count = count + 1
                                                 }
 					}
 					if(loc === 'South'){
 						if(south.includes(locationList[1])){
                                                         console.log(val)
-							newArr[count] = val.name
+							newArr[count] = val
+							count = count + 1;
                                                 }
 					}
 					if(loc === 'West'){
 						if(west.includes(locationList[1])){
 							console.log(val)
-                                                        newArr[count] = val.name
-                                                }
+                                                        newArr[count] = val
+                                                	count = count + 1;
+						}
 					}
-					count = count + 1
 				}
-				let redirect = url.format({pathname: '/student/result', query: {results: newArr}});
 				console.log('result array is : ' + newArr);
-				res.redirect(redirect);
+				for(let val of newArr){
+					console.log(val)
+				}
+				res.render('student_search_colleges_results.ejs', {results: newArr});
 			}
 		});
 	});

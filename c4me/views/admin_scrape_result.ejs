@@ -71,7 +71,15 @@
             </section>
         </div>
         <section id="info">
+	    <h2>Successfully Scraped</h2>
             <!-- PUT RESULTS OF SCRAPE HERE -->
+	    <% results.forEach(function(results){ %>
+	    	<tr>
+			<td><%= results.name %></td>
+			<td><%= results.location %></td>
+			<td><%= results.admis_percent*100 %></td>
+		</tr>
+	    <% }); %>
         </section>
     </main>
 </body>

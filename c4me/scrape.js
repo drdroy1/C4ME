@@ -6,6 +6,7 @@ const fs = require('fs');
 const mongoClient = require('mongodb').MongoClient;
 const mongodb = "mongodb://localhost:27017/";
 const puppeteer = require('puppeteer');
+const url = require('url');
 
 const cd_base_url = 'http://www.collegedata.com/';
 const r_url = 'https://www.timeshighereducation.com/rankings/united-states/2020#!/page/0/length/-1/sort_by/rank/sort_order/asc/cols/stats';
@@ -18,9 +19,16 @@ var app = express();
 app.use(bodyParser.urlencoded({ extended:true }));
 app.use(bodyParser.json());
 
+app.get('/college', function(req, res){
+	res.render('admin_scrape.ejs');
+});
+
+app.post('/college', function(err, res){
+	scrape_colleges(res);
+})
+
 app.post('', function(req, res){
 	//import_hs_path();
-	//scrape_colleges();
 
 	//search_hs('Townsend');
 	//search_hs('francis lewis');
@@ -51,6 +59,11 @@ app.post('', function(req, res){
 	//res.send('KO')
 	//res.sendFile(__dirname + "login.html");
 })
+
+app.get('/hs/result', function(req, res){
+	console.log(req.query.results);
+	res.render('admin_scrape_result.ejs', {scrapedCollegeData: req.query.results});
+});
 
 function find_similarhs(hsname, city, state, res) {
 	let hs_name = toTitle(hsname);
@@ -129,8 +142,7 @@ function simhs_algo(hs_doc, res) {
 					}
 				}
 				console.log('sending unsorted list to front end...');
-				res.send(hslist);
-				console.log(hslist);
+				res.render('admin_scrape.ejs', {results: hslist});
 			}
 		});
 	});
@@ -350,7 +362,7 @@ async function search_hs(str) {
 	//console.log('Completed');
 }
 
-async function scrape_colleges(){
+async function scrape_colleges(res){
 	let rname_list = [];
 	let rval_list = [];
 
@@ -373,6 +385,7 @@ async function scrape_colleges(){
 		rval_list.push(r);
 	});
 
+	let added = [];
 	let f = fs.readFileSync('tmp/colleges.txt', 'utf8');
 	flines = f.split('\n');
 	fsize = flines.length;
@@ -484,7 +497,7 @@ async function scrape_colleges(){
 				currentDB.collection('college').findOneAndDelete({name:college.name}, function(err, result) {
 					if (err) throw err;
 					if (result != null) {
-						console.log(result);
+						//console.log(result);
 					} else {
 						console.log('Not Found');
 					}
@@ -492,18 +505,19 @@ async function scrape_colleges(){
 				currentDB.collection('college').insertOne(college, function(err, result) {
 					if (err) throw err;
 					if (result != null) {
-						console.log(result);
+						added.push(college);
+						//console.log(result);
 					} else {
 						console.log('Could not add');
 					}
 				});
 			});
-			console.log('Done '+college.name);
 		} else {
 			console.log('Error: Could not load <' + cname + '>');
 		}
-
 	}
+	console.log('Done');
+	res.render('admin_scrape_result.ejs', {results: added});
 }
 
 function parseTestscores(str) {
