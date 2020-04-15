@@ -83,13 +83,13 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <% results.forEach(function(results){ %>
                     <tr>
-                        <% results.forEach(function(results){ %>
                         <td><%= results.name %></td>
                         <td><%= results.location %></td>
                         <td><%= results.admis_percent*100 %></td>
-                        <% }); %>
                     </tr>
+                    <% }); %>
                 </tbody>
             </table>
         </section>
