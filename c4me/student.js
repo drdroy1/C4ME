@@ -48,10 +48,10 @@ app.get('/result', function (req, res) {
 app.get('/profile', function (req, res) {
 	mongoClient.connect(mongodb, function (err, db) {
 		let currentDB = db.db('c4me')
-		console.log(req.session.userId)
 		currentDB.collection('profile').findOne({ userId: req.session.userId }, function (err, result) {
-			console.log(result)
+			console.log('profile result is: ' + result)
 			if (result) {
+				console.log('dfad' + result.fName + 'dsads');
 				res.render('student_profile.ejs', { 
 					lName: result.fName, 
 					fName: result.lName, 
@@ -68,7 +68,20 @@ app.get('/profile', function (req, res) {
 				});
 			}
 			else {
-				res.render('student_profile.ejs');
+				res.render('student_profile.ejs',{
+					lName: '',
+                                        fName: '',
+                                        age: '',
+                                        email: '',
+                                        home: '',
+                                        mobile: '',
+                                        currentSchool: '',
+                                        gradYear: '',
+                                        gpa: '',
+                                        sat_math: '',
+                                        sat_ebrw: '',
+                                        act: ''
+				});
 			}
 		})
 	});
@@ -163,7 +176,7 @@ app.post('/search', function (req, res) {
 });
 
 app.post('/edit', function (req, res) {
-	console.log('let me go');
+	console.log('Current editor ID: ' + req.session.userId);
 	let fname = req.body.firstName;
 	let lname = req.body.lastName;
 	let age = req.body.age;
@@ -193,7 +206,7 @@ app.post('/edit', function (req, res) {
 
 	mongoClient.connect(mongodb, function (err, db) {
 		let currentDB = db.db('c4me')
-		currentDB.collection('profile').findOneAndUpdate({userId: req.session.userId }, {$set: query})
+		currentDB.collection('profile').update({userId: req.session.userId }, {$set: query}, {upsert: true})
 		res.redirect('/student/profile');
 		db.close();
 	});
@@ -209,20 +222,46 @@ app.post('/compute/:key', function (req, res) {
 
 	mongoClient.connect(mongodb, function (err, db) {
 		let currentDB = db.db('c4me')
-		currentDB.collection('account').findOne({ account: username }, function (err, result) {
-			currentDB.collection('profile').findOne({ fName: result.fName, lName: result.lName }, function (err, result) {
-				let gpa = result.gpa
-				let math = result.math
-				let read = result.reading
-				let write = result.writing
-				let score = 0;
-
-				for (let val of table) {
-					dict[val.collegeName] = score;
-					score = 0
+		currentDB.collection('resTable').findOne({ key: key }, function (err, result) {
+			let arr = result.results
+			currentDB.collection('profile').findOne( { userId: username }, function(err, result){
+				console.log('Gonna start with search results: ' + result)
+				if(result){
+					let score = 0
+					let gpa = 0
+					let sat_math = 0
+					let sat_ebrw = 0
+					let act = 0
+					for( let val of arr){
+						console.log(val.testscores.avg_gpa)
+						score = 0
+						gpa = val.testscores.avg_gpa
+						sat_math = val.testscores.sat_math.lrange
+						sat_ebrw = val.testscores.sat_ebrw.lrange
+						act = val.testscores.act_composite.lrange
+						if(gpa <= result.gpa){
+							score = score + 1
+						}
+						if(act <= result.act){
+                                                        score = score + 1
+                                                }
+						if(sat_math <= result.sat_math){
+                                                        score = score + 1
+                                                }
+						if(sat_ebrw <= result.sat_ebrw){
+                                                        score = score + 1
+                                                }
+						val.recommendationScore = score/5
+						console.log(val.recommendationScore)
+					}
+					res.end()
 				}
-			});
+				else{
+					res.end()
+				}
+			}); 
 		});
+		res.end();
 	});
 });
 

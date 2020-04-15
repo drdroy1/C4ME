@@ -34,6 +34,7 @@ app.post('/delete', function(req, res){
 		let currentDB = db.db('c4me')
 		currentDB.collection('profile').remove({});
 	});
+	res.render('admin_students.ejs');
 });
 
 app.listen(8082);
