@@ -29,6 +29,7 @@ app.use(session({
 
 app.get('', function (req, res) {
 	req.session.userId = req.query.sessionId;
+	console.log('Set req session Id: ' + req.session.userId)
 	res.render('student_index.ejs');
 });
 
@@ -46,11 +47,26 @@ app.get('/result', function (req, res) {
 app.get('/profile', function (req, res) {
 	mongoClient.connect(mongodb, function (err, db) {
 		let currentDB = db.db('c4me')
+		console.log(req.session.userId)
 		currentDB.collection('profile').findOne({ userId: req.session.userId }, function (err, result) {
+			console.log(result)
 			if (result) {
 				firstName = result.firstName;
 				lastName = result.lastName;
-				res.render('student_profile.ejs', { lastName: lastName, firstName });
+				res.render('student_profile.ejs', { 
+					lName: firstName, 
+					fName: firstName, 
+					age: result.age, 
+					email: result.email,
+					home: result.home,
+					mobile: result.mobile,
+					currentSchool: result.currentSchool,
+					gradYear: result.gradYear,
+					gpa: result.gpa,
+					sat_math: result.sat_math,
+					sat_ebrw: result.sat_ebrw,
+					act: result.act
+				});
 			}
 			else {
 				res.render('student_profile.ejs');
@@ -156,7 +172,7 @@ app.post('/edit', function (req, res) {
 	console.log('let me go');
 	let fname = req.body.firstName;
 	let lname = req.body.lastName;
-	/*let age = req.body.age;
+	let age = req.body.age;
 	let email = req.body.email;
 	let homeP = req.body.home;
 	let mobile = req.body.mobile;
@@ -166,22 +182,25 @@ app.post('/edit', function (req, res) {
 	let satMath = req.body.sat_math;
 	let satEBRW = req.body.sat_ebrw;
 	let act = req.body.act;
-	*/
-
-	console.log('RECEIVED EDIT REQUEST');
+	
+	let query = {
+		userId: req.session.userId,
+		fName: fname,
+		lName: lname,
+		age: age,
+		email: email,
+		home: homeP,
+		mobile: mobile,
+		currentSchool: school,
+		gradYear: gyear,
+		gpa: gpa,
+		sat_math: satMath, sat_ebrw: satEBRW, act: act
+	}	
 
 	mongoClient.connect(mongodb, function (err, db) {
 		let currentDB = db.db('c4me')
-		currentDB.collection('profile').findOne({ fName: fname, lName: lname }, function (err, result) {
-			if (result != null) {
-				let query = {
-					userId: req.session.userId, fName: fname, lName: lname, age: age,
-					email: email, home: homeP, mobile: mobile,
-					currentSchool: school, gradYear: gyear, gpa: gpa, sat_math: satMath, sat_ebrw: satEBRW, act: act
-				}
-				currentDB.collection('profile').updateOne({ fName: fname, lName: lname }, { $set: query })
-			}
-		});
+		currentDB.collection('profile').findOneAndUpdate({userId: req.session.userId }, {$set: query})
+		res.redirect('/student/profile');
 		db.close();
 	});
 });
