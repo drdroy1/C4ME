@@ -27,7 +27,7 @@ app.get('/delete', function(req, res){
 	res.render('admin_students.ejs');
 });
 
-app.delete('', function(req, res){
+app.post('/delete', function(req, res){
 	console.log('deleting my ass');
 	mongoClient.connect(mongodb, function(err, db){
 		if (err) throw err;
