@@ -7,7 +7,7 @@
     <meta name="description" content="Helps high school students decide where to apply for college" />
     <meta name="keywords" content="" />
     <meta name="author" content="Andrew Cao, Qihong Jiang, Maggie Zhou" />
-    <title>C4me | Administrator</title>
+    <title>C4me | Student</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/style.css" />
@@ -70,21 +70,33 @@
                 </div>
             </section>
         </div>
-        <section id="info">
-            <div class="container">
-                <!-- PUT TABLE HERE PLS-->
-                <% results.forEach(function(results) { %>
-				    <tr>
-					    	<td><%= results.name %></td>
-                        			<td><%= results.cost_gen %></td>
- 			                       	<td><%= results.admis_percent %></td>
-					    	<td><%= results.location %></td>
-						<td><%= results.size %></td>
-						<td><%= results.ranking %></td>
-						<td><a href="/view?url=<%= results.name%>">View Similar Students</a></td>
-				    </tr>
-			    <% }); %>
-            </div>
+        <section id="info md-4">
+            <!-- PUT TABLE HERE PLS-->
+            <table class="table table-bordered">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Cost</th>
+                        <th scope="col">Admission Rate</th>
+                        <th scope="col">Location</th>
+                        <th scope="col">Size</th>
+                        <th scope="col">Ranking</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% results.forEach(function(results) { %>
+                    <tr>
+                        <td><%= results.name %></td>
+                        <td><%= results.cost_gen %></td>
+                        <td><%= results.admis_percent %></td>
+                        <td><%= results.location %></td>
+                        <td><%= results.size %></td>
+                        <td><%= results.ranking %></td>
+                        <td><a href="/view?url=<%= results.name%>">View Similar Students</a></td>
+                    </tr>
+                    <% }); %>
+                </tbody>
+            </table>
         </section>
 
 </body>
