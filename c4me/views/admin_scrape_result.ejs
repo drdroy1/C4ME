@@ -71,14 +71,21 @@
             </section>
         </div>
         <section id="info">
-	    <h2>Successfully Scraped</h2>
+	    <h3>Successfully Scraped</h3>
             <!-- PUT RESULTS OF SCRAPE HERE -->
-	    <% results.forEach(function(results){ %>
+		<table>
 	    	<tr>
-			<td><%= results.name %></td>
-			<td><%= results.location %></td>
-			<td><%= results.admis_percent*100 %></td>
-		</tr>
+			<th> College Name </th>
+			<th> Location (city, state) </th>
+			<th> Admission Rate (%) </th>
+	   	<tr/>
+		<% results.forEach(function(results){ %>
+			<tr>	
+				<td><%= results.name %></td>
+				<td><%= results.location %></td>
+				<td><%= results.admis_percent*100 %>%</td>
+			</tr>
+		</table>
 	    <% }); %>
         </section>
     </main>
