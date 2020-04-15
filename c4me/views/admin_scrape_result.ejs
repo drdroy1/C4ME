@@ -71,27 +71,9 @@
             </section>
         </div>
         <section id="info">
-<<<<<<< HEAD
-	    <h3>Successfully Scraped</h3>
-            <!-- PUT RESULTS OF SCRAPE HERE -->
-		<table>
-	    	<tr>
-			<th> College Name </th>
-			<th> Location (city, state) </th>
-			<th> Admission Rate (%) </th>
-	   	<tr/>
-		<% results.forEach(function(results){ %>
-			<tr>	
-				<td><%= results.name %></td>
-				<td><%= results.location %></td>
-				<td><%= results.admis_percent*100 %>%</td>
-			</tr>
-		</table>
-	    <% }); %>
-=======
             <h2>Successfully Scraped</h2>
             <!-- PUT RESULTS OF SCRAPE HERE -->
-            <table class="table">
+            <table class="table table-bordered">
                 <thead class="thead-light">
                     <tr>
                         <th scope="col">Name</th>
@@ -110,7 +92,6 @@
                     <% }); %>
                 </tbody>
             </table>
->>>>>>> bc67b5af7a5f69de5cdd4c20ec436ef5008e17bb
         </section>
     </main>
 </body>

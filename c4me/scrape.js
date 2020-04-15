@@ -33,10 +33,11 @@ app.get('', function(req, res){
 	//search_hs('Townsend');
 	//search_hs('francis lewis');
 
-	let hsname = 'bard high school early college', city = 'new york', state = 'ny';
+	//let hsname = 'bard high school early college', city = 'new york', state = 'ny';
 	//let hsname = 'academic magnet high school', city = 'north charleston', state = 'sc';
 	//let hsname = 'glendale high school', city = 'glendale', state = 'az';
 	//let hsname = 'glenbrook south high school', city = 'glenview', state = 'il';
+	let hsname = 'brooklyn technical high school', city = 'brooklyn', state = 'ny';
 	let path = hsname.replace(/ /g, '-') + '-' + city.replace(/ /g, '-') + '-' + state;
 	mongoClient.connect(mongodb, function(err, db) {
 		if(err) throw err;
@@ -44,7 +45,8 @@ app.get('', function(req, res){
 		currentDB.collection('hs_mirrorPaths').findOne({path: path}, function(err, result){
 			if(err) throw err;
 			if(result != null) {
-				find_similarhs(hsname, city, state, res);
+				//find_similarhs(hsname, city, state, res);
+				scrapeHS(hsname, city, state);
 			}
 		});
 	});
@@ -64,6 +66,23 @@ app.get('/hs/result', function(req, res){
 	console.log(req.query.results);
 	res.render('admin_scrape_result.ejs', {scrapedCollegeData: req.query.results});
 });
+
+function scrapeHS(hsname, city, state) {
+	let hs_name = toTitle(hsname);
+	mongoClient.connect(mongodb, function(err, db){
+		if(err) throw err;
+		let currentDB = db.db('c4me');
+		currentDB.collection('high_school').findOne({name: hs_name}, function(err, result){
+			if(err) throw err;
+			if(result == null) {
+				scrape_hs(hsname, city, state);
+			} else {
+				console.log('scrape hs: !NULL');
+			}
+		});
+	});
+
+}
 
 function find_similarhs(hsname, city, state, res) {
 	let hs_name = toTitle(hsname);
@@ -141,6 +160,7 @@ function simhs_algo(hs_doc, res) {
 						hslist.push(obj);
 					}
 				}
+				hslist.sort(compare);
 				console.log('sending unsorted list to front end...');
 				console.log(hslist);
 				//res.render('admin_scrape_result.ejs', {results: hslist});
@@ -148,6 +168,14 @@ function simhs_algo(hs_doc, res) {
 		});
 	});
 
+}
+
+function compare(a, b) {
+	if(a.score < b.score) {
+		return 1;
+	} else {
+		return -1;
+	}
 }
 
 function get_score(f1, f2, range, bound) {

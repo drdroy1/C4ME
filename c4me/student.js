@@ -44,7 +44,19 @@ app.get('/result', function(req, res){
 }); 
 
 app.get('/profile', function(req, res){
-	res.render('student_profile.ejs');
+	mongoClient.connect(mongodb, function (err, db) {
+		let currentDB = db.db('c4me')
+		currentDB.collection.findOne({ userId: req.session.userId }, function(err, result){
+			firstName = result.firstName
+			lastName = result.lastName
+			if(result){
+				res.render('student_profile.ejs', {lastName: lastName, firstName});		
+			}
+			else{
+				res.render('student_profile.ejs');
+			}
+		})	
+	});
 });
 
 app.get('/edit', function(req, res){
@@ -74,8 +86,6 @@ app.post('/search', function(req, res) {
 	if(m1 === ''){
 		m1 = 'Computer Science'
 	}
-
-	console.log(loc);
 		
 	mongoClient.connect(mongodb, function (err, db) {
 		if (err) throw err;
@@ -145,11 +155,20 @@ app.post('/search', function(req, res) {
 app.post('/edit', function(req, res){
 	let fname = req.body.firstName;
 	let lname = req.body.lastName;
+	let gyear = req.body.gradYear;
+	let id = req.body.idNum;
+	let email = req.body.email;
+	let homeP = req.body.home;
+	let mobile = req.body.mobile;
+	let address = req.body.address;
+	
+	console.log('RECEIVED EDIT REQUEST');
+	
 	mongoClient.connect(mongodb, function(err, db){
 		let currentDB = db.db('c4me')
 		currentDB.collection('profile').findOne({ fName: fname, lName: lname}, function(err, result){
 			if(result != null){
-				let query = {}
+				let query = { userId: req.session.userId, fName: fname, lName: lname, gyear: gyear, id: id, email: email, home: homeP, mobile: mobile, address: address}
 				currentDB.collection('profile').updateOne({ fName: fname, lName: lname}, {$set: query})
 			}
 		});
