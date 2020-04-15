@@ -72,10 +72,10 @@
         </div>
         <section id="info mt-4 md-4">
             <!-- PUT TABLE HERE PLS-->
-	  <form method='post' action = '/student/compute/<%= key %>'> 
-		<input type="submit" id="searchBtn" value="Compute">
-	  </form> 
-	  <table class="table table-bordered" id="myTable2">
+            <form method='post' action='/student/compute/<%= key %>'>
+                <input type="submit" id="searchBtn" value="Compute">
+            </form>
+            <table class="table table-bordered" id="myTable2">
                 <thead class="thead-light">
                     <tr>
                         <th scope="col" onclick="sortTable(0)">Name</th>
@@ -100,7 +100,7 @@
                     </tr>
                     <% }); %>
                 </tbody>
-             </table>
+            </table>
         </section>
         <script>
             function sortTable(n) {
@@ -158,27 +158,27 @@
                 }
             }
         </script>
-	<script  type="text/javascript" src="jquery-1.8.2.js"></script>
-<script type="text/javascript">
-$(function(){
-    var dataArr = [];
-    $("td").each(function(){
-        dataArr.push($(this).html());
-    });
-    $('#sendServer').click(function(){
-        $.ajax({
-              type : "POST",
-              url : '/student/compute',
-              data : "content="+dataArr,
-              success: function(data) {
-                  alert(data);// alert the data from the server
-              },
-              error : function() {
-              }
-        });
-    });
-});
-</script>
+        <script type="text/javascript" src="jquery-1.8.2.js"></script>
+        <script type="text/javascript">
+            $(function () {
+                var dataArr = [];
+                $("td").each(function () {
+                    dataArr.push($(this).html());
+                });
+                $('#sendServer').click(function () {
+                    $.ajax({
+                        type: "POST",
+                        url: '/student/compute',
+                        data: "content=" + dataArr,
+                        success: function (data) {
+                            alert(data);// alert the data from the server
+                        },
+                        error: function () {
+                        }
+                    });
+                });
+            });
+        </script>
 </body>
 
 </html>

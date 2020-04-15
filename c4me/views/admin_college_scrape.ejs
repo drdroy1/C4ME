@@ -17,7 +17,7 @@
     <header>
         <div class="container-fluid">
             <nav class="navbar navbar-expand-sm navbar-light bg-light fixed-top border-bottom">
-                <a class="navbar-brand ml-4 " href="/"><img src="../img/c4me_logo_(transparent).png"></a>
+                <a class="navbar-brand ml-4 " href="/admin"><img src="../img/c4me_logo_(transparent).png"></a>
                 <h2 class="mr-auto">| Administrator</h2>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNav #sideNav">
                     <span class="navbar-toggler-icon"></span>
@@ -48,56 +48,37 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link active" href="/scrape/college">
                                 Colleges
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="/admin/delete">
                                 Students
                             </a>
                         </li>
                     </ul>
             </nav>
         </div>
-    </div>
 
-    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-        <div class="justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <section id="pageName">
-                <div class="container md-4">
-                    <h1> Update & Review Colleges!</h1>
-                    <a href="/">
-                        <button class="btn btn-primary">Colleges</button>
-                    </a>
-                </div>
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+            <div
+                class="justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <section id="pageName">
+                    <div class="container md-4">
+                        <h1> Scrape Colleges</h1>
+                    </div>
+                </section>
+            </div>
+            <section id="info">
+                <center>
+                    <form method='post' action='/scrape/college' id="scrapeImport" class="main-form">
+                        <button type="submit" class="btn btn-primary" value="Scrape">Scrape Colleges</button>
+                    </form>
+                </center>
             </section>
-        </div>
-        <section id="info">
-            <div class="container">
-                <div class="row">
-                    <div class="col p-4 m-5 border border-primary rounded">
-                        <center>
-                            <h3 class="border-bottom border-dark">Welcome</h3>
-                        </center>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean justo massa, lobortis ac
-                            metus
-                            sodales,
-                            semper viverra odio</p>
-                    </div>
-                    <div class="col p-4 m-5 border border-primary rounded">
-                        <center>
-                            <h3 class="border-bottom border-dark">Students to be Reviewed</h3>
-                        </center>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean justo massa, lobortis ac
-                            metus
-                            sodales,
-                            semper viverra odio</p>
-                    </div>
-                </div>
-        </section>
-    </main>
-
+        </main>
+    </div>
 </body>
 
 <script src="./js/script.js"></script>

@@ -17,7 +17,7 @@
     <header>
         <div class="container-fluid">
             <nav class="navbar navbar-expand-sm navbar-light bg-light fixed-top border-bottom">
-                <a class="navbar-brand ml-4 " href="/"><img src="../img/c4me_logo_(transparent).png"></a>
+                <a class="navbar-brand ml-4 " href="/admin"><img src="../img/c4me_logo_(transparent).png"></a>
                 <h2 class="mr-auto">| Administrator</h2>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNav #sideNav">
                     <span class="navbar-toggler-icon"></span>
@@ -48,36 +48,36 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="/scrape/college">
                                 Colleges
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link active" href="/admin/delete">
                                 Students
                             </a>
                         </li>
                     </ul>
             </nav>
         </div>
-    </div>
-
-    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-        <div class="justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <section id="pageName">
-                <div class="container md-4">
-                    <h1> Scrape Colleges</h1>
-                </div>
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+            <div
+                class="justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <section id="pageName">
+                    <div class="container md-4">
+                        <h1>Student Masterlist</h1>
+                    </div>
+                </section>
+            </div>
+            <section id="info">
+                <center>
+                    <form method='delete' action='/admin' id="deleteStudents" class="main-form">
+                        <button type="submit" class="btn btn-primary" value="Delete">Delete All</button>
+                    </form>
+                </center>
             </section>
-        </div>
-        <section id="info">
-            <center>
-                <form method='post' action='/scrape/college' id="scrapeImport" class="main-form">
-                    <button type="submit" class="btn btn-primary" value="Scrape">Scrape Colleges</button>
-                </form>
-            </center>
-        </section>
-    </main>
+        </main>
+    </div>
 </body>
 
 <script src="./js/script.js"></script>
