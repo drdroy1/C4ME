@@ -46,10 +46,10 @@ app.get('/result', function(req, res){
 app.get('/profile', function(req, res){
 	mongoClient.connect(mongodb, function (err, db) {
 		let currentDB = db.db('c4me')
-		currentDB.collection.findOne({ userId: req.session.userId }, function(err, result){
-			firstName = result.firstName
-			lastName = result.lastName
+		currentDB.collection('profile').findOne({ userId: req.session.userId }, function(err, result){
 			if(result){
+				firstName = result.firstName;
+				lastName = result.lastName;
 				res.render('student_profile.ejs', {lastName: lastName, firstName});		
 			}
 			else{
