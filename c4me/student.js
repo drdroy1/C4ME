@@ -153,9 +153,10 @@ app.post('/search', function (req, res) {
 });
 
 app.post('/edit', function (req, res) {
+	console.log('let me go');
 	let fname = req.body.firstName;
 	let lname = req.body.lastName;
-	let age = req.body.age;
+	/*let age = req.body.age;
 	let email = req.body.email;
 	let homeP = req.body.home;
 	let mobile = req.body.mobile;
@@ -165,7 +166,7 @@ app.post('/edit', function (req, res) {
 	let satMath = req.body.sat_math;
 	let satEBRW = req.body.sat_ebrw;
 	let act = req.body.act;
-
+	*/
 
 	console.log('RECEIVED EDIT REQUEST');
 
