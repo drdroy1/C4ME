@@ -43,8 +43,12 @@ app.get('/result', function(req, res){
 	res.render('student_search_colleges_results.ejs', {newArr: req.query.results});
 }); 
 
+app.get('/profile', function(req, res){
+	res.render('student_profile.ejs');
+});
+
 app.get('/edit', function(req, res){
-	res.render('edit_form.ejs');
+	res.render('student_profile_edit.ejs');
 });
 
 app.post('/search', function(req, res) {

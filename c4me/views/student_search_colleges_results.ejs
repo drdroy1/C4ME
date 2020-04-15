@@ -76,9 +76,12 @@
                 <% results.forEach(function(results) { %>
 				    <tr>
 					    	<td><%= results.name %></td>
-                        			<td><%= results.cost_instate %></td>
- 			                       	<td><%= results.cost_outstate %></td>
-					    	<td><a href="/view?url=<%= results.name%>">View Similar Students</a></td>
+                        			<td><%= results.cost_gen %></td>
+ 			                       	<td><%= results.admis_percent %></td>
+					    	<td><%= results.location %></td>
+						<td><%= results.size %></td>
+						<td><%= results.ranking %></td>
+						<td><a href="/view?url=<%= results.name%>">View Similar Students</a></td>
 				    </tr>
 			    <% }); %>
             </div>
