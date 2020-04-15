@@ -27,43 +27,43 @@ app.use(session({
 	}
 }));
 
-app.get('', function(req,res){
+app.get('', function (req, res) {
 	req.session.userId = req.query.sessionId;
 	res.render('student_index.ejs');
 });
 
-app.get('/search', function(req, res){
+app.get('/search', function (req, res) {
 	res.render('student_search_colleges.ejs');
 });
 
-app.get('/result', function(req, res){
-	for(let val of req.query.results){
+app.get('/result', function (req, res) {
+	for (let val of req.query.results) {
 		console.log(val)
 	}
-	res.render('student_search_colleges_results.ejs', {newArr: req.query.results});
-}); 
+	res.render('student_search_colleges_results.ejs', { newArr: req.query.results });
+});
 
-app.get('/profile', function(req, res){
+app.get('/profile', function (req, res) {
 	mongoClient.connect(mongodb, function (err, db) {
 		let currentDB = db.db('c4me')
-		currentDB.collection('profile').findOne({ userId: req.session.userId }, function(err, result){
-			if(result){
+		currentDB.collection('profile').findOne({ userId: req.session.userId }, function (err, result) {
+			if (result) {
 				firstName = result.firstName;
 				lastName = result.lastName;
-				res.render('student_profile.ejs', {lastName: lastName, firstName});		
+				res.render('student_profile.ejs', { lastName: lastName, firstName });
 			}
-			else{
+			else {
 				res.render('student_profile.ejs');
 			}
-		})	
+		})
 	});
 });
 
-app.get('/edit', function(req, res){
+app.get('/edit', function (req, res) {
 	res.render('student_profile_edit.ejs');
 });
 
-app.post('/search', function(req, res) {
+app.post('/search', function (req, res) {
 	console.log(req.body)
 	let cname = req.body.collegeName;
 	let adminRate = parseInt(req.body.admimissionRate, 10);
@@ -72,21 +72,21 @@ app.post('/search', function(req, res) {
 	let size = parseInt(req.body.size, 10);
 	let m1 = req.body.m1;
 	let m2 = req.body.m2;
-	let query =  {size: {$gte: size}}
+	let query = { size: { $gte: size } }
 	//let query = {name: cname, size: { $gte: size }, admission:{percent:{$gte:adminRate}}}	
-	
-	if(cname !== ''){
+
+	if (cname !== '') {
 		query.name = cname;
 	}
-	
-	if(loc === ''){
+
+	if (loc === '') {
 		loc = 'Northeast';
 	}
-	
-	if(m1 === ''){
+
+	if (m1 === '') {
 		m1 = 'Computer Science'
 	}
-		
+
 	mongoClient.connect(mongodb, function (err, db) {
 		if (err) throw err;
 		let currentDB = db.db('c4me');
@@ -94,107 +94,116 @@ app.post('/search', function(req, res) {
 		let newArr = []
 		let count = 0
 
-		currentDB.collection('college').find(query).toArray(function(err, result){
+		currentDB.collection('college').find(query).toArray(function (err, result) {
 			if (err) throw err;
-			if(result != null){
+			if (result != null) {
 				console.log('adiaiojsjaido')
-				for( let val of result){
+				for (let val of result) {
 					let arr = []
-					for( let v of val.majors){
+					for (let v of val.majors) {
 						arr = arr.concat(v.split('\n'))
 					}
 					val.majors = arr
-					if(arr.includes(m1)||arr.includes(m2)){
+					if (arr.includes(m1) || arr.includes(m2)) {
 						resultArr[count] = val
 						count = count + 1
 					}
 				}
 				count = 0
-				for( let val of resultArr){
+				for (let val of resultArr) {
 					let locationInfo = val.location.replace(/ /g, '')
 					let locationList = locationInfo.split(',')
-					if(loc === 'Northeast'){
-						if(northeast.includes(locationList[1])){
+					if (loc === 'Northeast') {
+						if (northeast.includes(locationList[1])) {
 							console.log(val)
 							newArr[count] = val
 							count = count + 1
 						}
 					}
-					if(loc === 'Midwest'){
-						if(midwest.includes(locationList[1])){
-                                                        console.log(val)
+					if (loc === 'Midwest') {
+						if (midwest.includes(locationList[1])) {
+							console.log(val)
 							newArr[count] = val
 							count = count + 1
-                                                }
+						}
 					}
-					if(loc === 'South'){
-						if(south.includes(locationList[1])){
-                                                        console.log(val)
+					if (loc === 'South') {
+						if (south.includes(locationList[1])) {
+							console.log(val)
 							newArr[count] = val
 							count = count + 1;
-                                                }
+						}
 					}
-					if(loc === 'West'){
-						if(west.includes(locationList[1])){
+					if (loc === 'West') {
+						if (west.includes(locationList[1])) {
 							console.log(val)
-                                                        newArr[count] = val
-                                                	count = count + 1;
+							newArr[count] = val
+							count = count + 1;
 						}
 					}
 				}
 				console.log('result array is : ' + newArr);
-				for(let val of newArr){
+				for (let val of newArr) {
 					console.log(val)
 				}
-				res.render('student_search_colleges_results.ejs', {results: newArr});
+				res.render('student_search_colleges_results.ejs', { results: newArr });
 			}
 		});
 	});
 });
 
-app.post('/edit', function(req, res){
+app.post('/edit', function (req, res) {
 	let fname = req.body.firstName;
 	let lname = req.body.lastName;
-	let gyear = req.body.gradYear;
-	let id = req.body.idNum;
+	let age = req.body.age;
 	let email = req.body.email;
 	let homeP = req.body.home;
 	let mobile = req.body.mobile;
-	let address = req.body.address;
-	
+	let school = req.body.currentSchool;
+	let gyear = req.body.gradYear;
+	let gpa = req.body.gpa;
+	let satMath = req.body.sat_math;
+	let satEBRW = req.body.sat_ebrw;
+	let act = req.body.act;
+
+
 	console.log('RECEIVED EDIT REQUEST');
-	
-	mongoClient.connect(mongodb, function(err, db){
+
+	mongoClient.connect(mongodb, function (err, db) {
 		let currentDB = db.db('c4me')
-		currentDB.collection('profile').findOne({ fName: fname, lName: lname}, function(err, result){
-			if(result != null){
-				let query = { userId: req.session.userId, fName: fname, lName: lname, gyear: gyear, id: id, email: email, home: homeP, mobile: mobile, address: address}
-				currentDB.collection('profile').updateOne({ fName: fname, lName: lname}, {$set: query})
+		currentDB.collection('profile').findOne({ fName: fname, lName: lname }, function (err, result) {
+			if (result != null) {
+				let query = {
+					userId: req.session.userId, fName: fname, lName: lname, age: age,
+					email: email, home: homeP, mobile: mobile,
+					currentSchool: school, gradYear: gyear, gpa: gpa, sat_math: satMath, sat_ebrw: satEBRW, act: act
+				}
+				currentDB.collection('profile').updateOne({ fName: fname, lName: lname }, { $set: query })
 			}
 		});
 		db.close();
 	});
 });
 
-app.post('/compute', function(req, res){
+app.post('/compute', function (req, res) {
 	let table = req.body.table;
 	let username = req.session.userId;
 	let dict = {};
-	let count = 0;	
-	
-	mongoClient.connect(mongodb, function(err, db){
+	let count = 0;
+
+	mongoClient.connect(mongodb, function (err, db) {
 		let currentDB = db.db('c4me')
-		currentDB.collection('account').findOne({ account: username}, function(err, result){
-			currentDB.collection('profile').findOne({ fName: result.fName, lName: result.lName}, function(err, result){
+		currentDB.collection('account').findOne({ account: username }, function (err, result) {
+			currentDB.collection('profile').findOne({ fName: result.fName, lName: result.lName }, function (err, result) {
 				let gpa = result.gpa
 				let math = result.math
 				let read = result.reading
 				let write = result.writing
 				let score = 0;
 
-				for( let val of table){
+				for (let val of table) {
 					dict[val.collegeName] = score;
-					score = 0 			
+					score = 0
 				}
 			});
 		});
