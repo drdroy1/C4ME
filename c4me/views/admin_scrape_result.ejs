@@ -70,7 +70,7 @@
                 </div>
             </section>
         </div>
-        <section id="info">
+        <section id="info mt-4 md-4">
             <h2>Successfully Scraped</h2>
             <!-- PUT RESULTS OF SCRAPE HERE -->
             <table class="table table-bordered">
@@ -83,13 +83,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <% results.forEach(function(results){ %>
                     <tr>
+                        <% results.forEach(function(results){ %>
                         <td><%= results.name %></td>
                         <td><%= results.location %></td>
                         <td><%= results.admis_percent*100 %></td>
+                        <% }); %>
                     </tr>
-                    <% }); %>
                 </tbody>
             </table>
         </section>
