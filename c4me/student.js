@@ -51,11 +51,9 @@ app.get('/profile', function (req, res) {
 		currentDB.collection('profile').findOne({ userId: req.session.userId }, function (err, result) {
 			console.log(result)
 			if (result) {
-				firstName = result.firstName;
-				lastName = result.lastName;
 				res.render('student_profile.ejs', { 
-					lName: firstName, 
-					fName: firstName, 
+					lName: result.fName, 
+					fName: result.lName, 
 					age: result.age, 
 					email: result.email,
 					home: result.home,
