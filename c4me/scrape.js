@@ -142,7 +142,8 @@ function simhs_algo(hs_doc, res) {
 					}
 				}
 				console.log('sending unsorted list to front end...');
-				res.render('admin_scrape_result.ejs', {results: hslist});
+				console.log(hslist);
+				//res.render('admin_scrape_result.ejs', {results: hslist});
 			}
 		});
 	});
