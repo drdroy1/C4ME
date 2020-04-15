@@ -69,12 +69,15 @@ app.get('/hs/result', function(req, res){
 
 function scrapeHS(hsname, city, state) {
 	let hs_name = toTitle(hsname);
+	let path = hsname + ' ' + city + ' ' + state;
+	path.replace(/ /g, '-');
 	mongoClient.connect(mongodb, function(err, db){
 		if(err) throw err;
 		let currentDB = db.db('c4me');
 		currentDB.collection('high_school').findOne({name: hs_name}, function(err, result){
 			if(err) throw err;
 			if(result == null) {
+				currentDB.collection('hs_mirrorPaths').findOne({path: path}, function(err, result){
 				scrape_hs(hsname, city, state);
 			} else {
 				console.log('scrape hs: !NULL');
