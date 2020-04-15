@@ -74,7 +74,8 @@
             <!-- PUT TABLE HERE PLS-->
 	    <form action = '/student/compute/<%= results %>' method = 'post'>
 	    <button type="submit" class="btn btn-primary">Compute</button>
-            <table class="table table-bordered" id="myTable2">
+            	<input id="sendServer" name="sendServer" type="button" value="Send to Server" />
+		<table class="table table-bordered" id="myTable2">
                 <thead class="thead-light">
                     <tr>
                         <th scope="col" onclick="sortTable(0)">Name</th>
