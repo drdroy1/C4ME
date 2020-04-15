@@ -94,7 +94,6 @@ app.get('/register', function (req, res) {
 
 app.get('/login', redirectAdmin, function (req, res) {
 	let err = req.query.error;
-	console.log(err);
 	if( err == undefined){
 		err = {error: ''};
 		res.render('login.ejs', {error: ''});
@@ -194,7 +193,7 @@ app.post('/login', function (req, res) {
 				console.log(result.password.toString('hex'))
 				if (result.password.toString('hex') === sha256.toString('hex')) {
 					req.session.userId = result.username;
-					if (result.userType.toLowerCase() === 'administrator') {
+					if (result.userType.toLowerCase() === '2') {
 						let redirect = url.format({pathname: '/admin', query: { sessionId: req.session.userId }});
 						res.redirect(redirect);
 					}

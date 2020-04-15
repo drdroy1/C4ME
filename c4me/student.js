@@ -6,6 +6,7 @@ const path = require('path');
 
 const mongoClient = require('mongodb').MongoClient;
 const mongodb = "mongodb://localhost:27017/";
+const autoIncrement = require("mongodb-autoincrement");
 
 const northeast = ['ME', 'NH', 'VT', 'MA', 'CT', 'RI', 'NY', 'PA', 'NJ'];
 const midwest = ['ND', 'MN', 'WI', 'MI', 'SD', 'IA', 'IL', 'IN', 'OH', 'NE', 'MO', 'KS'];
@@ -111,7 +112,6 @@ app.post('/search', function (req, res) {
 		currentDB.collection('college').find(query).toArray(function (err, result) {
 			if (err) throw err;
 			if (result != null) {
-				console.log('adiaiojsjaido')
 				for (let val of result) {
 					let arr = []
 					for (let v of val.majors) {
@@ -129,38 +129,34 @@ app.post('/search', function (req, res) {
 					let locationList = locationInfo.split(',')
 					if (loc === 'Northeast') {
 						if (northeast.includes(locationList[1])) {
-							console.log(val)
 							newArr[count] = val
 							count = count + 1
 						}
 					}
 					if (loc === 'Midwest') {
 						if (midwest.includes(locationList[1])) {
-							console.log(val)
 							newArr[count] = val
 							count = count + 1
 						}
 					}
 					if (loc === 'South') {
 						if (south.includes(locationList[1])) {
-							console.log(val)
 							newArr[count] = val
 							count = count + 1;
 						}
 					}
 					if (loc === 'West') {
 						if (west.includes(locationList[1])) {
-							console.log(val)
 							newArr[count] = val
 							count = count + 1;
 						}
 					}
 				}
-				console.log('result array is : ' + newArr);
-				for (let val of newArr) {
-					console.log(val)
-				}
-				res.render('student_search_colleges_results.ejs', { results: newArr });
+				autoIncrement.getNextSequence(currentDB, "resTable", function(err, autoIndex){
+					let value = autoIndex.toString();
+					currentDB.collection('resTable').insertOne({key: value, results: newArr})
+					res.render('student_search_colleges_results.ejs', { results: newArr, key: value });
+				})
 			}
 		});
 	});
@@ -203,11 +199,13 @@ app.post('/edit', function (req, res) {
 	});
 });
 
-app.post('/compute', function (req, res) {
-	let table = req.body.table;
+app.post('/compute/:key', function (req, res) {
 	let username = req.session.userId;
+	let key = req.params.key;
 	let dict = {};
 	let count = 0;
+
+	console.log('computing recveied for user: ' + req.session.userId + ' with key ' + key)		
 
 	mongoClient.connect(mongodb, function (err, db) {
 		let currentDB = db.db('c4me')
