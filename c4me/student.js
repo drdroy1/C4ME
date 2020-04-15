@@ -251,17 +251,13 @@ app.post('/compute/:key', function (req, res) {
 						if(sat_ebrw <= result.sat_ebrw){
                                                         score = score + 1
                                                 }
-						val.recommendationScore = score/5
+						val.recommendationScore = score/4
 						console.log(val.recommendationScore)
 					}
-					res.end()
-				}
-				else{
-					res.end()
+					res.render('student_search_colleges_results_rec.ejs', {key: key, results: arr})
 				}
 			}); 
 		});
-		res.end();
 	});
 });
 
