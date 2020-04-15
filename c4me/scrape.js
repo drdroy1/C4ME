@@ -27,7 +27,7 @@ app.post('/college', function(err, res){
 	scrape_colleges(res);
 })
 
-app.post('', function(req, res){
+app.get('', function(req, res){
 	//import_hs_path();
 
 	//search_hs('Townsend');
@@ -56,7 +56,7 @@ app.post('', function(req, res){
 	//find_similarhs('glendale high school', 'glendale', 'az');
 	//find_similarhs('glenbrook south high school', 'glenview', 'il');
 	
-	//res.send('KO')
+	res.send('KO')
 	//res.sendFile(__dirname + "login.html");
 })
 
@@ -142,7 +142,8 @@ function simhs_algo(hs_doc, res) {
 					}
 				}
 				console.log('sending unsorted list to front end...');
-				res.render('admin_scrape.ejs', {results: hslist});
+				console.log(hslist);
+				//res.render('admin_scrape_result.ejs', {results: hslist});
 			}
 		});
 	});
@@ -385,7 +386,7 @@ async function scrape_colleges(res){
 		rval_list.push(r);
 	});
 
-	let added = [];
+	let added = [], failed = [];
 	let f = fs.readFileSync('tmp/colleges.txt', 'utf8');
 	flines = f.split('\n');
 	fsize = flines.length;
@@ -513,6 +514,7 @@ async function scrape_colleges(res){
 				});
 			});
 		} else {
+			failed.push(cname);
 			console.log('Error: Could not load <' + cname + '>');
 		}
 	}
