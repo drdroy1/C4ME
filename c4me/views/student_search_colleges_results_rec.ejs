@@ -64,19 +64,13 @@
 
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
         <div class="justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <section id="pageName" class="mb-0">
-                <div class="container">
+            <section id="pageName">
+                <div class="container md-4">
                     <h1> College Search Results</h1>
                 </div>
             </section>
-            <form method='post' action='/student/compute/<%= key %>'>
-                <!-- <input type="submit" id="searchBtn" value="Compute">--->
-                <button type="submit" class="btn btn-secondary float-right" value="compute_rec">Compute Recommendation
-                    Score</button><br><br>
-            </form>
         </div>
         <section id="info mt-4 mb-4">
-            <!-- PUT TABLE HERE PLS-->
             <table class="table table-bordered" id="myTable2">
                 <thead class="thead-light">
                     <tr>
@@ -86,6 +80,7 @@
                         <th scope="col" onclick="sortTable(3)">Location</th>
                         <th scope="col" onclick="sortTable(4)">Size</th>
                         <th scope="col" onclick="sortTable(5)">Ranking</th>
+                        <th scope="col" onclick="sortTable(6)">Rec. Score</th>
                         <th scope="col"> View </th>
                     </tr>
                 </thead>
@@ -98,6 +93,8 @@
                         <td><%= results.location %></td>
                         <td><%= results.size %></td>
                         <td><%= results.ranking %></td>
+                        <!-- IDK WHAT TO PUT HERE -->
+                        <td>HELP</td>
                         <td><a href="/view?url=<%= results.name%>">View Similar Students</a></td>
                     </tr>
                     <% }); %>
