@@ -90,73 +90,82 @@
                             <div class="tab-pane fade show active border pt-3" id="nav-general" role="tabpanel"
                                 aria-labelledby="nav-general-tab">
                                 <div class="container">
-                                    <h3>Personal Information</h3>
-                                    <div class="form-group form-inline">
-                                        <label for="firstName" class="mr-3">First Name</label>
-                                        <input type="text" id="firstName" class="form-control" name="firstName">
-                                    </div>
-                                    <div class="form-group form-inline">
-                                        <label for="lastName" class="mr-3">Last Name</label>
-                                        <input type="text" id="lastName" class="form-control" name="lastName">
-                                    </div>
-                                    <div class="form-group form-inline">
-                                        <label for="age" class="mr-3">Age</label>
-                                        <input type="text" id="age" class="form-control" name="age">
-                                    </div>
+                                    <form id="edit_profile" method='post' action='/student/edit'>
+                                        <h3>Personal Information</h3>
+                                        <div class="form-group form-inline">
+                                            <label for="firstName" class="mr-3">First Name</label>
+                                            <input type="text" id="firstName" class="form-control" name="firstName">
+                                        </div>
+                                        <div class="form-group form-inline">
+                                            <label for="lastName" class="mr-3">Last Name</label>
+                                            <input type="text" id="lastName" class="form-control" name="lastName">
+                                        </div>
+                                        <div class="form-group form-inline">
+                                            <label for="age" class="mr-3">Age</label>
+                                            <input type="text" id="age" class="form-control" name="age">
+                                        </div>
 
-                                    <br>
-                                    <div class="border-bottom border-dark"></div>
-                                    <br>
+                                        <br>
+                                        <div class="border-bottom border-dark"></div>
+                                        <br>
 
-                                    <h3>Contact Information</h3>
-                                    <div class="form-group form-inline">
-                                        <label for="email" class="mr-3">Email</label>
-                                        <input type="text" id="email" class="form-control" name="email">
-                                    </div>
-                                    <div class="form-group form-inline">
-                                        <label for="home" class="mr-3">Home Phone</label>
-                                        <input type="text" id="home" class="form-control" name="home">
-                                    </div>
-                                    <div class="form-group form-inline">
-                                        <label for="mobile" class="mr-3">Mobile Phone</label>
-                                        <input type="text" id="mobile" class="form-control" name="mobile">
-                                    </div>
+                                        <h3>Contact Information</h3>
+                                        <div class="form-group form-inline">
+                                            <label for="email" class="mr-3">Email</label>
+                                            <input type="text" id="email" class="form-control" name="email">
+                                        </div>
+                                        <div class="form-group form-inline">
+                                            <label for="home" class="mr-3">Home Phone</label>
+                                            <input type="text" id="home" class="form-control" name="home">
+                                        </div>
+                                        <div class="form-group form-inline">
+                                            <label for="mobile" class="mr-3">Mobile Phone</label>
+                                            <input type="text" id="mobile" class="form-control" name="mobile">
+                                        </div>
 
-                                    <br>
-                                    <div class="border-bottom border-dark"></div>
-                                    <br>
+                                        <br>
+                                        <div class="border-bottom border-dark"></div>
+                                        <br>
 
-                                    <h3>Academics</h3>
-                                    <div class="form-group form-inline">
-                                        <label for="currentSchool" class="mr-3">Current School</label>
-                                        <input type="text" id="currentSchool" class="form-control" name="currentSchool">
-                                    </div>
-                                    <div class="form-group form-inline">
-                                        <label for="gradYear" class="mr-3">Graduation Year</label>
-                                        <input type="text" id="gradYear" class="form-control" name="gradYear">
-                                    </div>
-                                    <div class="form-group form-inline">
-                                        <label for="gpa" class="mr-3">GPA</label>
-                                        <input type="text" id="gpa" class="form-control" name="gpa">
-                                    </div>
-                                    <div class="form-group form-inline">
-                                        <label for="sat_math" class="mr-3">SAT Math</label>
-                                        <input type="text" id="sat_math" class="form-control" name="sat_math">
-                                    </div>
-                                    <div class="form-group form-inline">
-                                        <label for="sat_ebrw" class="mr-3">SAT EBRW</label>
-                                        <input type="text" id="sat_ebrw" class="form-control" name="sat_ebrw">
-                                    </div>
-                                    <div class="form-group form-inline">
-                                        <label for="act" class="mr-3">ACT Composite</label>
-                                        <input type="text" id="act" class="form-control" name="act">
-                                    </div>
+                                        <h3>Academics</h3>
+                                        <div class="form-group form-inline">
+                                            <label for="currentSchool" class="mr-3">Current School</label>
+                                            <input type="text" id="currentSchool" class="form-control"
+                                                name="currentSchool">
+                                        </div>
+                                        <div class="form-group form-inline">
+                                            <label for="gradYear" class="mr-3">Graduation Year</label>
+                                            <input type="text" id="gradYear" class="form-control" name="gradYear">
+                                        </div>
+                                        <div class="form-group form-inline">
+                                            <label for="gpa" class="mr-3">GPA</label>
+                                            <input type="text" id="gpa" class="form-control" name="gpa">
+                                        </div>
+                                        <div class="form-group form-inline">
+                                            <label for="sat_math" class="mr-3">SAT Math</label>
+                                            <input type="text" id="sat_math" class="form-control" name="sat_math">
+                                        </div>
+                                        <div class="form-group form-inline">
+                                            <label for="sat_ebrw" class="mr-3">SAT EBRW</label>
+                                            <input type="text" id="sat_ebrw" class="form-control" name="sat_ebrw">
+                                        </div>
+                                        <div class="form-group form-inline">
+                                            <label for="act" class="mr-3">ACT Composite</label>
+                                            <input type="text" id="act" class="form-control" name="act">
+                                        </div>
+                                        <center>
+                                            <button type="submit" class="btn btn-secondary mb-3" style="width:125px;"
+                                                value="Submit">Submit</button>
+                                        </center>
+                                    </form>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                     <div class="tab-pane fade active border pt-3" id="nav-profile" role="tabpanel"
                         aria-labelledby="nav-profile-tab">
+<<<<<<< HEAD
 			<form action='/student/profile/edit' method='POST'>
                         <table id="acceptanceDecisions" class="table table-bordered">
                             <thead>
@@ -184,14 +193,51 @@
                                 </tr>
                             </tbody>
                         </table>
+=======
+                        <form id="edit_profile" method='post' action='/student/profile/colleges'>
+                            <table id="acceptanceDecisions" class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" class="text-center">College Name</th>
+                                        <th scope="col" class="text-center">College Decision</th>
+                                        <td scope="col" class="text-center"><input type="button"
+                                                class="btn btn-info add-new" id="addrow" value="Add New"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><input type="text" id="collegeName" class="form-control" name="collegeName">
+                                        </td>
+                                        <td><select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+                                                <option value="1">Applied</option>
+                                                <option value="2">Accepted</option>
+                                                <option value="3">Waitlisted</option>
+                                                <option value="4">Rejected</option>
+                                            </select>
+                                        </td>
+                                        <td align="center"><input type="button" class="ibtnDel btn btn-md btn-danger "
+                                                value="Delete">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <center>
+                                <button type="submit" class="btn btn-secondary mb-3" style="width:125px;"
+                                    value="Submit">Submit</button>
+                            </center>
+                        </form>
+>>>>>>> 9a020b5b86735c0009a5fa2e1a506d64115bfb89
                     </div>
                     <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+                        <form id="edit_profile" method='post' action='/student/edit'>
+                        </form>
+                        <center>
+                            <button type="submit" class="btn btn-secondary mb-3" style="width:125px;"
+                                value="Submit">Submit</button>
+                        </center>
                     </div>
                 </div>
                 <br>
-                <center>
-                    <button type="submit" class="btn btn-secondary" style="width:125px;" value="Submit">Submit</button>
-                </center>
                 <br>
             </form>
         </section>
