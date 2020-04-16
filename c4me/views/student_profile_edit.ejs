@@ -90,7 +90,7 @@
                             <div class="tab-pane fade show active border pt-3" id="nav-general" role="tabpanel"
                                 aria-labelledby="nav-general-tab">
                                 <div class="container">
-                                    <form id="edit_profile" method='post' action='/student/profile/edit'>
+                                    <form id="edit_profile" method='post' action='/student/edit'>
                                         <h3>Personal Information</h3>
                                         <div class="form-group form-inline">
                                             <label for="firstName" class="mr-3">First Name</label>
@@ -165,6 +165,35 @@
 
                     <div class="tab-pane fade active border pt-3" id="nav-profile" role="tabpanel"
                         aria-labelledby="nav-profile-tab">
+<<<<<<< HEAD
+			<form action='/student/profile/edit' method='POST'>
+                        <table id="acceptanceDecisions" class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="text-center">College Name</th>
+                                    <th scope="col" class="text-center">College Decision</th>
+                                    <td scope="col" class="text-center"><input type="button"
+                                            class="btn btn-info add-new" id="addrow" value="Add New"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="text" id="collegeName" class="form-control" name="collegeName">
+                                    </td>
+                                    <td><select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref" name="state">
+                                            <option value="1">Applied</option>
+                                            <option value="2">Accepted</option>
+                                            <option value="3">Waitlisted</option>
+                                            <option value="4">Rejected</option>
+                                        </select>
+                                    </td>
+                                    <td align="center"><input type="button" class="ibtnDel btn btn-md btn-danger"
+                                            value="Delete">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+=======
                         <form id="edit_profile" method='post' action='/student/profile/colleges'>
                             <table id="acceptanceDecisions" class="table table-bordered">
                                 <thead>
@@ -197,6 +226,7 @@
                                     value="Submit">Submit</button>
                             </center>
                         </form>
+>>>>>>> 9a020b5b86735c0009a5fa2e1a506d64115bfb89
                     </div>
                     <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
                         <form id="edit_profile" method='post' action='/student/edit'>
