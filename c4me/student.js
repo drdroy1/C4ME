@@ -51,7 +51,9 @@ app.get('/profile', function (req, res) {
 		currentDB.collection('profile').findOne({ userId: req.session.userId }, function (err, result) {
 			console.log('profile result is: ' + result)
 			if (result) {
+				currentDB.collection('decision').findOne({ userId: req.session.userId }, function(err, rr){
 				console.log('dfad' + result.fName + 'dsads');
+				if(rr){
 				res.render('student_profile.ejs', { 
 					lName: result.fName, 
 					fName: result.lName, 
@@ -64,8 +66,29 @@ app.get('/profile', function (req, res) {
 					gpa: result.gpa,
 					sat_math: result.sat_math,
 					sat_ebrw: result.sat_ebrw,
-					act: result.act
-				});
+					act: result.act,
+					collegeName: rr.collegeName,
+                                        decision: rr.decision
+				});}
+				else{
+					res.render('student_profile.ejs', {
+                                        lName: result.fName,
+                                        fName: result.lName,
+                                        age: result.age, 
+                                        email: result.email,
+                                        home: result.home,
+                                        mobile: result.mobile,
+                                        currentSchool: result.currentSchool,
+                                        gradYear: result.gradYear,
+                                        gpa: result.gpa,
+                                        sat_math: result.sat_math,
+                                        sat_ebrw: result.sat_ebrw,
+                                        act: result.act,
+                                        collegeName: '',
+                                        decision: ''
+                                });
+				}
+			});
 			}
 			else {
 				res.render('student_profile.ejs',{
@@ -80,7 +103,9 @@ app.get('/profile', function (req, res) {
                                         gpa: '',
                                         sat_math: '',
                                         sat_ebrw: '',
-                                        act: ''
+                                        act: '',
+					collegeName: '',
+                                        decision: ''
 				});
 			}
 		})
@@ -92,7 +117,26 @@ app.get('/edit', function (req, res) {
 });
 
 app.get('/profile/edit', function (req, res) {
-        res.render('student_profile_edit.ejs');
+	mongoClient.connect(mongodb, function (err, db) {
+		let currentDB = db.db('c4me')
+		currentDB.collection('decision').findOne({ userId: req.session.userId }, function(err, result){
+			if (result) {
+				console.log('result found')
+				res.render('student_profile.ejs', {
+                                        collegeName: result.collegeName,
+                                        decision: result.decision
+                                });
+			}
+			else{
+				console.log('result not found')
+				res.render('student_profile.ejs', {
+					collegeName: '',
+					decision: ''	
+				});
+			}
+			
+		});
+	});
 });
 
 app.post('/search', function (req, res) {
@@ -251,7 +295,7 @@ app.post('/profile/edit', function( req,res){
 				else{
 					currentDB.collection('decisions').insertOne({ userId: userId, state: state, collegeName: collegeName});
 				}
-				res.redirect('/profile/edit');
+				res.redirect('/student/profile/edit');
 			});
 		});
 	});
