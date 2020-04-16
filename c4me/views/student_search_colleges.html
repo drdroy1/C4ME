@@ -86,28 +86,30 @@
                         </div>
                     </div>
 
-                    <label for="collegeName">College Name</label><br>
-                    <input type="text" id="collegeName" name="collegeName" placeholder=" Enter College Name"><br><br>
+                    <div class="form-group">
+                        <label for="collegeName">College Name</label><br>
+                        <input type="text" id="collegeName" name="collegeName" placeholder="Enter College Name">
+                    </div>
 
-                    <label for="admissionRate">Admission Rate</label><br>
-                    <input type="range" min="0" max="1" value="1" step="0.01" class="slider" id="admissionRate"
-                        name="admissionRate">
-                    <p>Admission Rate: <span id="admissionResult"></span></p>
-                    <br>
+                    <div class="form-group">
+                        <label for="formControlRange">Admission Rate</label>
+                        <input type="range" class="form-control-range" max="1" value="0" step="0.01" class="slider"
+                            id="admissionRate" name="admissionRate">
+                    </div>
 
-                    <label for="cost">Cost</label><br>
-                    <input list="cost" type="text" name="cost">
-                    <datalist id="cost">
-                        <option value="$0 - $10,000"></option>
-                        <option value="$10,001 - $20,000"></option>
-                        <option value="$20,001 - $30,000"></option>
-                        <option value="$30,001 - $40,000"></option>
-                        <option value="$40,001 - $50,000"></option>
-                        <option value="$50,001 - $60,000"></option>
-                        <option value="$60,001 - $70,000"></option>
-                        <option value="$70,001 - $80,000"></option>
-                    </datalist>
-                    <br><br>
+                    <div class="form-group">
+                        <label class="my-1 mr-2" for="cost">Cost</label>
+                        <select class="custom-select my-1 mr-sm-2" id="cost" name="cost">
+                            <option value="$0 - $10,000">$0 - $10,000</option>
+                            <option value="$10,001 - $20,000">$10,001 - $20,000</option>
+                            <option value="$20,001 - $30,000">$20,001 - $30,000</option>
+                            <option value="$30,001 - $40,000">$30,001 - $40,000</option>
+                            <option value="$40,001 - $50,000">$40,001 - $50,000</option>
+                            <option value="$50,001 - $60,000">$50,001 - $60,000</option>
+                            <option value="$60,001 - $70,000">$60,001 - $70,000</option>
+                            <option value="$70,001 - $80,000">$70,001 - $80,000</option>
+                        </select>
+                    </div>
 
                     <label for="location">Location</label><br>
                     <input list="location" type="text" name="loc">

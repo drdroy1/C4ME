@@ -75,9 +75,10 @@
             <table class="table table-bordered" id="myTable2">
                 <thead class="thead-light">
                     <tr>
-                        <th scope="col" onclick="sortTable(0)">Name</th>
-                        <th scope="col" onclick="sortTable(1)">State</th>
-                        <th scope="col" onclick="sortTable(2)">College Name</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">State</th>
+                        <th scope="col">College Name</th>
+                        <th scope="col">Reviewed</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -86,6 +87,8 @@
                         <td><%= results.name %></td>
                         <td><%= results.state %></td>
                         <td><%= results.collegeName %></td>
+                        <<td align="center"><input type="button" class="ibtnDel btn btn-md btn-danger" value="Delete">
+                            </td>
                     </tr>
                     <% }); %>
                 </tbody>
