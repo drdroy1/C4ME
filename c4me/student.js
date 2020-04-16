@@ -218,13 +218,15 @@ app.post('/edit', function (req, res) {
 
 app.post('/profile/edit', function( req,res){
 	let userId = req.session.userId
-	let decisions = req.body.collegeDecisions;
+	let collegeName = req.body.collegeName;
 	let state = req.body.state;
+	
+	console.log(userId + ' applied to ' + collegeName + ', the decision is ' + state);
 
 	mongoClient.connect(mongodb, function (err, db) {
 		let currentDB = db.db('c4me')
 		currentDB.collection('profile').findOne({userId: userId}, function(err, result){
-			currentDB.collection('college').findOne({name: decisions}, function(err, r){
+			currentDB.collection('college').findOne({name: collegeName}, function(err, r){
 				let gpa = result.gpa
 				let satMath = result.sat_math
 				let satRW = result.sat_ebrw
@@ -243,15 +245,15 @@ app.post('/profile/edit', function( req,res){
 				if(r.testscores.act_composite.lrange > act || r.testscores.act_composite.avg - act > 2){
 					question = question + 1
 				}
-				if(question >= 2){
-					currentDB.collection('questions').insertOne({ userId: userId, decision: decision });
+				if(question >= 2 && state === 1){
+					currentDB.collection('questions').insertOne({ userId: userId, state: state, collegeName: collegeName});
 				}
 				else{
-					currentDB.collection('decisions').insertOne({ userId: userId, decision: decision });
+					currentDB.collection('decisions').insertOne({ userId: userId, state: state, collegeName: collegeName});
 				}
-			})
+				res.redirect('/profile/edit');
+			});
 		});
-		currentDB.collection('decisions').insertOne({ userId: userId, decision: decisions});		
 	});
 });
 

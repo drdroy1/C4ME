@@ -157,6 +157,7 @@
                     </div>
                     <div class="tab-pane fade active border pt-3" id="nav-profile" role="tabpanel"
                         aria-labelledby="nav-profile-tab">
+			<form action='/student/profile/edit' method='POST'>
                         <table id="acceptanceDecisions" class="table table-bordered">
                             <thead>
                                 <tr>
@@ -170,7 +171,7 @@
                                 <tr>
                                     <td><input type="text" id="collegeName" class="form-control" name="collegeName">
                                     </td>
-                                    <td><select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+                                    <td><select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref" name="state">
                                             <option value="1">Applied</option>
                                             <option value="2">Accepted</option>
                                             <option value="3">Waitlisted</option>
