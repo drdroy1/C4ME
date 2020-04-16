@@ -17,9 +17,10 @@ app.post('/review', function(req, res){
 	mongoClient.connect(mongodb, function(err, db){
 		if (err) throw err;
 		let currentDB = db.db('c4me')
-		let result = currentDB.collection('decision').find({}).toArray();
-		console.log(result)	
-		res.render('');
+		let result = currentDB.collection('questions').find({}).toArray(function (err, result) {
+			console.log(result);
+			res.render('admin_students_questionable.ejs', {results: result});
+		});
 	});
 });
 

@@ -51,27 +51,7 @@ app.get('/profile', function (req, res) {
 		currentDB.collection('profile').findOne({ userId: req.session.userId }, function (err, result) {
 			console.log('profile result is: ' + result)
 			if (result) {
-				currentDB.collection('decision').findOne({ userId: req.session.userId }, function(err, rr){
-				console.log('dfad' + result.fName + 'dsads');
-				if(rr){
-				res.render('student_profile.ejs', { 
-					lName: result.fName, 
-					fName: result.lName, 
-					age: result.age, 
-					email: result.email,
-					home: result.home,
-					mobile: result.mobile,
-					currentSchool: result.currentSchool,
-					gradYear: result.gradYear,
-					gpa: result.gpa,
-					sat_math: result.sat_math,
-					sat_ebrw: result.sat_ebrw,
-					act: result.act,
-					collegeName: rr.collegeName,
-                                        decision: rr.decision
-				});}
-				else{
-					res.render('student_profile.ejs', {
+				res.render('student_profile.ejs', {
                                         lName: result.fName,
                                         fName: result.lName,
                                         age: result.age, 
@@ -86,9 +66,7 @@ app.get('/profile', function (req, res) {
                                         act: result.act,
                                         collegeName: '',
                                         decision: ''
-                                });
-				}
-			});
+				});
 			}
 			else {
 				res.render('student_profile.ejs',{
