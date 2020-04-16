@@ -91,6 +91,10 @@ app.get('/edit', function (req, res) {
 	res.render('student_profile_edit.ejs');
 });
 
+app.get('/profile/edit', function (req, res) {
+        res.render('student_profile_edit.ejs');
+});
+
 app.post('/search', function (req, res) {
 	console.log(req.body)
 	let cname = req.body.collegeName;
@@ -212,7 +216,46 @@ app.post('/edit', function (req, res) {
 	});
 });
 
-app.post('/compute/:key', function (req, res) {
+app.post('/profile/edit', function( req,res){
+	let userId = req.session.userId
+	let decisions = req.body.collegeDecisions;
+	let state = req.body.state;
+
+	mongoClient.connect(mongodb, function (err, db) {
+		let currentDB = db.db('c4me')
+		currentDB.collection('profile').findOne({userId: userId}, function(err, result){
+			currentDB.collection('college').findOne({name: decisions}, function(err, r){
+				let gpa = result.gpa
+				let satMath = result.sat_math
+				let satRW = result.sat_ebrw
+				let act = result.act
+				let question = 0
+				
+				if(r.testscores.avg_gpa - gpa > 0.25){
+					question = question + 1
+				}
+				if(r.testscores.sat_math.lrange > satMath){
+					question = question + 0.3
+				}
+				if(r.testscores.sat_ebrw.lrange > satRW){
+					question = question + 0.7
+				}
+				if(r.testscores.act_composite.lrange > act || r.testscores.act_composite.avg - act > 2){
+					question = question + 1
+				}
+				if(question >= 2){
+					currentDB.collection('questions').insertOne({ userId: userId, decision: decision });
+				}
+				else{
+					currentDB.collection('decisions').insertOne({ userId: userId, decision: decision });
+				}
+			})
+		});
+		currentDB.collection('decisions').insertOne({ userId: userId, decision: decisions});		
+	});
+});
+
+app.post('/compute/:key', function( req, res) {
 	let username = req.session.userId;
 	let key = req.params.key;
 	let dict = {};
