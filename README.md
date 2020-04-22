@@ -4,9 +4,7 @@
 This repo is for the development of the College For Me project that provides an online service for bother colleges and students for their admission process and track their college applications.
 
 ## Team Member:
-Andrew Cao\
-Maggie Zhou\
-Qihong Jiang
+Dhruba Roy
 
 ### Front-end
  * HTML front end to send requests to the server
