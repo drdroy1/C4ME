@@ -38,4 +38,4 @@ app.post('/delete', function(req, res){
 	res.render('admin_students.ejs');
 });
 
-app.listen(8082);
+app.listen(3031);
