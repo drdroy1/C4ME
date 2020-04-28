@@ -34,6 +34,52 @@ app.get('', function (req, res) {
 	res.render('student_index.ejs');
 });
 
+app.get('/scatter', function (req, res) {
+	console.log('profile');
+	mongoClient.connect(mongodb, function (err, db) {
+		let currentDB = db.db('c4me')
+		currentDB.collection('profile').findOne({ userId: req.session.userId }, function (err, result) {
+			console.log('profile result is: ' + result)
+			if (result) {
+				res.render('student_scatter.ejs', {
+                                        lName: result.fName,
+                                        fName: result.lName,
+                                        age: result.age, 
+                                        email: result.email,
+                                        home: result.home,
+                                        mobile: result.mobile,
+                                        currentSchool: result.currentSchool,
+                                        gradYear: result.gradYear,
+                                        gpa: result.gpa,
+                                        sat_math: result.sat_math,
+                                        sat_ebrw: result.sat_ebrw,
+                                        act: result.act,
+                                        collegeName: '',
+                                        decision: ''
+				});
+			}
+			else {
+				res.render('student_profile.ejs',{
+					lName: '',
+                                        fName: '',
+                                        age: '',
+                                        email: '',
+                                        home: '',
+                                        mobile: '',
+                                        currentSchool: '',
+                                        gradYear: '',
+                                        gpa: '',
+                                        sat_math: '',
+                                        sat_ebrw: '',
+                                        act: '',
+					collegeName: '',
+                                        decision: ''
+				});
+			}
+		})
+	});
+});
+
 app.get('/search', function (req, res) {
 	res.render('student_search_colleges.ejs');
 });
@@ -46,6 +92,7 @@ app.get('/result', function (req, res) {
 });
 
 app.get('/profile', function (req, res) {
+	console.log('profile');
 	mongoClient.connect(mongodb, function (err, db) {
 		let currentDB = db.db('c4me')
 		currentDB.collection('profile').findOne({ userId: req.session.userId }, function (err, result) {

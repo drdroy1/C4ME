@@ -194,7 +194,7 @@ function get_score(f1, f2, range, bound) {
 
 // importing highschools.txt to db
 function import_hs_path() {
-	let f = fs.readFileSync('./tmp/highschools.txt', 'utf8');
+	let f = fs.readFileSync('tmp/highschools.txt', 'utf8');
 	flines = f.split('\n');
 	fsize = flines.length;
 
@@ -395,6 +395,7 @@ async function search_hs(str) {
 }
 
 async function scrape_colleges(res) {
+	console.log("Scraping");
 	let rname_list = [];
 	let rval_list = [];
 

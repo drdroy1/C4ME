@@ -62,6 +62,7 @@ app.use(express.static('views'));
 app.use(express.static('css'));
 app.use(express.static('img'));
 app.use(express.static('js'));
+app.use("/csv" , express.static('csv'));
 
 app.use(session({
 	name: 'sid',
