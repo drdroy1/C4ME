@@ -83,6 +83,8 @@ app.get('/scatter', function (req, res) {
 		})
 	});
 });
+
+var templateData = {}
 function getCsv(file) {
 	return new Promise(function (resolve, reject) {
 		var applicationsCsv = 'csv/applications-1.csv'
@@ -97,14 +99,13 @@ function getCsv(file) {
 	})
 }
 app.get('/tracker', function (req, res) {
-	var templateData = {}
 	getCsv('csv/applications-1.csv').then((data) => {
 		templateData.applicationData = data;
 		getCsv('csv/students-1.csv').then((data) => {
 			templateData.studentData = data;
 			getCsv('csv/colleges.txt').then((data) => {
 				templateData.collegeData = data;
-				res.render('student_applications_tracker.ejs', {template: templateData});
+				res.render('student_applications_tracker.ejs', { template: templateData });
 			});
 		});
 
@@ -281,10 +282,33 @@ app.post('/search', function (req, res) {
 	});
 });
 
+
+
+
 app.post('/tracker', function (req, res) {
 	console.log(req.body);
+	//console.log(templateData);
+	var collegeApplications = templateData.applicationData.filter(element => {
 
+		return element.college == req.body.colleges && (element.status == req.body.status || req.body.status == "All")
+
+	});
+	filterUsers = []
+	collegeApplications.forEach(element => {
+		returnedUser = getUser(element.userid)
+		if (returnedUser){
+			filterUsers.push(returnedUser)
+			//console.log(filterUsers)
+		}
+	});
+	function getUser(studentId) {
+		return templateData.studentData.find(element => {
+			return element.userid == studentId && element[" high_school_name"] == req.body.highSchool && (parseInt(element[" college_class"]) >= parseInt(req.body.gradRange1) && parseInt(element[" college_class"]) <= parseInt(req.body.gradRange2) || req.body.gradRange1 == "All")
+		})
+	}
+	res.render('student_applications_tracker_list.ejs', {users :filterUsers });
 });
+
 app.post('/edit', function (req, res) {
 	console.log('Current editor ID: ' + req.session.userId);
 	let fname = req.body.firstName;

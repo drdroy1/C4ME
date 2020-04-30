@@ -55,16 +55,15 @@
                     <label class="my-1 mr-2" for="status">Application Status</label>
                     <select class="custom-select my-1 mr-sm-2" id="status" name="status">
                         <option value="All">All</option>
-                        <option value="Accepted">Accepted</option>
-                        <option value="Denied">Denied</option>
-                        <option value="Pending">Pending/Other</option>
+                        <option value="accepted">Accepted</option>
+                        <option value="denied">Denied</option>
+                        <option value="wait-listed">Wait-listed</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label class="my-1 mr-2" for="cost">High Schools</label>
-                    <select class="custom-select my-1 mr-sm-2" id="cost" name="cost">
-                        <option value="All">All</option>
+                    <label class="my-1 mr-2" for="highSchool">High Schools</label>
+                    <select class="custom-select my-1 mr-sm-2" id="highSchool" name="highSchool">
                         <!-- Specifed High Schools List-->
                     </select>
                 </div>
@@ -78,19 +77,31 @@
     </body>
     <script>
         var template = <%- JSON.stringify(template) %>;
+        console.log(template)
         var mySelect = $('#colleges');
-        $.each(template, template.collegeData.forEach(element => {
-            mySelect.append(
-                $('<option></option>').append(template)
-                );  
-        }));
+        template.collegeData.forEach(element => {
+            name = element.Name
+            if(element[" County"]){
+                name += "," + element[" County"]
+            }
+            $('<option/>', { value : name }).text(name).appendTo('#colleges');
+        })
+
+        var highSchools = new Set()
+        template.studentData.forEach(student => {
+            highSchools.add(student[" high_school_name"])           
+        })
+        highSchools.forEach(school => {
+            console.log(school)
+            $('<option/>', { value : school }).text(school).appendTo('#highSchool');
+        })
         // template.collegeData.forEach(element => {
         //     $("#college").append()
         //     $("<option/>").append()
 
         //     console.log(element)
         // });
-        console.log(template)
+        
 </script>
     <!-- jquery Library-->
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
