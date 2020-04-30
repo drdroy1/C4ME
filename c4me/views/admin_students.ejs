@@ -1,91 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
+<%- include("admin_header.ejs"); -%>
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Helps high school students decide where to apply for college" />
-    <meta name="keywords" content="" />
-    <meta name="author" content="Andrew Cao, Qihong Jiang, Maggie Zhou" />
-    <title>C4me | Administrator</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.5.0.js" integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc=" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="../css/style.css" />
-</head>
-
-<body>
-    <header>
-        <div class="container-fluid">
-            <nav class="navbar navbar-expand-sm navbar-light bg-light fixed-top border-bottom">
-                <a class="navbar-brand ml-4 " href="/admin"><img src="../img/c4me_logo_(transparent).png"></a>
-                <h2 class="mr-auto">| Administrator</h2>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNav #sideNav">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="topNav">
-                    <ul class="navbar-nav ml-auto">
-                        <li class="nav-item">
-                            <a href="/admin/messages">Messages</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/logout">Logout</a>
-                        </li>
-                    </ul>
-                </div>
-
-            </nav>
-        </div>
-    </header>
-
-    <div class="container-fluid">
-        <div class="row">
-            <nav class="col-md-2 d-none d-md-block bg-light sidebar" id="sideNav">
-                <div class="sidebar-sticky">
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                Profile
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/scrape/college">
-                                Colleges
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" href="/admin/delete">
-                                Students
-                            </a>
-                        </li>
-                    </ul>
-            </nav>
-        </div>
-        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-            <div
-                class="justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <section id="pageName">
-                    <div class="container md-4">
-                        <h1>Student Masterlist</h1>
-                    </div>
-                </section>
+<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+    <div class="justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <section id="pageName">
+            <div class="container md-4">
+                <h1>Student Masterlist</h1>
             </div>
-            <section id="info">
-                <center>
-                    <form method='post' action='/admin/delete' id="deleteStudents" class="main-form">
-                        <button type="submit" class="btn btn-primary" value="Delete">Delete All</button>
-                    </form>
-                    <form method='post' action='/admin/review' id="reviewStudents" class="main-form">
-                        <button type="submit" class="btn btn-primary" value="Review">Review Questionable
-                            Students</button>
-                    </form>
-                </center>
-            </section>
-        </main>
+        </section>
     </div>
+    <section id="info">
+        <center>
+            <form method='post' action='/admin/delete' id="deleteStudents" class="main-form">
+                <button type="submit" class="btn btn-primary" value="Delete">Delete All</button>
+            </form>
+            <form method='post' action='/admin/review' id="reviewStudents" class="main-form">
+                <button type="submit" class="btn btn-primary" value="Review">Review Questionable
+                    Students</button>
+            </form>
+        </center>
+    </section>
+</main>
+</div>
 </body>
 
- <!-- jquery Library-->
+<!-- jquery Library-->
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
     integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
     crossorigin="anonymous"></script>

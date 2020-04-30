@@ -1,197 +1,134 @@
-<!DOCTYPE html>
-<html lang="en">
+<%- include("student_header.ejs"); -%>
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Helps high school students decide where to apply for college" />
-    <meta name="keywords" content="" />
-    <meta name="author" content="Andrew Cao, Qihong Jiang, Maggie Zhou" />
-    <title>C4me | Student</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.5.0.js" integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc=" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="../css/style.css" />
-</head>
-
-<body>
-    <header>
-        <div class="container-fluid">
-            <nav class="navbar navbar-expand-sm navbar-light bg-light fixed-top border-bottom">
-                <a class="navbar-brand ml-4 " href="/student"><img src="../img/c4me_logo_(transparent).png"></a>
-                <h2 class="mr-auto">| Student</h2>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNav #sideNav">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="topNav">
-                    <ul class="navbar-nav ml-auto">
-                        <li class="nav-item">
-                            <a href="#">Messages</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/logout">Logout</a>
-                        </li>
-                    </ul>
-                </div>
-
-            </nav>
-        </div>
-    </header>
-
-    <div class="container-fluid">
-        <div class="row">
-            <nav class="col-md-2 d-none d-md-block bg-light sidebar" id="sideNav">
-                <div class="sidebar-sticky">
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link" href="/student/profile">
-                                Profile
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/student/search">
-                                Search for Colleges
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                Search Similar High Schools
-                            </a>
-                        </li>
-                    </ul>
-            </nav>
-        </div>
-    </div>
-
-    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-        <div class="justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <section id="pageName">
-                <div class="container md-4">
-                    <h1> College Search Results</h1>
-                </div>
-            </section>
-        </div>
-        <section id="info mt-4 mb-4">
-            <table class="table table-bordered" id="myTable2">
-                <thead class="thead-light">
-                    <tr>
-                        <th scope="col" onclick="sortTable(0)">Name</th>
-                        <th scope="col" onclick="sortTable(1)">Cost</th>
-                        <th scope="col" onclick="sortTable(2)">Admission Rate</th>
-                        <th scope="col" onclick="sortTable(3)">Location</th>
-                        <th scope="col" onclick="sortTable(4)">Size</th>
-                        <th scope="col" onclick="sortTable(5)">Ranking</th>
-                        <th scope="col" onclick="sortTable(6)">Rec. Score</th>
-                        <th scope="col"> View </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% results.forEach(function(results) { %>
-                    <tr>
-                        <td><%= results.name %></td>
-                        <td><%= results.cost_gen %></td>
-                        <td><%= results.admis_percent %></td>
-                        <td><%= results.location %></td>
-                        <td><%= results.size %></td>
-                        <td><%= results.ranking %></td>
-                        <td><%= results.recommendationScore %></td>
-                        <td><a href="/view?url=<%= results.name%>">View Similar Students</a></td>
-                    </tr>
-                    <% }); %>
-                </tbody>
-            </table>
+<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+    <div class="justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <section id="pageName">
+            <div class="container md-4">
+                <h1> College Search Results</h1>
+            </div>
         </section>
-</body>
+    </div>
+    <section id="info mt-4 mb-4">
+        <table class="table table-bordered" id="myTable2">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col" onclick="sortTable(0)">Name</th>
+                    <th scope="col" onclick="sortTable(1)">Cost</th>
+                    <th scope="col" onclick="sortTable(2)">Admission Rate</th>
+                    <th scope="col" onclick="sortTable(3)">Location</th>
+                    <th scope="col" onclick="sortTable(4)">Size</th>
+                    <th scope="col" onclick="sortTable(5)">Ranking</th>
+                    <th scope="col" onclick="sortTable(6)">Rec. Score</th>
+                    <th scope="col"> View </th>
+                </tr>
+            </thead>
+            <tbody>
+                <% results.forEach(function(results) { %>
+                <tr>
+                    <td><%= results.name %></td>
+                    <td><%= results.cost_gen %></td>
+                    <td><%= results.admis_percent %></td>
+                    <td><%= results.location %></td>
+                    <td><%= results.size %></td>
+                    <td><%= results.ranking %></td>
+                    <td><%= results.recommendationScore %></td>
+                    <td><a href="/view?url=<%= results.name%>">View Similar Students</a></td>
+                </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </section>
+    </body>
 
-<script>
-    function sortTable(n) {
-        var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
-        table = document.getElementById("myTable2");
-        switching = true;
-        // Set the sorting direction to ascending:
-        dir = "asc";
-        /* Make a loop that will continue until
-        no switching has been done: */
-        while (switching) {
-            // Start by saying: no switching is done:
-            switching = false;
-            rows = table.rows;
-            /* Loop through all table rows (except the
-            first, which contains table headers): */
-            for (i = 1; i < (rows.length - 1); i++) {
-                // Start by saying there should be no switching:
-                shouldSwitch = false;
-                /* Get the two elements you want to compare,
-                one from current row and one from the next: */
-                x = rows[i].getElementsByTagName("TD")[n];
-                y = rows[i + 1].getElementsByTagName("TD")[n];
-                /* Check if the two rows should switch place,
-                based on the direction, asc or desc: */
-                if (dir == "asc") {
-                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-                        // If so, mark as a switch and break the loop:
-                        shouldSwitch = true;
-                        break;
-                    }
-                } else if (dir == "desc") {
-                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
-                        // If so, mark as a switch and break the loop:
-                        shouldSwitch = true;
-                        break;
+    <script>
+        function sortTable(n) {
+            var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+            table = document.getElementById("myTable2");
+            switching = true;
+            // Set the sorting direction to ascending:
+            dir = "asc";
+            /* Make a loop that will continue until
+            no switching has been done: */
+            while (switching) {
+                // Start by saying: no switching is done:
+                switching = false;
+                rows = table.rows;
+                /* Loop through all table rows (except the
+                first, which contains table headers): */
+                for (i = 1; i < (rows.length - 1); i++) {
+                    // Start by saying there should be no switching:
+                    shouldSwitch = false;
+                    /* Get the two elements you want to compare,
+                    one from current row and one from the next: */
+                    x = rows[i].getElementsByTagName("TD")[n];
+                    y = rows[i + 1].getElementsByTagName("TD")[n];
+                    /* Check if the two rows should switch place,
+                    based on the direction, asc or desc: */
+                    if (dir == "asc") {
+                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                            // If so, mark as a switch and break the loop:
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else if (dir == "desc") {
+                        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                            // If so, mark as a switch and break the loop:
+                            shouldSwitch = true;
+                            break;
+                        }
                     }
                 }
-            }
-            if (shouldSwitch) {
-                /* If a switch has been marked, make the switch
-                and mark that a switch has been done: */
-                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-                switching = true;
-                // Each time a switch is done, increase this count by 1:
-                switchcount++;
-            } else {
-                /* If no switching has been done AND the direction is "asc",
-                set the direction to "desc" and run the while loop again. */
-                if (switchcount == 0 && dir == "asc") {
-                    dir = "desc";
+                if (shouldSwitch) {
+                    /* If a switch has been marked, make the switch
+                    and mark that a switch has been done: */
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
                     switching = true;
+                    // Each time a switch is done, increase this count by 1:
+                    switchcount++;
+                } else {
+                    /* If no switching has been done AND the direction is "asc",
+                    set the direction to "desc" and run the while loop again. */
+                    if (switchcount == 0 && dir == "asc") {
+                        dir = "desc";
+                        switching = true;
+                    }
                 }
             }
         }
-    }
-</script>
-<script type="text/javascript" src="jquery-1.8.2.js"></script>
-<script type="text/javascript">
-    $(function () {
-        var dataArr = [];
-        $("td").each(function () {
-            dataArr.push($(this).html());
-        });
-        $('#sendServer').click(function () {
-            $.ajax({
-                type: "POST",
-                url: '/student/compute',
-                data: "content=" + dataArr,
-                success: function (data) {
-                    alert(data);// alert the data from the server
-                },
-                error: function () {
-                }
+    </script>
+    <script type="text/javascript" src="jquery-1.8.2.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            var dataArr = [];
+            $("td").each(function () {
+                dataArr.push($(this).html());
+            });
+            $('#sendServer').click(function () {
+                $.ajax({
+                    type: "POST",
+                    url: '/student/compute',
+                    data: "content=" + dataArr,
+                    success: function (data) {
+                        alert(data);// alert the data from the server
+                    },
+                    error: function () {
+                    }
+                });
             });
         });
-    });
-</script>
+    </script>
 
- <!-- jquery Library-->
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-    crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-    crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-    crossorigin="anonymous"></script>
-<script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+    <!-- jquery Library-->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+    <script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
 
 
-</html>
+    </html>

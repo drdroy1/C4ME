@@ -3,10 +3,14 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const url = require('url');
 const path = require('path');
+const csvParser = require('csv-parser');
+const fs = require('fs');
+
 
 const mongoClient = require('mongodb').MongoClient;
 const mongodb = "mongodb://localhost:27017/";
 const autoIncrement = require("mongodb-autoincrement");
+
 
 const northeast = ['ME', 'NH', 'VT', 'MA', 'CT', 'RI', 'NY', 'PA', 'NJ'];
 const midwest = ['ND', 'MN', 'WI', 'MI', 'SD', 'IA', 'IL', 'IN', 'OH', 'NE', 'MO', 'KS'];
@@ -42,43 +46,72 @@ app.get('/scatter', function (req, res) {
 			console.log('profile result is: ' + result)
 			if (result) {
 				res.render('student_scatter.ejs', {
-                                        lName: result.fName,
-                                        fName: result.lName,
-                                        age: result.age, 
-                                        email: result.email,
-                                        home: result.home,
-                                        mobile: result.mobile,
-                                        currentSchool: result.currentSchool,
-                                        gradYear: result.gradYear,
-                                        gpa: result.gpa,
-                                        sat_math: result.sat_math,
-                                        sat_ebrw: result.sat_ebrw,
-                                        act: result.act,
-                                        collegeName: '',
-                                        decision: ''
+					lName: result.fName,
+					fName: result.lName,
+					age: result.age,
+					email: result.email,
+					home: result.home,
+					mobile: result.mobile,
+					currentSchool: result.currentSchool,
+					gradYear: result.gradYear,
+					gpa: result.gpa,
+					sat_math: result.sat_math,
+					sat_ebrw: result.sat_ebrw,
+					act: result.act,
+					collegeName: '',
+					decision: ''
 				});
 			}
 			else {
-				res.render('student_profile.ejs',{
+				res.render('student_profile.ejs', {
 					lName: '',
-                                        fName: '',
-                                        age: '',
-                                        email: '',
-                                        home: '',
-                                        mobile: '',
-                                        currentSchool: '',
-                                        gradYear: '',
-                                        gpa: '',
-                                        sat_math: '',
-                                        sat_ebrw: '',
-                                        act: '',
+					fName: '',
+					age: '',
+					email: '',
+					home: '',
+					mobile: '',
+					currentSchool: '',
+					gradYear: '',
+					gpa: '',
+					sat_math: '',
+					sat_ebrw: '',
+					act: '',
 					collegeName: '',
-                                        decision: ''
+					decision: ''
 				});
 			}
 		})
 	});
 });
+function getCsv(file) {
+	return new Promise(function (resolve, reject) {
+		var applicationsCsv = 'csv/applications-1.csv'
+		// var studentCsv = 'csv/students-1.csv'
+		var rows = []
+		fs.createReadStream(file)
+			.pipe(csvParser())
+			.on('data', (row) => rows.push(row))
+			.on('end', function () {
+				resolve(rows)
+			});
+	})
+}
+app.get('/tracker', function (req, res) {
+	var templateData = {}
+	getCsv('csv/applications-1.csv').then((data) => {
+		templateData.applicationData = data;
+		getCsv('csv/students-1.csv').then((data) => {
+			templateData.studentData = data;
+			getCsv('csv/colleges.txt').then((data) => {
+				templateData.collegeData = data;
+				res.render('student_applications_tracker.ejs', {template: templateData});
+			});
+		});
+
+	});
+});
+
+
 
 app.get('/search', function (req, res) {
 	res.render('student_search_colleges.ejs');
@@ -99,38 +132,38 @@ app.get('/profile', function (req, res) {
 			console.log('profile result is: ' + result)
 			if (result) {
 				res.render('student_profile.ejs', {
-                                        lName: result.fName,
-                                        fName: result.lName,
-                                        age: result.age, 
-                                        email: result.email,
-                                        home: result.home,
-                                        mobile: result.mobile,
-                                        currentSchool: result.currentSchool,
-                                        gradYear: result.gradYear,
-                                        gpa: result.gpa,
-                                        sat_math: result.sat_math,
-                                        sat_ebrw: result.sat_ebrw,
-                                        act: result.act,
-                                        collegeName: '',
-                                        decision: ''
+					lName: result.fName,
+					fName: result.lName,
+					age: result.age,
+					email: result.email,
+					home: result.home,
+					mobile: result.mobile,
+					currentSchool: result.currentSchool,
+					gradYear: result.gradYear,
+					gpa: result.gpa,
+					sat_math: result.sat_math,
+					sat_ebrw: result.sat_ebrw,
+					act: result.act,
+					collegeName: '',
+					decision: ''
 				});
 			}
 			else {
-				res.render('student_profile.ejs',{
+				res.render('student_profile.ejs', {
 					lName: '',
-                                        fName: '',
-                                        age: '',
-                                        email: '',
-                                        home: '',
-                                        mobile: '',
-                                        currentSchool: '',
-                                        gradYear: '',
-                                        gpa: '',
-                                        sat_math: '',
-                                        sat_ebrw: '',
-                                        act: '',
+					fName: '',
+					age: '',
+					email: '',
+					home: '',
+					mobile: '',
+					currentSchool: '',
+					gradYear: '',
+					gpa: '',
+					sat_math: '',
+					sat_ebrw: '',
+					act: '',
 					collegeName: '',
-                                        decision: ''
+					decision: ''
 				});
 			}
 		})
@@ -144,22 +177,22 @@ app.get('/edit', function (req, res) {
 app.get('/profile/edit', function (req, res) {
 	mongoClient.connect(mongodb, function (err, db) {
 		let currentDB = db.db('c4me')
-		currentDB.collection('decision').findOne({ userId: req.session.userId }, function(err, result){
+		currentDB.collection('decision').findOne({ userId: req.session.userId }, function (err, result) {
 			if (result) {
 				console.log('result found')
 				res.render('student_profile.ejs', {
-                                        collegeName: result.collegeName,
-                                        decision: result.decision
-                                });
+					collegeName: result.collegeName,
+					decision: result.decision
+				});
 			}
-			else{
+			else {
 				console.log('result not found')
 				res.render('student_profile.ejs', {
 					collegeName: '',
-					decision: ''	
+					decision: ''
 				});
 			}
-			
+
 		});
 	});
 });
@@ -238,9 +271,9 @@ app.post('/search', function (req, res) {
 						}
 					}
 				}
-				autoIncrement.getNextSequence(currentDB, "resTable", function(err, autoIndex){
+				autoIncrement.getNextSequence(currentDB, "resTable", function (err, autoIndex) {
 					let value = autoIndex.toString();
-					currentDB.collection('resTable').insertOne({key: value, results: newArr})
+					currentDB.collection('resTable').insertOne({ key: value, results: newArr })
 					res.render('student_search_colleges_results.ejs', { results: newArr, key: value });
 				})
 			}
@@ -248,6 +281,10 @@ app.post('/search', function (req, res) {
 	});
 });
 
+app.post('/tracker', function (req, res) {
+	console.log(req.body);
+
+});
 app.post('/edit', function (req, res) {
 	console.log('Current editor ID: ' + req.session.userId);
 	let fname = req.body.firstName;
@@ -262,7 +299,7 @@ app.post('/edit', function (req, res) {
 	let satMath = req.body.sat_math;
 	let satEBRW = req.body.sat_ebrw;
 	let act = req.body.act;
-	
+
 	let query = {
 		userId: req.session.userId,
 		fName: fname,
@@ -275,50 +312,50 @@ app.post('/edit', function (req, res) {
 		gradYear: gyear,
 		gpa: gpa,
 		sat_math: satMath, sat_ebrw: satEBRW, act: act
-	}	
+	}
 
 	mongoClient.connect(mongodb, function (err, db) {
 		let currentDB = db.db('c4me')
-		currentDB.collection('profile').update({userId: req.session.userId }, {$set: query}, {upsert: true})
+		currentDB.collection('profile').update({ userId: req.session.userId }, { $set: query }, { upsert: true })
 		res.redirect('/student/profile');
 		db.close();
 	});
 });
 
-app.post('/profile/edit', function( req,res){
+app.post('/profile/edit', function (req, res) {
 	let userId = req.session.userId
 	let collegeName = req.body.collegeName;
 	let state = req.body.state;
-	
+
 	console.log(userId + ' applied to ' + collegeName + ', the decision is ' + state);
 
 	mongoClient.connect(mongodb, function (err, db) {
 		let currentDB = db.db('c4me')
-		currentDB.collection('profile').findOne({userId: userId}, function(err, result){
-			currentDB.collection('college').findOne({name: collegeName}, function(err, r){
+		currentDB.collection('profile').findOne({ userId: userId }, function (err, result) {
+			currentDB.collection('college').findOne({ name: collegeName }, function (err, r) {
 				let gpa = result.gpa
 				let satMath = result.sat_math
 				let satRW = result.sat_ebrw
 				let act = result.act
 				let question = 0
-				
-				if(r.testscores.avg_gpa - gpa > 0.25){
+
+				if (r.testscores.avg_gpa - gpa > 0.25) {
 					question = question + 1
 				}
-				if(r.testscores.sat_math.lrange > satMath){
+				if (r.testscores.sat_math.lrange > satMath) {
 					question = question + 0.3
 				}
-				if(r.testscores.sat_ebrw.lrange > satRW){
+				if (r.testscores.sat_ebrw.lrange > satRW) {
 					question = question + 0.7
 				}
-				if(r.testscores.act_composite.lrange > act || r.testscores.act_composite.avg - act > 2){
+				if (r.testscores.act_composite.lrange > act || r.testscores.act_composite.avg - act > 2) {
 					question = question + 1
 				}
-				if(question >= 2 && state === 1){
-					currentDB.collection('questions').insertOne({ userId: userId, state: state, collegeName: collegeName});
+				if (question >= 2 && state === 1) {
+					currentDB.collection('questions').insertOne({ userId: userId, state: state, collegeName: collegeName });
 				}
-				else{
-					currentDB.collection('decisions').insertOne({ userId: userId, state: state, collegeName: collegeName});
+				else {
+					currentDB.collection('decisions').insertOne({ userId: userId, state: state, collegeName: collegeName });
 				}
 				res.redirect('/student/profile/edit');
 			});
@@ -326,51 +363,51 @@ app.post('/profile/edit', function( req,res){
 	});
 });
 
-app.post('/compute/:key', function( req, res) {
+app.post('/compute/:key', function (req, res) {
 	let username = req.session.userId;
 	let key = req.params.key;
 	let dict = {};
 	let count = 0;
 
-	console.log('computing recveied for user: ' + req.session.userId + ' with key ' + key)		
+	console.log('computing recveied for user: ' + req.session.userId + ' with key ' + key)
 
 	mongoClient.connect(mongodb, function (err, db) {
 		let currentDB = db.db('c4me')
 		currentDB.collection('resTable').findOne({ key: key }, function (err, result) {
 			let arr = result.results
-			currentDB.collection('profile').findOne( { userId: username }, function(err, result){
+			currentDB.collection('profile').findOne({ userId: username }, function (err, result) {
 				console.log('Gonna start with search results: ' + result)
-				if(result){
+				if (result) {
 					let score = 0
 					let gpa = 0
 					let sat_math = 0
 					let sat_ebrw = 0
 					let act = 0
-					for( let val of arr){
+					for (let val of arr) {
 						console.log(val.testscores.avg_gpa)
 						score = 0
 						gpa = val.testscores.avg_gpa
 						sat_math = val.testscores.sat_math.lrange
 						sat_ebrw = val.testscores.sat_ebrw.lrange
 						act = val.testscores.act_composite.lrange
-						if(gpa <= result.gpa){
+						if (gpa <= result.gpa) {
 							score = score + 1
 						}
-						if(act <= result.act){
-                                                        score = score + 1
-                                                }
-						if(sat_math <= result.sat_math){
-                                                        score = score + 1
-                                                }
-						if(sat_ebrw <= result.sat_ebrw){
-                                                        score = score + 1
-                                                }
-						val.recommendationScore = score/4
+						if (act <= result.act) {
+							score = score + 1
+						}
+						if (sat_math <= result.sat_math) {
+							score = score + 1
+						}
+						if (sat_ebrw <= result.sat_ebrw) {
+							score = score + 1
+						}
+						val.recommendationScore = score / 4
 						console.log(val.recommendationScore)
 					}
-					res.render('student_search_colleges_results_rec.ejs', {key: key, results: arr})
+					res.render('student_search_colleges_results_rec.ejs', { key: key, results: arr })
 				}
-			}); 
+			});
 		});
 	});
 });

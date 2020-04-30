@@ -1,166 +1,103 @@
-<!DOCTYPE html>
-<html lang="en">
+<%- include("student_header.ejs"); -%>
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Helps high school students decide where to apply for college" />
-    <meta name="keywords" content="" />
-    <meta name="author" content="Andrew Cao, Qihong Jiang, Maggie Zhou" />
-    <title>C4me | Student</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.5.0.js" integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc=" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="../css/style.css" />
-</head>
+<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+    <div class="justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <section id="pageName">
+            <div class="container md-4">
+                <h1> Student Profile</h1>
+            </div>
+        </section>
+    </div>
+    <section id="info">
+        <nav>
+            <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab"
+                    aria-controls="nav-home" aria-selected="true">General Info</a>
+                <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab"
+                    aria-controls="nav-profile" aria-selected="false">College Application</a>
+                <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab"
+                    aria-controls="nav-contact" aria-selected="false">Security</a>
+            </div>
+        </nav>
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active border pt-3" id="nav-general" role="tabpanel"
+                        aria-labelledby="nav-general-tab">
+                        <div class="container">
+                            <h3>Personal Information</h3>
+                            <ul>
+                                <li>First Name: <%= fName %></li>
+                                <li>Last Name: <%= lName %></li>
+                                <li>Age: <%= age %></li>
+                            </ul>
 
-<body>
-    <header>
-        <div class="container-fluid">
-            <nav class="navbar navbar-expand-sm navbar-light bg-light fixed-top border-bottom">
-                <a class="navbar-brand ml-4 " href="/student"><img src="../img/c4me_logo_(transparent).png"></a>
-                <h2 class="mr-auto">| Student</h2>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNav">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="topNav">
-                    <ul class="navbar-nav ml-auto">
-                        <li class="nav-item">
-                            <a href="#">Messages</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#">Logout</a>
-                        </li>
-                    </ul>
-                </div>
+                            <br>
+                            <div class="border-bottom border-dark"></div>
+                            <br>
 
-            </nav>
-        </div>
-    </header>
+                            <h3>Contact Information</h3>
+                            <ul>
+                                <li>Email: <%= email %></li>
+                                <li>Home Phone: <%= home %></li>
+                                <li>Mobile Phone: <%= mobile %></li>
+                            </ul>
 
-    <div class="container-fluid">
-        <div class="row">
-            <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-                <div class="sidebar-sticky">
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="/student/profile">
-                                Profile
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/student/search">
-                                Search for Colleges
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                Search Similar High Schools
-                            </a>
-                        </li>
-                    </ul>
-            </nav>
-            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-                <div
-                    class="justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <section id="pageName">
-                        <div class="container md-4">
-                            <h1> Student Profile</h1>
-                        </div>
-                    </section>
-                </div>
-                <section id="info">
-                    <nav>
-                        <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
-                            <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home"
-                                role="tab" aria-controls="nav-home" aria-selected="true">General Info</a>
-                            <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile"
-                                role="tab" aria-controls="nav-profile" aria-selected="false">College Application</a>
-                            <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact"
-                                role="tab" aria-controls="nav-contact" aria-selected="false">Security</a>
-                        </div>
-                    </nav>
-                    <div class="tab-content" id="nav-tabContent">
-                        <div class="tab-pane fade show active" id="nav-home" role="tabpanel"
-                            aria-labelledby="nav-home-tab">
-                            <div class="tab-content" id="nav-tabContent">
-                                <div class="tab-pane fade show active border pt-3" id="nav-general" role="tabpanel"
-                                    aria-labelledby="nav-general-tab">
-                                    <div class="container">
-                                        <h3>Personal Information</h3>
-                                        <ul>
-                                            <li>First Name: <%= fName %></li>
-                                            <li>Last Name: <%= lName %></li>
-                                            <li>Age: <%= age %></li>
-                                        </ul>
+                            <br>
+                            <div class="border-bottom border-dark"></div>
+                            <br>
 
-                                        <br>
-                                        <div class="border-bottom border-dark"></div>
-                                        <br>
-
-                                        <h3>Contact Information</h3>
-                                        <ul>
-                                            <li>Email: <%= email %></li>
-                                            <li>Home Phone: <%= home %></li>
-                                            <li>Mobile Phone: <%= mobile %></li>
-                                        </ul>
-
-                                        <br>
-                                        <div class="border-bottom border-dark"></div>
-                                        <br>
-
-                                        <h3>Academics</h3>
-                                        <ul>
-                                            <li>Current School: <%= currentSchool %></li>
-                                            <li>Graduation Year: <%= gradYear %></li>
-                                            <li>GPA: <%= gpa %></li>
-                                            <li>SAT Math: <%= sat_math %></li>
-                                            <li>SAT EBRW: <%= sat_ebrw %></li>
-                                            <li>ACT Composite: <%= act %></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="tab-pane fade border pt-3" id="nav-profile" role="tabpanel"
-                            aria-labelledby="nav-profile-tab">
-                            <table class="table table-bordered" id="myTable2">
-                                <thead class="thead-light">
-                                    <tr>
-                                        <th scope="col">College Name</th>
-                                        <th scope="col">College Decision</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td><%=collegeName %></td>
-                                        <td><%=decision %></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
-
+                            <h3>Academics</h3>
+                            <ul>
+                                <li>Current School: <%= currentSchool %></li>
+                                <li>Graduation Year: <%= gradYear %></li>
+                                <li>GPA: <%= gpa %></li>
+                                <li>SAT Math: <%= sat_math %></li>
+                                <li>SAT EBRW: <%= sat_ebrw %></li>
+                                <li>ACT Composite: <%= act %></li>
+                            </ul>
                         </div>
                     </div>
-                </section>
-                <br>
-                <center>
-                    <a href="/student/edit">
-                        <button type="submit" class="btn btn-secondary" style="width:125px;" value="Edit">Edit</button>
-                    </a>
-                </center>
-                <br>
-            </main>
+                </div>
+            </div>
+
+            <div class="tab-pane fade border pt-3" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                <table class="table table-bordered" id="myTable2">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">College Name</th>
+                            <th scope="col">College Decision</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><%=collegeName %></td>
+                            <td><%=decision %></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+
+            </div>
         </div>
-    </div>
+    </section>
+    <br>
+    <center>
+        <a href="/student/edit">
+            <button type="submit" class="btn btn-secondary" style="width:125px;" value="Edit">Edit</button>
+        </a>
+    </center>
+    <br>
+</main>
+</div>
+</div>
 
 
 
 </body>
 
- <!-- jquery Library-->
+<!-- jquery Library-->
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
     integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
     crossorigin="anonymous"></script>
