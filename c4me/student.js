@@ -1,6 +1,7 @@
 const express = require('express');
 const session = require('express-session');
-const bodyParser = require('body-parser');
+// const bodyParser = require('body-parser');
+
 const url = require('url');
 const path = require('path');
 const csvParser = require('csv-parser');
@@ -19,8 +20,11 @@ const south = ['OK', 'AR', 'KY', 'WV', 'MD', 'DE', 'TX', 'LA', 'TN', 'DC', 'MS',
 const pacific = ['HI', 'AK'];
 
 const app = express();
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(bodyParser.json());
+app.use(express.urlencoded({
+	extended:true
+}))
 app.use(session({
 	name: 'sid',
 	resave: false,
@@ -285,12 +289,12 @@ app.post('/search', function (req, res) {
 
 
 
-//The application tracker post implementatio
+//The application tracker post implementation
 app.post('/tracker', function (req, res) {
 	console.log(req.body);
 	//console.log(templateData);
 	var collegeApplications = templateData.applicationData.filter(element => {
-		if (req.body.status == "other" && (element.status == "pending" || element.status == "wait-listed")){
+		if (req.body.status == "other" && (element.status == "pending" || element.status == "wait-listed")) {
 			return element.college == req.body.colleges
 		}
 		else {
@@ -299,6 +303,7 @@ app.post('/tracker', function (req, res) {
 	});
 	filterUsers = []
 	userApps = []
+	userAppsFiltered = []
 	collegeApplications.forEach(element => {
 		returnedUser = getUser(element.userid)
 		if (returnedUser) {
@@ -315,13 +320,41 @@ app.post('/tracker', function (req, res) {
 			return element.userid == studentId && element.high_school_name == req.body.highSchool && (parseInt(element.college_class) >= parseInt(req.body.gradRange1) && parseInt(element.college_class) <= parseInt(req.body.gradRange2) || req.body.gradRange1 == "All")
 		})
 	}
-	function getAppUser(studentId){
-		return templateData.collegeData.find(element => {
+	function getAppUser(studentId) {
+		return templateData.applicationData.find(element => {
+			//console.log(element.userid)
+			//console.log(studentId)
+			//console.log(element.college)
+			//console.log(req.body.colleges)
 			return element.userid == studentId && element.college == req.body.colleges
 		})
 	}
-	res.render('student_applications_tracker_list.ejs', { users: filterUsers , statuses: userApps });
+	filterUsers.forEach(element => {
+		userApps.forEach(filtered => {
+			if (element.userid == filtered.userid) {
+				userAppsFiltered.push(filtered)
+			}
+		})
+	})
+	// console.log(userAppsFiltered)
+	if(req.body.listBtn == "List"){
+		console.log(filterUsers, userAppsFiltered)
+		res.render('student_applications_tracker_list.ejs', { users: filterUsers , statuses: userAppsFiltered });
+	}
+	if(req.body.listBtn == "Scatterplot"){
+		res.render('student_applications_tracker_scatter.ejs', { users: filterUsers , statuses: userAppsFiltered });
+	}
+	// app.post('/tracker/list', function (req, res) {
+	// 	res.render('student_applications_tracker_list.ejs', { users: filterUsers , statuses: userAppsFiltered });
+	// 	});
+	// app.post('/scatter', function (req, res) {
+	// 	res.render('student_applications_tracker_list.ejs', { users: filterUsers , statuses: userAppsFiltered });
+	// });
 });
+app.post('/listProfile', function (req, res) {
+	console.log(req.body)
+});
+
 
 app.post('/edit', function (req, res) {
 	console.log('Current editor ID: ' + req.session.userId);

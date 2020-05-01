@@ -4,8 +4,8 @@
     var users = <%- JSON.stringify(users) %>;
     console.log(users)
 
-    var userStatus = <%- JSON.stringify(statuses) %>;
-    console.log(userStatus)
+    var statuses = <%- JSON.stringify(statuses) %>;
+    console.log(statuses)
 
 </script>
 
@@ -16,8 +16,7 @@
                 <h1>Applications Tracker List</h1>
             </div>
         </section>
-            <!-- <input type="submit" id="searchBtn" value="Compute">--->
-            <button type="submit" class="btn btn-secondary float-right" value="compute_rec">View Full Profile</button><br><br>
+        <!-- <input type="submit" id="searchBtn" value="Compute">--->
         </form>
     </div>
     <section id="info mt-4 mb-4">
@@ -35,17 +34,107 @@
                 </tr>
             </thead>
             <tbody>
-                <% users.forEach(function(users, userStatus) { %>
+                <% for(var i = 0; i < users.length ; i ++) { %>
                 <tr>
-                    <td><%- users.userid %></td>
-                    <td><%- users.GPA %></td>
-                    <td><%- users.SAT_EBRW %></td>
-                    <td><%- users.SAT_math %></td>
-                    <td><%- users.ACT_composite %></td>
-                    <td><%- userStatus.status %></td>
+                    <td><%- users[i].userid %></td>
+                    <td><%- users[i].GPA %></td>
+                    <td><%- users[i].SAT_EBRW %></td>
+                    <td><%- users[i].SAT_math %></td>
+                    <td><%- users[i].ACT_composite %></td>
+                    <td><%- statuses[i].status %></td>
+                    <td><a class="viewProfile" id="<%- users[i].userid %>" href="/view?url=<%- users %>">View
+                            Profile</a></td>
+                    
+
+                    <% } %>
                 </tr>
-                <% }); %>
             </tbody>
         </table>
+        <div id="profileInfo"></div>
     </section>
     </body>
+    <script>
+        function sortTable(n) {
+            var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+            table = document.getElementById("myTable2");
+            switching = true;
+            // Set the sorting direction to ascending:
+            dir = "asc";
+            /* Make a loop that will continue until
+            no switching has been done: */
+            while (switching) {
+                // Start by saying: no switching is done:
+                switching = false;
+                rows = table.rows;
+                /* Loop through all table rows (except the
+                first, which contains table headers): */
+                for (i = 1; i < (rows.length - 1); i++) {
+                    // Start by saying there should be no switching:
+                    shouldSwitch = false;
+                    /* Get the two elements you want to compare,
+                    one from current row and one from the next: */
+                    x = rows[i].getElementsByTagName("TD")[n];
+                    y = rows[i + 1].getElementsByTagName("TD")[n];
+                    /* Check if the two rows should switch place,
+                    based on the direction, asc or desc: */
+                    if (dir == "asc") {
+                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                            // If so, mark as a switch and break the loop:
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else if (dir == "desc") {
+                        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                            // If so, mark as a switch and break the loop:
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                }
+                if (shouldSwitch) {
+                    /* If a switch has been marked, make the switch
+                    and mark that a switch has been done: */
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                    // Each time a switch is done, increase this count by 1:
+                    switchcount++;
+                } else {
+                    /* If no switching has been done AND the direction is "asc",
+                    set the direction to "desc" and run the while loop again. */
+                    if (switchcount == 0 && dir == "asc") {
+                        dir = "desc";
+                        switching = true;
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- jquery Library-->
+    <script src="https://code.jquery.com/jquery-3.5.0.js"
+        integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+    <script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+    <script>
+        $(() => {
+            $(".viewProfile").on("click", function (evt) {
+                evt.preventDefault()
+                var profileID = $(this).attr("id");
+                var profileInfo = users.find(user => user.userid == profileID)
+                console.log(profileInfo)
+                // console.log($(this).attr("id"))
+                // $.post("/listProfile", { "profile": profileInfo });
+                Object.keys(profileInfo).forEach(key=>{
+                    $("#profileInfo").append(`${key}:${profileInfo[key]}<br>`)
+                })
+            })
+        });
+    </script>
+
+    </html>

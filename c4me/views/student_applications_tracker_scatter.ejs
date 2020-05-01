@@ -1,0 +1,112 @@
+<!-- Code from d3-graph-gallery.com -->
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<!-- Load d3.js -->
+<script src="https://d3js.org/d3.v4.js"></script>
+
+<!-- Create a div where the graph will take place -->
+
+<%- include("student_header.ejs"); -%>
+<script>
+    var users = <%- JSON.stringify(users) %>;
+    console.log(users)
+
+    var statuses = <%- JSON.stringify(statuses) %>;
+    console.log(statuses)
+    
+    var avgGpa = 0
+    var avgSatMath = 0
+    var avgSatEbrw = 0
+    var weightedAvg = 0
+    for(var i = 0; i < users.length ; i ++){
+      avgGpa += parseInt(users[i].GPA)
+      avgSatMath += parseInt(users[i].SAT_math)
+      avgSatEbrw += parseInt(users[i].SAT_EBRW)
+    }
+    avgGpa = avgGpa/users.length
+    avgSatMath = avgSatMath/users.length
+    avgSatEbrw = avgSatEbrw/users.length
+    function getWeightedAvg(users){
+      var subjectTestCounter = 0;
+      var subjectTestWeight = 0;
+      var SATFull = 0;
+      var ACTtoSATConversion = 0;
+      var fullWeight = 0;
+      if(isNaN(parseInt(users.SAT_literature))){
+        subjectTestWeight += 0
+      }
+      else{
+        subjectTestWeight += ((parseInt(users.SAT_literature)/800) * 0.05)
+        subjectTestCounter ++
+      }
+      if(isNaN(parseInt(users.SAT_US_hist))){
+        subjectTestWeight += 0
+      }
+      else{
+        subjectTestWeight += ((parseInt(users.SAT_US_hist)/800) * 0.05)
+        subjectTestCounter ++
+      }
+      if(isNaN(parseInt(users.SAT_world_hist))){
+        subjectTestWeight += 0
+      }
+      else{
+        subjectTestWeight += ((parseInt(users.SAT_world_hist)/800) * 0.05)
+        subjectTestCounter ++
+      }
+      if(isNaN(parseInt(users.SAT_math_I))){
+        subjectTestWeight += 0
+      }
+      else{
+        subjectTestWeight += ((parseInt(users.SAT_math_I)/800) * 0.05)
+        subjectTestCounter ++
+      }
+      if(isNaN(parseInt(users.SAT_math_II))){
+        subjectTestWeight += 0
+      }
+      else{
+        subjectTestWeight += ((parseInt(users.SAT_math_II)/800) * 0.05)
+        subjectTestCounter ++
+      }
+      if(isNaN(parseInt(users.SAT_eco_bio))){
+        subjectTestWeight += 0
+      }
+      else{
+        subjectTestWeight += ((parseInt(users.SAT_eco_bio)/800) * 0.05)
+        subjectTestCounter ++
+      }
+      if(isNaN(parseInt(users.SAT_mol_bio))){
+        subjectTestWeight += 0
+      }
+      else{
+        subjectTestWeight += ((parseInt(users.SAT_mol_bio)/800) * 0.05)
+        subjectTestCounter ++
+      }
+      if(isNaN(parseInt(users.SAT_chemistry))){
+        subjectTestWeight += 0
+      }
+      else{
+        subjectTestWeight += ((parseInt(users.SAT_chemistry)/800) * 0.05)
+        subjectTestCounter ++
+      }
+      if(isNaN(parseInt(users.SAT_physics))){
+        subjectTestWeight += 0
+      }
+      else{
+        subjectTestWeight += ((parseInt(users.SAT_physics)/800) * 0.05)
+        subjectTestCounter ++
+      }
+      majorTestWeight = 1 - (0.05 * subjectTestCounter)
+      if(isNaN(parseInt(users.SAT_math)) == false && isNaN(parseInt(users.SAT_EBRW)) == false && isNaN(parseInt(users.ACT_comp))){
+        SATFull = parseInt(user.SAT_math) + parseInt(users.SAT_EBRW)
+        ACTtoSATConversion = parseInt(users.ACT_comp) * 45    //THis is the average conversion rate I saw online
+       // fullWeight = 
+
+      }
+
+    }
+    console.log(avgGpa, avgSatEbrw, avgSatMath)
+</script>
+
+<div id="my_dataviz"></div>
+
