@@ -83,11 +83,11 @@ app.get('/scatter', function (req, res) {
 		})
 	});
 });
-
+//templateData will be the data received from the csv files provided 
 var templateData = {}
 function getCsv(file) {
 	return new Promise(function (resolve, reject) {
-		var applicationsCsv = 'csv/applications-1.csv'
+		var applicationsCsv = 'csv/applications-2.csv'
 		// var studentCsv = 'csv/students-1.csv'
 		var rows = []
 		fs.createReadStream(file)
@@ -98,10 +98,11 @@ function getCsv(file) {
 			});
 	})
 }
+//get implementation for tracker that will receive the tracket hit and pass this data
 app.get('/tracker', function (req, res) {
-	getCsv('csv/applications-1.csv').then((data) => {
+	getCsv('csv/applications-2.csv').then((data) => {
 		templateData.applicationData = data;
-		getCsv('csv/students-1.csv').then((data) => {
+		getCsv('csv/students-2.csv').then((data) => {
 			templateData.studentData = data;
 			getCsv('csv/colleges.txt').then((data) => {
 				templateData.collegeData = data;
@@ -284,29 +285,42 @@ app.post('/search', function (req, res) {
 
 
 
-
+//The application tracker post implementatio
 app.post('/tracker', function (req, res) {
 	console.log(req.body);
 	//console.log(templateData);
 	var collegeApplications = templateData.applicationData.filter(element => {
-
-		return element.college == req.body.colleges && (element.status == req.body.status || req.body.status == "All")
-
+		if (req.body.status == "other" && (element.status == "pending" || element.status == "wait-listed")){
+			return element.college == req.body.colleges
+		}
+		else {
+			return element.college == req.body.colleges && (element.status == req.body.status || req.body.status == "All")
+		}
 	});
 	filterUsers = []
+	userApps = []
 	collegeApplications.forEach(element => {
 		returnedUser = getUser(element.userid)
-		if (returnedUser){
+		if (returnedUser) {
 			filterUsers.push(returnedUser)
 			//console.log(filterUsers)
+		}
+		returnedUserforApp = getAppUser(element.userid)
+		if (returnedUserforApp) {
+			userApps.push(returnedUserforApp)
 		}
 	});
 	function getUser(studentId) {
 		return templateData.studentData.find(element => {
-			return element.userid == studentId && element[" high_school_name"] == req.body.highSchool && (parseInt(element[" college_class"]) >= parseInt(req.body.gradRange1) && parseInt(element[" college_class"]) <= parseInt(req.body.gradRange2) || req.body.gradRange1 == "All")
+			return element.userid == studentId && element.high_school_name == req.body.highSchool && (parseInt(element.college_class) >= parseInt(req.body.gradRange1) && parseInt(element.college_class) <= parseInt(req.body.gradRange2) || req.body.gradRange1 == "All")
 		})
 	}
-	res.render('student_applications_tracker_list.ejs', {users :filterUsers });
+	function getAppUser(studentId){
+		return templateData.collegeData.find(element => {
+			return element.userid == studentId && element.college == req.body.colleges
+		})
+	}
+	res.render('student_applications_tracker_list.ejs', { users: filterUsers , statuses: userApps });
 });
 
 app.post('/edit', function (req, res) {

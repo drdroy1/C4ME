@@ -57,7 +57,7 @@
                         <option value="All">All</option>
                         <option value="accepted">Accepted</option>
                         <option value="denied">Denied</option>
-                        <option value="wait-listed">Wait-listed</option>
+                        <option value="other">Pending/Waitlisted</option>
                     </select>
                 </div>
 
@@ -89,7 +89,7 @@
 
         var highSchools = new Set()
         template.studentData.forEach(student => {
-            highSchools.add(student[" high_school_name"])           
+            highSchools.add(student.high_school_name)           
         })
         highSchools.forEach(school => {
             console.log(school)

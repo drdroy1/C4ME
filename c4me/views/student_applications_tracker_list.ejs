@@ -1,6 +1,51 @@
 <%- include("student_header.ejs"); -%>
 
 <script>
-    var users = <%- JSON.stringify(users) %>
+    var users = <%- JSON.stringify(users) %>;
     console.log(users)
+
+    var userStatus = <%- JSON.stringify(statuses) %>;
+    console.log(userStatus)
+
 </script>
+
+<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+    <div class="justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <section id="pageName" class="mb-0">
+            <div class="container">
+                <h1>Applications Tracker List</h1>
+            </div>
+        </section>
+            <!-- <input type="submit" id="searchBtn" value="Compute">--->
+            <button type="submit" class="btn btn-secondary float-right" value="compute_rec">View Full Profile</button><br><br>
+        </form>
+    </div>
+    <section id="info mt-4 mb-4">
+        <!-- PUT TABLE HERE PLS-->
+        <table class="table table-bordered" id="myTable2">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col" onclick="sortTable(0)">Name</th>
+                    <th scope="col" onclick="sortTable(1)">GPA</th>
+                    <th scope="col" onclick="sortTable(2)">SAT EBRW</th>
+                    <th scope="col" onclick="sortTable(3)">SAT Math</th>
+                    <th scope="col" onclick="sortTable(4)">ACT Composite</th>
+                    <th scope="col" onclick="sortTable(5)">Status</th>
+                    <th scope="col"> View </th>
+                </tr>
+            </thead>
+            <tbody>
+                <% users.forEach(function(users, userStatus) { %>
+                <tr>
+                    <td><%- users.userid %></td>
+                    <td><%- users.GPA %></td>
+                    <td><%- users.SAT_EBRW %></td>
+                    <td><%- users.SAT_math %></td>
+                    <td><%- users.ACT_composite %></td>
+                    <td><%- userStatus.status %></td>
+                </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </section>
+    </body>
