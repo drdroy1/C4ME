@@ -317,7 +317,7 @@ app.post('/tracker', function (req, res) {
 	});
 	function getUser(studentId) {
 		return templateData.studentData.find(element => {
-			return element.userid == studentId && element.high_school_name == req.body.highSchool && (parseInt(element.college_class) >= parseInt(req.body.gradRange1) && parseInt(element.college_class) <= parseInt(req.body.gradRange2) || req.body.gradRange1 == "All")
+			return element.userid == studentId && (element.high_school_name == req.body.highSchool || req.body.highSchool == "All") && (parseInt(element.college_class) >= parseInt(req.body.gradRange1) && parseInt(element.college_class) <= parseInt(req.body.gradRange2) || req.body.gradRange1 == "All")
 		})
 	}
 	function getAppUser(studentId) {

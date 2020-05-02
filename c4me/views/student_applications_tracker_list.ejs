@@ -44,13 +44,16 @@
                     <td><%- statuses[i].status %></td>
                     <td><a class="viewProfile" id="<%- users[i].userid %>" href="/view?url=<%- users %>">View
                             Profile</a></td>
-                    
+
 
                     <% } %>
                 </tr>
             </tbody>
         </table>
         <div id="profileInfo"></div>
+        <div id="dialog" title="Full Profile Info">
+            <p></p>
+        </div>
     </section>
     </body>
     <script>
@@ -120,21 +123,69 @@
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         crossorigin="anonymous"></script>
     <script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+
+    <script src="https://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
 
     <script>
+        $(function () {
+            $("#dialog").dialog({
+                autoOpen: false,
+                position: { my: "top" },
+                width: '900px',
+            })
+        });
         $(() => {
-            $(".viewProfile").on("click", function (evt) {
+            $(".viewProfile").on('click', function (evt) {
+                $("#dialog").empty()
+                $("#dialog").dialog('open', "option", "position", "center");
                 evt.preventDefault()
                 var profileID = $(this).attr("id");
                 var profileInfo = users.find(user => user.userid == profileID)
                 console.log(profileInfo)
                 // console.log($(this).attr("id"))
                 // $.post("/listProfile", { "profile": profileInfo });
-                Object.keys(profileInfo).forEach(key=>{
-                    $("#profileInfo").append(`${key}:${profileInfo[key]}<br>`)
+                // Object.keys(profileInfo).forEach(key => {
+                //     console.log(key)
+                $("#dialog").append(`Userid: ${profileInfo["userid"]}<br>
+                    Password: ${profileInfo["password"]}<br>
+                    Residence State: ${profileInfo["residence_state"]}<br>
+                    High School Name: ${profileInfo["high_school_name"]}<br>
+                    High School City: ${profileInfo["high_school_city"]}<br>
+                    High School State: ${profileInfo["high_school_state"]}<br>
+                    GPA: ${profileInfo["GPA"]}<br>
+                    College Class: ${profileInfo["college_class"]}<br>
+                    First Choice Major: ${profileInfo["major_1"]}<br>
+                    Second Choice Major: ${profileInfo["major_2"]}<br>
+                    SAT EBRW: ${profileInfo["SAT_EBRW"]}<br>
+                    SAT Math: ${profileInfo["SAT_math"]}<br>
+                    ACT Composite: ${profileInfo["ACT_composite"]}<br>
+                    ACT English: ${profileInfo["ACT_English"]}<br>
+                    ACT Math: ${profileInfo["ACT_math"]}<br>
+                    ACT Reading: ${profileInfo["ACT_reading"]}<br>
+                    ACT Science: ${profileInfo["ACT_science"]}<br>
+                    SAT Literature: ${profileInfo["SAT_literature"]}<br>
+                    SAT US History: ${profileInfo["SAT_US_hist"]}<br>
+                    SAT World History: ${profileInfo["SAT_world_hist"]}<br>
+                    SAT Math I: ${profileInfo["SAT_math_I"]}<br>
+                    SAT Math II: ${profileInfo["SAT_math_II"]}<br>
+                    SAT Eco Bio: ${profileInfo["SAT_eco_bio"]}<br>
+                    SAT Molecular Biology: ${profileInfo["SAT_mol_bio"]}<br>
+                    SAT Chemistry: ${profileInfo["SAT_chemistry"]}<br>
+                    SAT Physics: ${profileInfo["SAT_physics"]}<br>
+                    APs Passed: ${profileInfo["num_AP_passed"]}<br>
+                    `)
+                //})
+                $("#dialog").dialog({
+                    close: function () {
+                        $("#dialog").empty()
+                    }
                 })
             })
         });
     </script>
+
 
     </html>

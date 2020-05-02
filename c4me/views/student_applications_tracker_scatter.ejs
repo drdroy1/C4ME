@@ -31,7 +31,7 @@
       var subjectTestCounter = 0;
       var subjectTestWeight = 0;
       var SATFull = 0;
-      var ACTtoSATConversion = 0;
+      var ACTFull = 0;
       var fullWeight = 0;
       if(isNaN(parseInt(users.SAT_literature))){
         subjectTestWeight += 0
@@ -97,15 +97,33 @@
         subjectTestCounter ++
       }
       majorTestWeight = 1 - (0.05 * subjectTestCounter)
-      if(isNaN(parseInt(users.SAT_math)) == false && isNaN(parseInt(users.SAT_EBRW)) == false && isNaN(parseInt(users.ACT_comp))){
-        SATFull = parseInt(user.SAT_math) + parseInt(users.SAT_EBRW)
-        ACTtoSATConversion = parseInt(users.ACT_comp) * 45    //THis is the average conversion rate I saw online
-       // fullWeight = 
-
+      if(isNaN(parseInt(users.SAT_math)) == false && isNaN(parseInt(users.SAT_EBRW)) == false && isNaN(parseInt(users.ACT_composite)) == false){
+        console.log("reached")
+        SATFull = (parseInt(users.SAT_math) + parseInt(users.SAT_EBRW))/1600
+        ACTFull = (parseInt(users.ACT_composite)/36)  
+        fullWeight = ((SATFull * (majorTestWeight/2)) + (ACTFull * (majorTestWeight/2)) + subjectTestWeight) * 100
+        console.log(fullWeight)
+        return fullWeight 
+      }
+      else if(isNaN(parseInt(users.SAT_math)) == false && isNaN(parseInt(users.SAT_EBRW)) == false && isNaN(parseInt(users.ACT_composite)) == true){
+        console.log("reached2")
+        SATFull = (parseInt(users.SAT_math) + parseInt(users.SAT_EBRW))/1600
+        fullWeight = ((SATFull * majorTestWeight) + subjectTestWeight) * 100
+        return fullWeight
+      }
+      else{
+        console.log("reached3")
+        ACTFull = (parseInt(users.ACT_composite)/36)
+        fullWeight = ((ACTFull * majorTestWeight) + subjectTestWeight) * 100
+        return fullWeight
       }
 
     }
-    console.log(avgGpa, avgSatEbrw, avgSatMath)
+    users.forEach(element => {
+      weightedAvg += getWeightedAvg(element)
+    });
+    weightedAvg = weightedAvg/users.length
+    console.log(avgGpa, avgSatEbrw, avgSatMath, weightedAvg)
 </script>
 
 <div id="my_dataviz"></div>
