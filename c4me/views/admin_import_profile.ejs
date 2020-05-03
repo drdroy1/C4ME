@@ -1,0 +1,168 @@
+<%- include("admin_header.ejs"); -%>
+
+<script>
+    var users = <%- JSON.stringify(users) %>;
+    console.log(users.studentData)
+
+</script>
+
+<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+    <div class="justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <section id="pageName" class="mb-0">
+            <div class="container">
+                <h1>Applications Tracker List</h1>
+            </div>
+        </section>
+        <!-- <input type="submit" id="searchBtn" value="Compute">--->
+        </form>
+    </div>
+    <section id="info mt-4 mb-4">
+        <!-- PUT TABLE HERE PLS-->
+        <h6 style="text-align:center">Click on a column head to sort by that column</h6>
+        <div class="outer">
+            <div class="inner">
+        <table class="table table-admin table-bordered" id="myTable2">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col" onclick="sortTable(0)">Name</th>
+                    <th scope="col" onclick="sortTable(1)">Password</th>
+                    <th scope="col" onclick="sortTable(2)">State</th>
+                    <th scope="col" onclick="sortTable(3)">High School Name</th>
+                    <th scope="col" onclick="sortTable(4)">High School City</th>
+                    <th scope="col" onclick="sortTable(5)">High School State</th>               
+                    <th scope="col" onclick="sortTable(6)">GPA</th>
+                    <th scope="col" onclick="sortTable(7)">College Class</th>
+                    <th scope="col" onclick="sortTable(8)">Major 1</th>
+                    <th scope="col" onclick="sortTable(9)">Major 2</th>
+                    <th scope="col" onclick="sortTable(10)">SAT Math</th>
+                    <th scope="col" onclick="sortTable(11)">SAT EBRW</th>
+                    <th scope="col" onclick="sortTable(12)">ACT Composite</th>
+                    <th scope="col" onclick="sortTable(13)">ACT English</th>
+                    <th scope="col" onclick="sortTable(14)">ACT Math</th>
+                    <th scope="col" onclick="sortTable(15)">ACT Reading</th>
+                    <th scope="col" onclick="sortTable(16)">ACT Science</th>
+                    <th scope="col" onclick="sortTable(17)">SAT Literature</th>
+                    <th scope="col" onclick="sortTable(18)">SAT US History</th>
+                    <th scope="col" onclick="sortTable(19)">SAT World History</th>
+                    <th scope="col" onclick="sortTable(20)">SAT Math I</th>
+                    <th scope="col" onclick="sortTable(21)">SAT Math II</th>
+                    <th scope="col" onclick="sortTable(22)">SAT Eco. Bio</th>
+                    <th scope="col" onclick="sortTable(23)">SAT Mol. Bio</th>
+                    <th scope="col" onclick="sortTable(24)">SAT Chemistry</th>
+                    <th scope="col" onclick="sortTable(25)">SAT Physics</th>
+                    <th scope="col" onclick="sortTable(26)">APs Passed</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% users.studentData.forEach(function(users) { %>
+                <tr>
+                    <td><%- users.userid %></td>
+                    <td><%- users.password %></td>
+                    <td><%- users.residence_state %></td>
+                    <td><%- users.high_school_name %></td>
+                    <td><%- users.high_school_city %></td>
+                    <td><%- users.high_school_state %></td>
+                    <td><%- users.GPA %></td>
+                    <td><%- users.college_class %></td>
+                    <td><%- users.major_1 %></td>
+                    <td><%- users.major_2 %></td>
+                    <td><%- users.SAT_math %></td>
+                    <td><%- users.SAT_EBRW %></td>
+                    <td><%- users.ACT_composite %></td>
+                    <td><%- users.ACT_English %></td>
+                    <td><%- users.ACT_math %></td>
+                    <td><%- users.ACT_reading %></td>
+                    <td><%- users.ACT_science %></td>
+                    <td><%- users.SAT_literature %></td>
+                    <td><%- users.SAT_US_hist %></td>
+                    <td><%- users.SAT_world_hist %></td>
+                    <td><%- users.SAT_math_I %></td>
+                    <td><%- users.SAT_math_II %></td>
+                    <td><%- users.SAT_eco_bio %></td>
+                    <td><%- users.SAT_mol_bio %></td>
+                    <td><%- users.SAT_chemistry %></td>
+                    <td><%- users.SAT_physics %></td>
+                    <td><%- users.num_AP_passed %></td>
+
+                    <% }) %>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
+        </div>
+    </section>
+    </body>
+    <script>
+        function sortTable(n) {
+            var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+            table = document.getElementById("myTable2");
+            switching = true;
+            // Set the sorting direction to ascending:
+            dir = "asc";
+            /* Make a loop that will continue until
+            no switching has been done: */
+            while (switching) {
+                // Start by saying: no switching is done:
+                switching = false;
+                rows = table.rows;
+                /* Loop through all table rows (except the
+                first, which contains table headers): */
+                for (i = 1; i < (rows.length - 1); i++) {
+                    // Start by saying there should be no switching:
+                    shouldSwitch = false;
+                    /* Get the two elements you want to compare,
+                    one from current row and one from the next: */
+                    x = rows[i].getElementsByTagName("TD")[n];
+                    y = rows[i + 1].getElementsByTagName("TD")[n];
+                    /* Check if the two rows should switch place,
+                    based on the direction, asc or desc: */
+                    if (dir == "asc") {
+                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                            // If so, mark as a switch and break the loop:
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else if (dir == "desc") {
+                        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                            // If so, mark as a switch and break the loop:
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                }
+                if (shouldSwitch) {
+                    /* If a switch has been marked, make the switch
+                    and mark that a switch has been done: */
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                    // Each time a switch is done, increase this count by 1:
+                    switchcount++;
+                } else {
+                    /* If no switching has been done AND the direction is "asc",
+                    set the direction to "desc" and run the while loop again. */
+                    if (switchcount == 0 && dir == "asc") {
+                        dir = "desc";
+                        switching = true;
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- jquery Library-->
+    <script src="https://code.jquery.com/jquery-3.5.0.js"
+        integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+    <script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+
+    <script src="https://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
+

@@ -137,6 +137,16 @@ header li {
 @media (max-width: 576px) {
   
 }
+table {
+  overflow-x: auto;
+}
+
+.table-admin {
+  display: block;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
 
 
 /*
