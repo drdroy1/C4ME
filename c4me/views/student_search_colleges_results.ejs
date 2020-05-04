@@ -1,5 +1,11 @@
 <%- include("student_header.ejs"); -%>
 
+<script>
+    //Parsed JSON elements will be rendered here
+    //Also Received templateData
+    
+</script>
+
 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
     <div class="justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <section id="pageName" class="mb-0">
@@ -9,9 +15,12 @@
         </section>
         <form method='post' action='/student/compute/<%= key %>'>
             <!-- <input type="submit" id="searchBtn" value="Compute">--->
+           
             <button type="submit" class="btn btn-secondary float-right" value="compute_rec">Compute Recommendation
-                Score</button><br><br>
+                Score</button>
         </form>
+        <button class="btn btn-secondary float-right" style="margin-right:20px" onclick="history.back()" >Modify Search</button><br><br>
+
     </div>
     <section id="info mt-4 mb-4">
         <!-- PUT TABLE HERE PLS-->
@@ -25,6 +34,7 @@
                     <th scope="col" onclick="sortTable(4)">Size</th>
                     <th scope="col" onclick="sortTable(5)">Ranking</th>
                     <th scope="col"> View </th>
+                    <th scope="col"> View </th>
                 </tr>
             </thead>
             <tbody>
@@ -37,14 +47,18 @@
                     <td><%= results.size %></td>
                     <td><%= results.ranking %></td>
                     <td><a href="/view?url=<%= results.name%>">View Similar Students</a></td>
+                    <td><a class="viewProfile"href="/view?url=" >View Profile</a></td>
                 </tr>
                 <% }); %>
             </tbody>
         </table>
+        <div id="dialog" title="Full Profile Info">
     </section>
     </body>
 
     <script>
+        var results = <%- JSON.stringify(results) %>
+        console.log(results)
         function sortTable(n) {
             var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
             table = document.getElementById("myTable2");
@@ -100,7 +114,7 @@
             }
         }
     </script>
-    <script type="text/javascript" src="jquery-1.8.2.js"></script>
+    <!-- <script type="text/javascript" src="jquery-1.8.2.js"></script> -->
     <script type="text/javascript">
         $(function () {
             var dataArr = [];
@@ -133,6 +147,61 @@
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         crossorigin="anonymous"></script>
     <script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
-
-
+    
+    <!-- <script>
+        $(function () {
+            $("#dialog").dialog({
+                autoOpen: false,
+                position: { my: "top" },
+                width: '900px',
+            })
+        });
+        $(() => {
+            $(".viewProfile").on('click', function (evt) {
+                $("#dialog").empty()
+                $("#dialog").dialog('open', "option", "position", "center");
+                evt.preventDefault()
+                var profileID = $(this).attr("id");
+                var profileInfo = users.find(user => user.userid == profileID)
+                console.log(profileInfo)
+                // console.log($(this).attr("id"))
+                // $.post("/listProfile", { "profile": profileInfo });
+                // Object.keys(profileInfo).forEach(key => {
+                //     console.log(key)
+                $("#dialog").append(`Userid: ${profileInfo["userid"]}<br>
+                    Residence State: ${profileInfo["residence_state"]}<br>
+                    High School Name: ${profileInfo["high_school_name"]}<br>
+                    High School City: ${profileInfo["high_school_city"]}<br>
+                    High School State: ${profileInfo["high_school_state"]}<br>
+                    GPA: ${profileInfo["GPA"]}<br>
+                    College Class: ${profileInfo["college_class"]}<br>
+                    First Choice Major: ${profileInfo["major_1"]}<br>
+                    Second Choice Major: ${profileInfo["major_2"]}<br>
+                    SAT EBRW: ${profileInfo["SAT_EBRW"]}<br>
+                    SAT Math: ${profileInfo["SAT_math"]}<br>
+                    ACT Composite: ${profileInfo["ACT_composite"]}<br>
+                    ACT English: ${profileInfo["ACT_English"]}<br>
+                    ACT Math: ${profileInfo["ACT_math"]}<br>
+                    ACT Reading: ${profileInfo["ACT_reading"]}<br>
+                    ACT Science: ${profileInfo["ACT_science"]}<br>
+                    SAT Literature: ${profileInfo["SAT_literature"]}<br>
+                    SAT US History: ${profileInfo["SAT_US_hist"]}<br>
+                    SAT World History: ${profileInfo["SAT_world_hist"]}<br>
+                    SAT Math I: ${profileInfo["SAT_math_I"]}<br>
+                    SAT Math II: ${profileInfo["SAT_math_II"]}<br>
+                    SAT Eco Bio: ${profileInfo["SAT_eco_bio"]}<br>
+                    SAT Molecular Biology: ${profileInfo["SAT_mol_bio"]}<br>
+                    SAT Chemistry: ${profileInfo["SAT_chemistry"]}<br>
+                    SAT Physics: ${profileInfo["SAT_physics"]}<br>
+                    APs Passed: ${profileInfo["num_AP_passed"]}<br>
+                    `)
+                //})
+                $("#dialog").dialog({
+                    close: function () {
+                        $("#dialog").empty()
+                    }
+                })
+            })
+        });
+</script> -->
     </html>

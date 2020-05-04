@@ -455,9 +455,30 @@ async function scrape_colleges(res) {
 		}
 
 		college.name = flines[i].replace(/\r/g, '');
+		console.log("College:", college.name)
 		let cname = college.name.replace('SUNY', 'State University of New York');
-		cname = cname.replace(/,/g, '');
-		cname = cname.replace(/ /g, '\-');
+		
+		if(college.name == "Franklin & Marshall College"){
+			cname = 'Franklin-Marshall-College'
+		}
+		if(college.name == "The College of St Scholastica"){
+			cname = 'College-of-St-Scholastica'
+		}
+		if(college.name == "The College of Wooster"){
+			cname = 'College-of-Wooster'
+		}
+		if(college.name == "Washington & Jefferson College"){
+			cname = 'Washington-Jefferson-College'
+		}
+		else{
+			cname = cname.replace(/,/g, '');
+			cname = cname.replace(/ /g, '\-');
+		}
+		// Special Cases
+		// The College of St Scholastica
+		// The College of Wooster
+		// Franklin & Marshall College
+		// Washington & Jefferson College
 
 		// fetch with puppeteer
 		await page.goto(cd_base_url + '/college/' + cname);
@@ -468,13 +489,45 @@ async function scrape_colleges(res) {
 			// admission info
 			let adminStr = $0("dt:contains('Overall Admission Rate')").next().first().text().split(' ');
 			college.admis_percent = parseInt(adminStr[0].substring(0, adminStr[0].indexOf('%'))) / 100;
-			//console.log(adminStr);
+
+			//Admin String [ '32%', 'of', '18,984', 'applicants', 'were', 'admitted' ]
+
+			//console.log("college.admis_percent" ,college.admis_percent); .32
 			if (adminStr.length > 2) {
 				college.admis_num = parseInt(adminStr[2].replace(/,/g, '')) * college.admis_percent;
 			}
+			console.log("college.admis_num" ,college.admis_num);
 
+			//Completion
+			let completionStr = $0("dt:contains('Students Graduating Within 4 Years')").next().first().text().split(' ');
+			console.log("Completion String ", completionStr)
+
+			college.completion_percent = parseInt(completionStr[1].substring(0, completionStr[1].indexOf('%'))) / 100;
+			console.log("Completion String Percent",college.completion_percent)
+
+			//console.log("Completion Completion Number",college.completion_num)
+			
 			// college size
 			college.size = parseInt($0('div.d-inline-block.text-left > span.h2').text().replace(/,/g, ''));
+
+
+
+
+			//Type of institution
+			var ctype = $0(".statbar__item >div").text()
+			if(ctype.substring(0,18) == 'Private for-profit'){
+				ctype = ctype.substring(0,18)
+			}
+			else if(ctype.substring(0,7) == 'Private'){
+				ctype = 'Private non-profit'
+			}
+			else if(ctype.substring(0,6) == 'Public'){
+				ctype = ctype.substring(0,6)
+			}
+			college.ctype = ctype
+			console.log("Type of Institution:" ,college.ctype)
+			
+
 
 			// standardize test score
 			let gpa = $0("dt:contains('Average GPA')").next().first().text();
@@ -501,6 +554,12 @@ async function scrape_colleges(res) {
 			} else {
 				college.cost_gen = parseInt(costStr.substring(1).replace(/,/g, ''));
 			}
+
+			//Graduating Student Median Debt
+			let debtStr = ($0("dt:contains('Average Indebtedness of 2018 Graduates')").next().first().text()).trim();
+
+			college.med_debt = parseInt((debtStr.substring(1,)).replace(/,/g, ''));
+			console.log("Graduating Student Debt", (college.med_debt))
 
 			// location
 			college.location = $0('#mainContent').next().text();
@@ -532,6 +591,7 @@ async function scrape_colleges(res) {
 				if (err) throw err;
 				let currentDB = db.db('c4me');
 				currentDB.collection('college').findOneAndDelete({ name: college.name }, function (err, result) {
+
 					if (err) throw err;
 					if (result != null) {
 						//console.log(result);
@@ -583,5 +643,4 @@ function parseTestscores(str) {
 	}
 	return parsed;
 }
-
 app.listen(8081);

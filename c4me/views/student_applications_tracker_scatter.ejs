@@ -8,31 +8,48 @@
 <!-- Create a div where the graph will take place -->
 <div id="my_dataviz"></div>
 
-<%# include("student_header.ejs"); -%>
+<%- include("student_header.ejs"); -%>
 <link rel="stylesheet" src="../css/scatter.css" />
 
 <script>
   var users = <%- JSON.stringify(users) %>;
-  console.log(users)
+
 
   var statuses = <%- JSON.stringify(statuses) %>;
   console.log(statuses)
 
   var lName = <%- JSON.stringify(lName) %>
   console.log(lName)
+  var myGpa = <%- JSON.stringify(gpa) %>
+  console.log(myGpa)
+  var mySatMath = <%- JSON.stringify(sat_math) %>
+  console.log(mySatMath)
+  var mySatEbrw = <%- JSON.stringify(sat_ebrw) %>
+  console.log(mySatEbrw)
+  var myAct = <%- JSON.stringify(act) %>
+  console.log(myAct)
+  var myUserId = "me"
+  var myProfile = {userid:myUserId,GPA:myGpa,SAT_math: mySatMath, SAT_EBRW:mySatEbrw, ACT_composite:myAct}
+  console.log(myProfile)
+  users.push(myProfile)
+  console.log(users)
 
   var avgGpa = 0
   var avgSatMath = 0
   var avgSatEbrw = 0
+  var avgAct = 0
   var weightedAvg = 0
   for (var i = 0; i < users.length; i++) {
       avgGpa += parseFloat(users[i].GPA)
       avgSatMath += parseInt(users[i].SAT_math)
       avgSatEbrw += parseInt(users[i].SAT_EBRW)
+      avgAct += parseInt(users[i].ACT_composite)
+
   }
   avgGpa = avgGpa / users.length
   avgSatMath = avgSatMath / users.length
   avgSatEbrw = avgSatEbrw / users.length
+  avgAct = avgAct / users.length
 
   function getStatus(users, statuses) {
       var status = "";
@@ -165,8 +182,9 @@
     ];
 
     // Select X-axis Variable
-    var span = body.append("span").text("Select X-Axis variable: ");
-    var yInput = body
+    var span = body.append("div").text("Select X-Axis variable: ");
+    span.classed("xLabel", true);
+    var yInput = span
       .append("select")
       .attr("id", "xSelect")
       .on("change", xChange)
@@ -188,14 +206,14 @@
       top: 100,
       right: 30,
       bottom: 30,
-      left: 300,
+      left: 320,
     };
-    var h = 800 - margin.left - margin.right;
+    var h = 820 - margin.left - margin.right;
     var w = 600 - margin.top - margin.bottom;
     //var formatPercent = d3.format('.2%')
     // Scales
     function colorScale(d) {
-      console.log("Status:", getStatus(d, statuses));
+      console.log("Profiles:", d.userid);
       if (d.userid == "me") {
         color = "blue";
       } else if (getStatus(d, statuses) == "accepted") {
@@ -218,15 +236,7 @@
     console.log("xScale domain:", xScale.domain());
     var yScale = d3
       .scaleLinear()
-      .domain([
-        d3.min([0, 0]),
-        d3.max([
-          0,
-          d3.max(users, function (users) {
-            return parseFloat(users.GPA);
-          }),
-        ]),
-      ])
+      .domain([d3.min([0, 0]), d3.max([0, 4])])
       .range([h, 0]);
     console.log("yScale domain:", yScale.domain());
     // SVG
@@ -257,11 +267,19 @@
       .enter()
       .append("circle")
       .attr("cx", function (users) {
-        return xScale(parseInt(users.SAT_EBRW) + parseInt(users.SAT_math));
+        if (parseInt(users.SAT_EBRW) + parseInt(users.SAT_math) > 0) {
+          return xScale(parseInt(users.SAT_EBRW) + parseInt(users.SAT_math));
+        } else {
+          return xScale(0);
+        }
       })
       .attr("cy", function (users) {
         console.log("Gpas:", parseFloat(users.GPA));
-        return yScale(parseFloat(users.GPA));
+        if (parseFloat(users.GPA) > 0 && parseFloat(users.GPA) <= 4) {
+          return yScale(parseFloat(users.GPA));
+        } else {
+          return yScale(0);
+        }
       })
       .attr("r", "5")
       .attr("stroke", "black")
@@ -297,41 +315,66 @@
           getWeightedAvg(users)
         );
       });
-      
+
     //Dashed Line
-    var avgline = d3.line()
-        .x(avgGpa)
-        .y(40);
-    console.log(avgline.y)
-    svg.append("path")
-    .attr({
-        d: avgline,
-        stroke: "black",
-        "stroke-width": 1,
-        fill: "none",
-        "stroke-dasharray": "5,5",
-    });
-    console.log()
+    // var avgline = d3.line()
+    //     .x(avgGpa)
+    //     .y(40);
+    // console.log(avgline.y)
+    // svg.append("path")
+    // .attr({
+    //     d: avgline,
+    //     stroke: "black",
+    //     "stroke-width": 1,
+    //     fill: "none",
+    //     "stroke-dasharray": "5,5",
+    // });
+    // console.log()
+    svg
+      .append("line")
+      .attr("x1", 0)
+      .attr("y1", 470 - avgGpa * (h / 4))
+      .attr("x2", w)
+      .attr("y2", 470 - avgGpa * (h / 4))
+      .style("stroke", "blue");
+
+    console.log("height", h);
+    console.log("width", w);
+
+    svg
+      .append("line")
+      .attr("x1", (avgSatEbrw + avgSatMath) / (1600 / w))
+      .attr("y1", 0)
+      .attr("x2", (avgSatEbrw + avgSatMath) / (1600 / w))
+      .attr("y2", h)
+      .style("stroke", "blue");
+
+    // .attr({
+    //     stroke: "black",
+    //     "stroke-width": 1,
+    //     fill: "none",
+    //     "stroke-dasharray": "5,5",
+    // });
 
     // X-axis
-    svg.append("g")
+    svg
+      .append("g")
       .attr("class", "axis")
       .attr("id", "xAxis")
       .attr("transform", "translate(0," + h + ")")
-      .call(xAxis)
-    svg.append("text") // X-axis Label
+      .call(xAxis);
+    svg
+      .append("text") // X-axis Label
       .attr("id", "xAxisLabel")
-      .attr("y", w-20)
+      .attr("y", w - 15)
       .attr("x", w)
       .attr("dy", ".71em")
       .style("text-anchor", "end")
       .text("SAT EBRW + Math");
     // Y-axis
-    svg.append("g")
-      .attr("class", "axis")
-      .attr("id", "yAxis")
-      .call(yAxis)
-    svg.append("text") // y-axis Label
+    svg.append("g").attr("class", "axis").attr("id", "yAxis").call(yAxis);
+    svg
+      .append("text") // y-axis Label
       .attr("id", "yAxisLabel")
       .attr("transform", "rotate(-90)")
       .attr("x", 0)
@@ -340,13 +383,12 @@
       .style("text-anchor", "end")
       .text("GPA");
 
-
-
-
     function xChange() {
       var value = this.value; // get the new x value
       console.log("Changing Value:", value);
       if (value == "SAT EBRW + Math") {
+        d3.selectAll("line").remove();
+
         xScale // change the xScale
           .domain([d3.min([0, 0]), d3.max([0, 1600])]);
         xAxis.scale(xScale); // change the xScale
@@ -364,11 +406,35 @@
           .delay(function (users, i) {
             return i * 100;
           })
+
           .attr("cx", function (users) {
-            return xScale(parseInt(users.SAT_EBRW) + parseInt(users.SAT_math));
+            if (parseInt(users.SAT_EBRW) + parseInt(users.SAT_math) > 0) {
+              return xScale(
+                parseInt(users.SAT_EBRW) + parseInt(users.SAT_math)
+              );
+            } else {
+              return xScale(0);
+            }
           });
+        svg
+          .append("line")
+          .attr("x1", 0)
+          .attr("y1", 470 - avgGpa * (h / 4))
+          .attr("x2", w)
+          .attr("y2", 470 - avgGpa * (h / 4))
+          .style("stroke", "blue");
+
+        svg
+          .append("line")
+          .attr("x1", (avgSatEbrw + avgSatMath) / (1600 / w))
+          .attr("y1", 0)
+          .attr("x2", (avgSatEbrw + avgSatMath) / (1600 / w))
+          .attr("y2", h)
+          .style("stroke", "blue");
       }
       if (value == "ACT Composite") {
+        d3.selectAll("line").remove();
+
         xScale // change the xScale
           .domain([d3.min([0, 0]), d3.max([0, 36])]);
         xAxis.scale(xScale); // change the xScale
@@ -386,11 +452,35 @@
           .delay(function (users, i) {
             return i * 100;
           })
+
           .attr("cx", function (users) {
-            return xScale(parseInt(users.ACT_composite));
+            if (
+              parseInt(users.ACT_composite) > 0 &&
+              parseInt(users.ACT_composite) <= 36
+            ) {
+              return xScale(parseInt(users.ACT_composite));
+            } else {
+              return xScale(0);
+            }
           });
+        svg
+          .append("line")
+          .attr("x1", 0)
+          .attr("y1", 470 - avgGpa * (h / 4))
+          .attr("x2", w)
+          .attr("y2", 470 - avgGpa * (h / 4))
+          .style("stroke", "blue");
+
+        svg
+          .append("line")
+          .attr("x1", avgAct / (36 / w))
+          .attr("y1", 0)
+          .attr("x2", avgAct / (36 / w))
+          .attr("y2", h)
+          .style("stroke", "blue");
       }
       if (value == "Weighted Average") {
+        d3.selectAll("line").remove();
         xScale // change the xScale
           .domain([d3.min([0, 0]), d3.max([0, 100])]);
         xAxis.scale(xScale); // change the xScale
@@ -411,9 +501,25 @@
           .attr("cx", function (users) {
             return xScale(getWeightedAvg(users));
           });
+        svg
+          .append("line")
+          .attr("x1", 0)
+          .attr("y1", 470 - avgGpa * (h / 4))
+          .attr("x2", w)
+          .attr("y2", 470 - avgGpa * (h / 4))
+          .style("stroke", "blue");
+
+        svg
+          .append("line")
+          .attr("x1", weightedAvg / (100 / w))
+          .attr("y1", 0)
+          .attr("x2", weightedAvg / (100 / w))
+          .attr("y2", h)
+          .style("stroke", "blue");
       }
     }
   }
+
   // //users.forEach(data => {
 
   // // Add X axis

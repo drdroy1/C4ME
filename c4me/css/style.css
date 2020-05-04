@@ -147,6 +147,16 @@ table {
   white-space: nowrap;
 }
 
+.xLabel{
+  position: absolute;
+  width: 100px;
+  top:650px;
+  left:500px;
+  
+}
+.dashed {
+  stroke-dasharray: 5, 5;
+}
 
 
 /*

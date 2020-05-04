@@ -280,6 +280,7 @@ app.post('/search', function (req, res) {
 				autoIncrement.getNextSequence(currentDB, "resTable", function (err, autoIndex) {
 					let value = autoIndex.toString();
 					currentDB.collection('resTable').insertOne({ key: value, results: newArr })
+					console.log("Results:", newArr, "Key:", value);
 					res.render('student_search_colleges_results.ejs', { results: newArr, key: value });
 				})
 			}
@@ -437,7 +438,6 @@ app.post('/tracker', function (req, res) {
 						let satRW = result.sat_ebrw
 						let act = result.act
 						let question = 0
-
 						if (r.testscores.avg_gpa - gpa > 0.25) {
 							question = question + 1
 						}
@@ -475,7 +475,7 @@ app.post('/tracker', function (req, res) {
 				currentDB.collection('resTable').findOne({ key: key }, function (err, result) {
 					let arr = result.results
 					currentDB.collection('profile').findOne({ userId: username }, function (err, result) {
-						console.log('Gonna start with search results: ' + result)
+						console.log('results: ', result)
 						if (result) {
 							let score = 0
 							let gpa = 0

@@ -41,6 +41,8 @@
     </body>
 
     <script>
+        var results = <%- JSON.stringify(results) %>
+        console.log(results)
         function sortTable(n) {
             var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
             table = document.getElementById("myTable2");
@@ -96,7 +98,7 @@
             }
         }
     </script>
-    <script type="text/javascript" src="jquery-1.8.2.js"></script>
+    <!-- <script type="text/javascript" src="jquery-1.8.2.js"></script> -->
     <script type="text/javascript">
         $(function () {
             var dataArr = [];
