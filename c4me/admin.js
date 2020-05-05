@@ -50,7 +50,7 @@ app.post('/delete', function (req, res) {
 var templateData = {}
 function getCsv(file) {
 	return new Promise(function (resolve, reject) {
-		// var applicationsCsv = 'csv/applications-2.csv'
+		// var applicationsCsv = 'csv/applications-large.csv'
 		// var studentCsv = 'csv/students-1.csv'
 		var rows = []
 		fs.createReadStream(file)
@@ -71,7 +71,7 @@ app.get('/import', function (req, res) {
 	// 	})
 	let errorArray= []
 	csvtojson()
-		.fromFile('csv/students-2.csv')
+		.fromFile('csv/students-large.csv')
 		.then(csvDataStudent => {
 			console.log(csvDataStudent);
 
@@ -98,9 +98,9 @@ app.get('/import', function (req, res) {
 		res.render('admin_import_page.ejs', {errors: errorArray})
 });
 app.get('/imported', function (req, res) {
-	getCsv('csv/applications-2.csv').then((data) => {
+	getCsv('csv/applications-large.csv').then((data) => {
 		templateData.applicationData = data;
-		getCsv('csv/students-2.csv').then((data) => {
+		getCsv('csv/students-large.csv').then((data) => {
 			templateData.studentData = data;
 			console.log(templateData);
 			res.render('admin_import_profile.ejs', { users: templateData });

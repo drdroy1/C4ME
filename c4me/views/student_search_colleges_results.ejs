@@ -3,7 +3,7 @@
 <script>
     //Parsed JSON elements will be rendered here
     //Also Received templateData
-    
+
 </script>
 
 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
@@ -13,52 +13,30 @@
                 <h1> College Search Results</h1>
             </div>
         </section>
-        <form method='post' action='/student/compute/<%= key %>'>
-            <!-- <input type="submit" id="searchBtn" value="Compute">--->
-           
-            <button type="submit" class="btn btn-secondary float-right" value="compute_rec">Compute Recommendation
-                Score</button>
+        <!-- <form method='post' action='/student/compute/<%# key %>'> -->
+        <!-- <input type="submit" id="searchBtn" value="Compute">--->
+
+        <button type="submit" class="btn btn-secondary float-right" value="compute_rec">Compute Recommendation
+            Score</button>
         </form>
-        <button class="btn btn-secondary float-right" style="margin-right:20px" onclick="history.back()" >Modify Search</button><br><br>
+        <button class="btn btn-secondary float-right" style="margin-right:20px" onclick="history.back()">Modify
+            Search</button><br><br>
 
     </div>
     <section id="info mt-4 mb-4">
         <!-- PUT TABLE HERE PLS-->
         <table class="table table-bordered" id="myTable2">
-            <thead class="thead-light">
-                <tr>
-                    <th scope="col" onclick="sortTable(0)">Name</th>
-                    <th scope="col" onclick="sortTable(1)">Cost</th>
-                    <th scope="col" onclick="sortTable(2)">Admission Rate</th>
-                    <th scope="col" onclick="sortTable(3)">Location</th>
-                    <th scope="col" onclick="sortTable(4)">Size</th>
-                    <th scope="col" onclick="sortTable(5)">Ranking</th>
-                    <th scope="col"> View </th>
-                    <th scope="col"> View </th>
-                </tr>
-            </thead>
             <tbody>
-                <% results.forEach(function(results) { %>
-                <tr>
-                    <td><%= results.name %></td>
-                    <td><%= results.cost_gen %></td>
-                    <td><%= results.admis_percent %></td>
-                    <td><%= results.location %></td>
-                    <td><%= results.size %></td>
-                    <td><%= results.ranking %></td>
-                    <td><a href="/view?url=<%= results.name%>">View Similar Students</a></td>
-                    <td><a class="viewProfile"href="/view?url=" >View Profile</a></td>
-                </tr>
-                <% }); %>
+
             </tbody>
         </table>
+        <div id="profileInfo"></div>
         <div id="dialog" title="Full Profile Info">
     </section>
     </body>
 
     <script>
-        var results = <%- JSON.stringify(results) %>
-        console.log(results)
+
         function sortTable(n) {
             var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
             table = document.getElementById("myTable2");
@@ -115,7 +93,7 @@
         }
     </script>
     <!-- <script type="text/javascript" src="jquery-1.8.2.js"></script> -->
-    <script type="text/javascript">
+    <!-- <script type="text/javascript">
         $(function () {
             var dataArr = [];
             $("td").each(function () {
@@ -133,13 +111,12 @@
                     }
                 });
             });
-        });
-    </script>
+        }); -->
+    <!-- </script> -->
 
     <!-- jquery Library-->
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.0.js"
+        integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
         integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
         crossorigin="anonymous"></script>
@@ -147,8 +124,427 @@
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         crossorigin="anonymous"></script>
     <script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
-    
-    <!-- <script>
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+
+    <script src="https://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
+
+    <script>
+        var search = <%- JSON.stringify(search) %>
+        console.log(search)
+        const northeast = ['ME', 'NH', 'VT', 'MA', 'CT', 'RI', 'NY', 'PA', 'NJ', 'DC'];
+        const midwest = ['ND', 'MN', 'WI', 'MI', 'SD', 'IA', 'IL', 'IN', 'OH', 'NE', 'MO', 'KS'];
+        const west = ['WA', 'MT', 'OR', 'ID', 'WY', 'CA', 'NV', 'CO', 'UT', 'AZ', 'NM'];
+        const south = ['OK', 'AR', 'KY', 'WV', 'MD', 'DE', 'TX', 'LA', 'TN', 'DC', 'MS', 'AL', 'NC', 'GA', 'SC', 'FL'];
+        const pacific = ['HI', 'AK'];
+        //$.getJSON("/json/college_data.json", showColleges) //Gets the Json College File and then uses the function showColleges to display onto tables
+        var filteredColleges = []
+        console.log("Search", search)
+        $.getJSON("/json/college_data.json", filterColleges)
+        function filterColleges(collegeInfo) {
+            var location = ''
+            console.log("College Info:", collegeInfo)
+            console.log("Search", search)
+            if (search.rank1 != '') {
+                var rank1 = parseInt(search.rank1)
+            }
+            else {
+                var rank1 = ''
+            }
+
+            if (search.rank2 != '') {
+                var rank2 = parseInt(search.rank2)
+            }
+            else {
+                var rank2 = ''
+            }
+
+            if (search.size1 != '') {
+                var size1 = parseInt(search.size1)
+            }
+            else {
+                var size1 = ''
+            }
+
+            if (search.size2 != '') {
+                var size2 = parseInt(search.size2)
+            }
+            else {
+                var size2 = ''
+            }
+            console.log(size1)
+            console.log(size2)
+            console.log(rank1)
+            console.log(rank2)
+
+            collegeInfo.forEach(college => {
+                location = college.location.substring(college.location.length - 2, college.location.length)
+                var ranking = 0
+                if (college.ranking == "401-500") {
+                    ranking = 450
+                }
+                if (college.ranking == "> 600") {
+                    ranking = 600
+                }
+                else {
+                    ranking = college.ranking
+                }
+                var size = 0
+                if (college.size < 0 || college.size == "NaN") {
+                    size = 0
+                }
+                else {
+                    size = parseInt(college.size)
+                }
+
+                var act = 0
+                var satEnglish = 0
+                var satMath = 0
+                if (parseInt(college.testscores.sat_ebrw.avg) > 0 || (parseInt(college.testscores.sat_ebrw.lrange) > 0 && parseInt(college.testscores.sat_ebrw.rrange) > 0)) {
+                            if (parseInt(college.testscores.sat_ebrw.avg) > 0) {
+
+                                satEnglish = college.testscores.sat_ebrw.avg
+
+                            }
+                            else if (parseInt(college.testscores.sat_ebrw.lrange) > 0 && parseInt(college.testscores.sat_ebrw.rrange) > 0) {
+                                satEnglish = (parseInt(college.testscores.sat_ebrw.lrange) + parseInt(college.testscores.sat_ebrw.rrange)) / 2
+                                
+                            }
+                        }
+                        //college.testscores.sat_math.avg
+                if (parseInt(college.testscores.sat_math.avg) > 0 || (parseInt(college.testscores.sat_math.lrange) > 0 && parseInt(college.testscores.sat_math.rrange) > 0)) {
+                            if (parseInt(college.testscores.sat_math.avg) > 0) {
+                                satMath = parseInt(college.testscores.sat_math.avg)
+
+                            }
+                            else if (parseInt(college.testscores.sat_math.lrange) > 0 && parseInt(college.testscores.sat_math.rrange) > 0) {
+                                satMath = (parseInt(college.testscores.sat_math.lrange) + parseInt(college.testscores.sat_math.rrange)) / 2
+                            }
+                        }
+
+
+
+
+
+                if (parseInt(college.testscores.act_composite.avg) > 0 || (parseInt(college.testscores.act_composite.lrange) > 0 && parseInt(college.testscores.act_composite.rrange) > 0)) {
+                    //college.testscores.act_composite.avg
+                    if (parseInt(college.testscores.act_composite.avg) > 0) {
+
+                        act = parseInt(college.testscores.act_composite.avg)
+                    }
+                    else if (parseInt(college.testscores.act_composite.lrange) > 0 && parseInt(college.testscores.act_composite.rrange) > 0) {
+                        act = (parseInt(college.testscores.act_composite.lrange) + parseInt(college.testscores.act_composite.rrange)) / 2
+                        
+                    }
+
+                }
+
+
+                //console.log(location)
+                if (college.name.includes(search.collegeName)) {
+
+                    if ((search.admissionRate1 <= college.admis_percent && search.admissionRate2 >= college.admis_percent) || (search.admissionRate1 <= search.admissionRate2)) {
+                        if (search.cost == "All" || (search.cost == "0" && college.cost_gen > 0 && college.cost_gen <= 10000)
+                            || (search.cost == "1" && college.cost_gen >= 10001 && college.cost_gen <= 20000)
+                            || (search.cost == "2" && college.cost_gen >= 20001 && college.cost_gen <= 30000)
+                            || (search.cost == "3" && college.cost_gen >= 30001 && college.cost_gen <= 40000)
+                            || (search.cost == "4" && college.cost_gen >= 40001 && college.cost_gen <= 50000)
+                            || (search.cost == "5" && college.cost_gen >= 50001 && college.cost_gen <= 60000)
+                            || (search.cost == "6" && college.cost_gen >= 60001 && college.cost_gen <= 70000)
+                            || (search.cost == "7" && college.cost_gen >= 70001 && college.cost_gen <= 80000)
+
+                            || (search.cost == "1" && college.cost_instate >= 10001 && college.cost_instate <= 20000)
+                            || (search.cost == "2" && college.cost_instate >= 20001 && college.cost_instate <= 30000)
+                            || (search.cost == "3" && college.cost_instate >= 30001 && college.cost_instate <= 40000)
+                            || (search.cost == "4" && college.cost_instate >= 40001 && college.cost_instate <= 50000)
+                            || (search.cost == "5" && college.cost_instate >= 50001 && college.cost_instate <= 60000)
+                            || (search.cost == "6" && college.cost_instate >= 60001 && college.cost_instate <= 70000)
+                            || (search.cost == "7" && college.cost_instate >= 70001 && college.cost_instate <= 80000)
+
+                            || (search.cost == "1" && college.cost_outstate >= 10001 && college.cost_outstate <= 20000)
+                            || (search.cost == "2" && college.cost_outstate >= 20001 && college.cost_outstate <= 30000)
+                            || (search.cost == "3" && college.cost_outstate >= 30001 && college.cost_outstate <= 40000)
+                            || (search.cost == "4" && college.cost_outstate >= 40001 && college.cost_outstate <= 50000)
+                            || (search.cost == "5" && college.cost_outstate >= 50001 && college.cost_outstate <= 60000)
+                            || (search.cost == "6" && college.cost_outstate >= 60001 && college.cost_outstate <= 70000)
+                            || (search.cost == "7" && college.cost_outstate >= 70001 && college.cost_outstate <= 80000)
+                        ) {
+                            if (search.loc == ''
+                                || (search.loc == "Northeast" && northeast.indexOf(location) > -1)
+                                || (search.loc == "Midwest" && midwest.indexOf(location) > -1)
+                                || (search.loc == "South" && south.indexOf(location) > -1)
+                                || (search.loc == "West" && west.indexOf(location) > -1)
+                                || (search.loc == "Pacific" && pacific.indexOf(location) > -1)
+                            ) {
+                                if ((search.m1 == '' && search.m2 == '')
+                                    || college.majors[0].includes(search.m1)
+                                    || college.majors[0].includes(search.m2)
+                                    || college.majors[1].includes(search.m1)
+                                    || college.majors[1].includes(search.m2)
+                                ) {
+                                    //console.log(typeof rank1 === 'string')
+                                    if ((rank1 <= ranking && isNaN(rank2))
+                                        || (isNaN(rank1) && ranking <= rank2)
+                                        || (isNaN(rank1) && isNaN(rank2))
+                                        || (rank1 <= ranking && rank2 >= ranking)
+                                        || (rank1 >= 400 && rank2 <= 500 && ranking == 450)
+                                        || (rank1 >= 600 || rank2 >= 600 && ranking == 600)
+                                        || (rank1 == '' && rank2 == '')
+                                        || (rank1 == '' && rank2 >= ranking)
+                                        || (rank1 <= ranking && rank2 == '')
+                                    ){
+
+                                        if (size == 0
+                                            || (size1 <= size && isNaN(size2))
+                                            || (isNaN(size1) && size <= size2)
+                                            || (isNaN(size1) && isNaN(size2))
+                                            || (size1 <= size && size2 >= size)
+                                            || (size1 == '' && size2 == '')
+                                            || (size1 == '' && size2 >= size)
+                                            || (size1 <= size && size2 == '')
+                                        ){
+
+                                            if(search.math == 'All'
+                                            ||(search.math == '0' && satMath >= 0 && satMath <=100)
+                                            ||(search.math == '1' && satMath >= 101 && satMath <=200)
+                                            ||(search.math == '2' && satMath >= 201 && satMath <=300)
+                                            ||(search.math == '3' && satMath >= 301 && satMath <=400)
+                                            ||(search.math == '4' && satMath >= 401 && satMath <=500)
+                                            ||(search.math == '5' && satMath >= 501 && satMath <=600)
+                                            ||(search.math == '6' && satMath >= 601 && satMath <=700)
+                                            ||(search.math == '7' && satMath >= 701 && satMath <=800)
+                                            
+                                            ){
+                                                    if(search.reading == 'All'
+                                                ||(search.reading == '0' && satEnglish >= 0 && satEnglish <=100)
+                                                ||(search.reading == '1' && satEnglish >= 101 && satEnglish <=200)
+                                                ||(search.reading == '2' && satEnglish >= 201 && satEnglish <=300)
+                                                ||(search.reading == '3' && satEnglish >= 301 && satEnglish <=400)
+                                                ||(search.reading == '4' && satEnglish >= 401 && satEnglish <=500)
+                                                ||(search.reading == '5' && satEnglish >= 501 && satEnglish <=600)
+                                                ||(search.reading == '6' && satEnglish >= 601 && satEnglish <=700)
+                                                ||(search.reading == '7' && satEnglish >= 701 && satEnglish <=800)
+                                                
+                                                ){
+                                                        if(search.act == 'All'
+                                                    ||(search.act == '0' && act >= 1 && act <=4)
+                                                    ||(search.act == '1' && act >= 5 && act <=8)
+                                                    ||(search.act == '2' && act >= 9 && act <=12)
+                                                    ||(search.act == '3' && act >= 13 && act <=16)
+                                                    ||(search.act == '4' && act >= 17 && act <=20)
+                                                    ||(search.act == '5' && act >= 21 && act <=24)
+                                                    ||(search.act == '6' && act >= 25 && act <=28)
+                                                    ||(search.act == '7' && act >= 29 && act <=32)
+                                                    ||(search.act == '7' && act >= 33 && act <=36)
+
+                                                    ){
+
+                                            
+                                                        console.log("true:", college)
+                                                            return college
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+
+                    }
+                }
+            })
+        }
+        //function returnJsonFilter(college){
+        // console.log("Return Json Filter:", typeof(college))
+        // college.forEach(key=>{
+        //     console.log("key",key)
+        //     filteredColleges.push(key)
+        // })
+        // return college
+        //}
+
+        console.log("Filtered Colleges:", filteredColleges)
+        //console.log("Hello")
+        function showColleges(collegeInfo) {
+            console.log("Received College Info:", collegeInfo)
+            var thead = $("<thead/>")
+            var row = $("<tr/>")
+            Object.keys(collegeInfo[0]).forEach(key => {
+                console.log(key)
+
+                if (key == "name") {
+                    row.append($("<td/>", { html: '<th  onclick="sortTable(0)">Name</th>' }))
+                }
+                else if (key == "cost_gen") {
+                    row.append($("<td/>", { html: '<th  onclick="sortTable(1)">Cost to Attend</th>' }))
+                }
+                else if (key == "admis_percent") {
+                    row.append($("<td/>", { html: '<th  onclick="sortTable(2)">Admitted Percent</th>' }))
+                }
+                else if (key == "size") {
+                    row.append($("<td/>", { html: '<th  onclick="sortTable(3)">Size</th>' }))
+                }
+                else if (key == "location") {
+                    row.append($("<td/>", { html: '<th onclick="sortTable(4)">Location</th>' }))
+                }
+                else if (key == "ranking") {
+
+                    row.append($("<td/>", { html: '<th onclick="sortTable(5)">Ranking</th>' }))
+                }
+                else if (key == "testscores") {
+                    row.append($("<td/>", { html: '<th onclick="sortTable(6)">SAT EBRW</th>' }))
+                    row.append($("<td/>", { html: '<th onclick="sortTable(7)">SAT Math</th>' }))
+                    row.append($("<td/>", { html: '<th onclick="sortTable(8)">ACT Composite</th>' }))
+                }
+                else if (key == "completion_percent") {
+                    row.append($("<td/>", { html: "View Profile" }))
+
+                }
+            })
+            thead.append(row)
+            $("#myTable2").append(thead)
+            collegeInfo.forEach(college => {
+                //console.log(profileInfo)
+                //console.log("Dialog Tester:", $(college).attr("name"))
+                //console.log(college)
+                var row = $("<tr/>")
+                Object.keys(college).forEach(key => {
+
+                    if (key == "name" || key == "admis_percent" || key == "location") { //Key Names
+
+                        var keyData = $("<td/>", { html: college[key] })
+                        row.append(keyData)
+                    }
+                    else if (key == "size") { //Size
+                        //console.log(college.size)
+                        if (college.size < 0 || college.size == "NaN") {
+                            var keyData = $("<td/>", { html: "N/a" })
+                            row.append(keyData)
+                        }
+                        else {
+                            var parsed = parseInt(college[key])
+                            var keyData = $("<td/>", { html: parsed })
+                            row.append(keyData)
+                        }
+                    }
+                    else if (key == "cost_gen") { // Cost to attend
+                        if (college.cost_gen < 0 || college.cost_gen == "NaN") {
+                            if (college.cost_instate > 0 || college.cost_outstate > 0) {
+                                var college_state_cost = "Instate: " + college.cost_instate.toString() + "\nOutstate: " + college.cost_outstate.toString()
+                                //console.log("Instate", college_state_cost)
+                                var keyData = $("<td/>", { html: college_state_cost })
+                                row.append(keyData)
+                            }
+
+                            else {
+                                var keyData = $("<td/>", { html: "N/a" })
+                                row.append(keyData)
+                            }
+                        }
+                        else {
+                            var parsed = parseInt(college[key])
+                            var keyData = $("<td/>", { html: parsed })
+                            row.append(keyData)
+                        }
+                    }
+                    else if (key == "ranking") { //Ranking
+                        //"401-500"
+                        //"> 600"
+                        //console.log(college.ranking)
+                        if (college.ranking == "401-500") {
+                            var parsed = 450
+                            var keyData = $("<td/>", { html: parsed })
+                            row.append(keyData)
+                        }
+                        else if (college.ranking == "> 600") {
+                            var parsed = 600
+                            var keyData = $("<td/>", { html: parsed })
+                            row.append(keyData)
+                        }
+                        else {
+                            var parsed = parseInt(college[key])
+                            var keyData = $("<td/>", { html: parsed })
+                            row.append(keyData)
+                        }
+                    }
+                    else if (key == "testscores") { //Test Score Breakdown
+                        //console.log(college.testscores.sat_ebrw.lrange, (college.testscores.sat_ebrw.rrange))
+                        if (parseInt(college.testscores.sat_ebrw.avg) > 0 || (parseInt(college.testscores.sat_ebrw.lrange) > 0 && parseInt(college.testscores.sat_ebrw.rrange) > 0)) {
+                            if (parseInt(college.testscores.sat_ebrw.avg) > 0) {
+
+                                var keyData = $("<td/>", { html: college.testscores.sat_ebrw.avg })
+                                row.append(keyData)
+
+                            }
+                            else if (parseInt(college.testscores.sat_ebrw.lrange) > 0 && parseInt(college.testscores.sat_ebrw.rrange) > 0) {
+                                var avg = (parseInt(college.testscores.sat_ebrw.lrange) + parseInt(college.testscores.sat_ebrw.rrange)) / 2
+                                var keyData = $("<td/>", { html: avg })
+                                row.append(keyData)
+                            }
+                        }
+                        else {
+                            var nothing = "N/a"
+                            var keyData = $("<td/>", { html: nothing })
+                            row.append(keyData)
+                        }
+                        //college.testscores.sat_math.avg
+                        if (parseInt(college.testscores.sat_math.avg) > 0 || (parseInt(college.testscores.sat_math.lrange) > 0 && parseInt(college.testscores.sat_math.rrange) > 0)) {
+                            if (parseInt(college.testscores.sat_math.avg) > 0) {
+
+                                var keyData = $("<td/>", { html: college.testscores.sat_math.avg })
+                                row.append(keyData)
+
+                            }
+                            else if (parseInt(college.testscores.sat_math.lrange) > 0 && parseInt(college.testscores.sat_math.rrange) > 0) {
+                                var avg = (parseInt(college.testscores.sat_math.lrange) + parseInt(college.testscores.sat_math.rrange)) / 2
+                                var keyData = $("<td/>", { html: avg })
+                                row.append(keyData)
+                            }
+                        }
+
+                        else {
+                            var nothing = "N/a"
+                            var keyData = $("<td/>", { html: nothing })
+                            row.append(keyData)
+                        }
+                        if (parseInt(college.testscores.act_composite.avg) > 0 || (parseInt(college.testscores.act_composite.lrange) > 0 && parseInt(college.testscores.act_composite.rrange) > 0)) {
+                            //college.testscores.act_composite.avg
+                            if (parseInt(college.testscores.act_composite.avg) > 0) {
+
+                                var keyData = $("<td/>", { html: college.testscores.act_composite.avg })
+                                row.append(keyData)
+
+                            }
+                            else if (parseInt(college.testscores.act_composite.lrange) > 0 && parseInt(college.testscores.act_composite.rrange) > 0) {
+                                var avg = (parseInt(college.testscores.act_composite.lrange) + parseInt(college.testscores.act_composite.rrange)) / 2
+                                var keyData = $("<td/>", { html: avg })
+                                row.append(keyData)
+                            }
+
+                        }
+                        else {
+                            var nothing = "N/a"
+                            var keyData = $("<td/>", { html: nothing })
+                            row.append(keyData)
+                        }
+                    }
+                    else if (key == "completion_percent") {
+                        var keyData = $("<td/>", { html: '<a class="viewProfile" href="/view?url=<%# college %>">View Profile</a>' })
+                        row.append(keyData)
+                    }
+                })
+                $("#myTable2").append(row)
+            });
+        }
+        //showColleges(filteredColleges)
+    </script>
+
+
+
+    <script>
         $(function () {
             $("#dialog").dialog({
                 autoOpen: false,
@@ -161,40 +557,20 @@
                 $("#dialog").empty()
                 $("#dialog").dialog('open', "option", "position", "center");
                 evt.preventDefault()
-                var profileID = $(this).attr("id");
-                var profileInfo = users.find(user => user.userid == profileID)
+                var profileID = $(this).attr("name");
+                var profileInfo = collegeInfo.find(college => college.name == profileID)
                 console.log(profileInfo)
-                // console.log($(this).attr("id"))
-                // $.post("/listProfile", { "profile": profileInfo });
-                // Object.keys(profileInfo).forEach(key => {
-                //     console.log(key)
-                $("#dialog").append(`Userid: ${profileInfo["userid"]}<br>
-                    Residence State: ${profileInfo["residence_state"]}<br>
-                    High School Name: ${profileInfo["high_school_name"]}<br>
-                    High School City: ${profileInfo["high_school_city"]}<br>
-                    High School State: ${profileInfo["high_school_state"]}<br>
-                    GPA: ${profileInfo["GPA"]}<br>
-                    College Class: ${profileInfo["college_class"]}<br>
-                    First Choice Major: ${profileInfo["major_1"]}<br>
-                    Second Choice Major: ${profileInfo["major_2"]}<br>
-                    SAT EBRW: ${profileInfo["SAT_EBRW"]}<br>
-                    SAT Math: ${profileInfo["SAT_math"]}<br>
-                    ACT Composite: ${profileInfo["ACT_composite"]}<br>
-                    ACT English: ${profileInfo["ACT_English"]}<br>
-                    ACT Math: ${profileInfo["ACT_math"]}<br>
-                    ACT Reading: ${profileInfo["ACT_reading"]}<br>
-                    ACT Science: ${profileInfo["ACT_science"]}<br>
-                    SAT Literature: ${profileInfo["SAT_literature"]}<br>
-                    SAT US History: ${profileInfo["SAT_US_hist"]}<br>
-                    SAT World History: ${profileInfo["SAT_world_hist"]}<br>
-                    SAT Math I: ${profileInfo["SAT_math_I"]}<br>
-                    SAT Math II: ${profileInfo["SAT_math_II"]}<br>
-                    SAT Eco Bio: ${profileInfo["SAT_eco_bio"]}<br>
-                    SAT Molecular Biology: ${profileInfo["SAT_mol_bio"]}<br>
-                    SAT Chemistry: ${profileInfo["SAT_chemistry"]}<br>
-                    SAT Physics: ${profileInfo["SAT_physics"]}<br>
-                    APs Passed: ${profileInfo["num_AP_passed"]}<br>
-                    `)
+                // $("#dialog").append(`Userid: ${profileInfo["name"]}<br>
+                //     Residence State: ${profileInfo["size"]}<br>
+                //     High School Name: ${profileInfo["admis_num"]}<br>
+                //     High School City: ${profileInfo["admis_percent"]}<br>
+                //     High School State: ${profileInfo["admis_percent"]}<br>
+                //     GPA: ${profileInfo["majors"]}<br>
+                //     College Class: ${profileInfo["ranking"]}<br>
+                //     First Choice Major: ${profileInfo["completion_percent"]}<br>
+                //     Second Choice Major: ${profileInfo["ctype"]}<br>
+                //     SAT EBRW: ${profileInfo["med_debt"]}<br>
+                //     `)
                 //})
                 $("#dialog").dialog({
                     close: function () {
@@ -203,5 +579,6 @@
                 })
             })
         });
-</script> -->
+    </script>
+
     </html>

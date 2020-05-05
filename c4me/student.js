@@ -91,7 +91,7 @@ app.get('', function (req, res) {
 var templateData = {}
 function getCsv(file) {
 	return new Promise(function (resolve, reject) {
-		var applicationsCsv = 'csv/applications-2.csv'
+		var applicationsCsv = 'csv/applications-large.csv'
 		// var studentCsv = 'csv/students-1.csv'
 		var rows = []
 		fs.createReadStream(file)
@@ -104,9 +104,9 @@ function getCsv(file) {
 }
 //get implementation for tracker that will receive the tracket hit and pass this data
 app.get('/tracker', function (req, res) {
-	getCsv('csv/applications-2.csv').then((data) => {
+	getCsv('csv/applications-large.csv').then((data) => {
 		templateData.applicationData = data;
-		getCsv('csv/students-2.csv').then((data) => {
+		getCsv('csv/students-large.csv').then((data) => {
 			templateData.studentData = data;
 			getCsv('csv/colleges.txt').then((data) => {
 				templateData.collegeData = data;
@@ -280,8 +280,8 @@ app.post('/search', function (req, res) {
 				autoIncrement.getNextSequence(currentDB, "resTable", function (err, autoIndex) {
 					let value = autoIndex.toString();
 					currentDB.collection('resTable').insertOne({ key: value, results: newArr })
-					console.log("Results:", newArr, "Key:", value);
-					res.render('student_search_colleges_results.ejs', { results: newArr, key: value });
+					//console.log("Results:", newArr, "Key:", value);
+					res.render('student_search_colleges_results.ejs', {search: req.body });
 				})
 			}
 		});

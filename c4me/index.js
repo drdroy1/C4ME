@@ -63,6 +63,8 @@ app.use(express.static('css'));
 app.use(express.static('img'));
 app.use(express.static('js'));
 app.use("/csv" , express.static('csv'));
+app.use("/json" , express.static('json'));
+
 
 app.use(session({
 	name: 'sid',

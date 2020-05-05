@@ -402,9 +402,9 @@
           .text(value);
         d3.selectAll("circle") // move the circles
           .transition()
-          .duration(1000)
+          .duration(500)
           .delay(function (users, i) {
-            return i * 100;
+            return i * 10;
           })
 
           .attr("cx", function (users) {
@@ -448,9 +448,9 @@
           .text(value);
         d3.selectAll("circle") // move the circles
           .transition()
-          .duration(1000)
+          .duration(500)
           .delay(function (users, i) {
-            return i * 100;
+            return i * 10;
           })
 
           .attr("cx", function (users) {
@@ -494,9 +494,9 @@
           .text(value);
         d3.selectAll("circle") // move the circles
           .transition()
-          .duration(1000)
+          .duration(500)
           .delay(function (users, i) {
-            return i * 100;
+            return i * 10;
           })
           .attr("cx", function (users) {
             return xScale(getWeightedAvg(users));
