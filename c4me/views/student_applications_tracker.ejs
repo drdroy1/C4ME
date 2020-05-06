@@ -96,9 +96,9 @@
     }
     </script>
     <script>
-        var template = <%- JSON.stringify(template) %>;
+        var template = <%- JSON.stringify(template) %>; //Takes the template that was passed 
         console.log(template)
-        var mySelect = $('#colleges');
+        var mySelect = $('#colleges'); //Goes through colleges.txt file to add the colleges into menu
         template.collegeData.forEach(element => {
             name = element.Name
             if(element[" County"]){
@@ -113,7 +113,7 @@
         })
         highSchools.forEach(school => {
             console.log(school)
-            $('<option/>', { value : school }).text(school).appendTo('#highSchool');
+            $('<option/>', { value : school }).text(school).appendTo('#highSchool'); //Appends high schools based on high schools listed in user Profiles
         })
         sortDropDownListByText()
         // template.collegeData.forEach(element => {

@@ -70,7 +70,7 @@ app.get('/import', function (req, res) {
 	// 		console.log(result);
 	// 	})
 	let errorArray= []
-	csvtojson()
+	csvtojson() //Imports the profiles into a mongodb database and sends to a success page
 		.fromFile('csv/students-large.csv')
 		.then(csvDataStudent => {
 			console.log(csvDataStudent);
@@ -97,7 +97,7 @@ app.get('/import', function (req, res) {
 		});
 		res.render('admin_import_page.ejs', {errors: errorArray})
 });
-app.get('/imported', function (req, res) {
+app.get('/imported', function (req, res) { //A page to display all students data.
 	getCsv('csv/applications-large.csv').then((data) => {
 		templateData.applicationData = data;
 		getCsv('csv/students-large.csv').then((data) => {

@@ -1,6 +1,7 @@
 <%- include("student_header.ejs"); -%>
 
 <script>
+    //Here we separated users and their statuses below we will just compare the userids to get the status we want 
     var users = <%- JSON.stringify(users) %>;
     console.log(users)
 
@@ -20,7 +21,7 @@
         </form>
     </div>
     <section id="info mt-4 mb-4">
-        <!-- PUT TABLE HERE PLS-->
+        <!-- Underneath the table is being rendered and it runs through a for loop which goes through the data that has been filtered-->
         <table class="table table-bordered" id="myTable2">
             <thead class="thead-light">
                 <tr>
@@ -149,7 +150,9 @@
                 // $.post("/listProfile", { "profile": profileInfo });
                 // Object.keys(profileInfo).forEach(key => {
                 //     console.log(key)
-                $("#dialog").append(`Userid: ${profileInfo["userid"]}<br>
+
+                //Appends all this info to the dialog box that displays user profile info
+                $("#dialog").append(`Userid: ${profileInfo["userid"]}<br> 
                     Residence State: ${profileInfo["residence_state"]}<br>
                     High School Name: ${profileInfo["high_school_name"]}<br>
                     High School City: ${profileInfo["high_school_city"]}<br>

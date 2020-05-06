@@ -22,7 +22,7 @@ const pacific = ['HI', 'AK'];
 const app = express();
 // app.use(bodyParser.urlencoded({ extended: true }));
 // app.use(bodyParser.json());
-app.use(express.urlencoded({
+app.use(express.urlencoded({ //Took out some old express usage and replaced it with more consistent and updated one
 	extended: true
 }))
 app.use(session({
@@ -88,10 +88,10 @@ app.get('', function (req, res) {
 // 	});
 // });
 //templateData will be the data received from the csv files provided 
-var templateData = {}
+var templateData = {} 
 function getCsv(file) {
 	return new Promise(function (resolve, reject) {
-		var applicationsCsv = 'csv/applications-large.csv'
+		// var applicationsCsv = 'csv/applications-large.csv'
 		// var studentCsv = 'csv/students-1.csv'
 		var rows = []
 		fs.createReadStream(file)
@@ -102,20 +102,6 @@ function getCsv(file) {
 			});
 	})
 }
-//get implementation for tracker that will receive the tracket hit and pass this data
-app.get('/tracker', function (req, res) {
-	getCsv('csv/applications-large.csv').then((data) => {
-		templateData.applicationData = data;
-		getCsv('csv/students-large.csv').then((data) => {
-			templateData.studentData = data;
-			getCsv('csv/colleges.txt').then((data) => {
-				templateData.collegeData = data;
-				res.render('student_applications_tracker.ejs', { template: templateData });
-			});
-		});
-
-	});
-});
 
 
 
@@ -281,13 +267,27 @@ app.post('/search', function (req, res) {
 					let value = autoIndex.toString();
 					currentDB.collection('resTable').insertOne({ key: value, results: newArr })
 					//console.log("Results:", newArr, "Key:", value);
-					res.render('student_search_colleges_results.ejs', {search: req.body });
+					res.render('student_search_colleges_results.ejs', {search: req.body }); // For my purposes I didn't use the above ethods and instead just passed the search filters into the next rendered page
 				})
 			}
 		});
 	});
 });
 
+//get implementation for tracker that will receive the tracket hit and pass this data
+app.get('/tracker', function (req, res) {
+	getCsv('csv/applications-large.csv').then((data) => {  //Takes the applications data
+		templateData.applicationData = data; 
+		getCsv('csv/students-large.csv').then((data) => { //Takes the students data
+			templateData.studentData = data;
+			getCsv('csv/colleges.txt').then((data) => { //This one take the college.txt file
+				templateData.collegeData = data;
+				res.render('student_applications_tracker.ejs', { template: templateData });
+			});
+		});
+
+	});
+});
 
 
 //The application tracker post implementation
@@ -295,7 +295,7 @@ app.post('/tracker', function (req, res) {
 	console.log('profile')
 	console.log(req.body);
 	//console.log(templateData);
-	var collegeApplications = templateData.applicationData.filter(element => {
+	var collegeApplications = templateData.applicationData.filter(element => { //Takes the filters specified by Application status and puts them in college applications
 		if (req.body.status == "other" && (element.status == "pending" || element.status == "wait-listed")) {
 			return element.college == req.body.colleges
 		}
@@ -303,21 +303,21 @@ app.post('/tracker', function (req, res) {
 			return element.college == req.body.colleges && (element.status == req.body.status || req.body.status == "All")
 		}
 	});
-	filterUsers = []
-	userApps = []
-	userAppsFiltered = []
-	collegeApplications.forEach(element => {
+	filterUsers = [] //Gets only the ids for which need be
+	userApps = [] //Get all the applications
+	userAppsFilteredStatus = [] //Filters those apps based on filters given
+	collegeApplications.forEach(element => { //Goes through the college applications to get the user application info based on the users in collegeApplications , filters them out
 		returnedUser = getUser(element.userid)
 		if (returnedUser) {
 			filterUsers.push(returnedUser)
 			//console.log(filterUsers)
 		}
-		returnedUserforApp = getAppUser(element.userid)
+		var returnedUserforApp = getAppUser(element.userid)
 		if (returnedUserforApp) {
-			userApps.push(returnedUserforApp)
+			userApps.push(returnedUserforApp) //Only adds profiles 
 		}
 	});
-	function getUser(studentId) {
+	function getUser(studentId) { //Filers based on Id, high school, college, class, grad range
 		return templateData.studentData.find(element => {
 			return element.userid == studentId && (element.high_school_name == req.body.highSchool || req.body.highSchool == "All") && (parseInt(element.college_class) >= parseInt(req.body.gradRange1) && parseInt(element.college_class) <= parseInt(req.body.gradRange2) || req.body.gradRange1 == "All")
 		})
@@ -328,22 +328,22 @@ app.post('/tracker', function (req, res) {
 			//console.log(studentId)
 			//console.log(element.college)
 			//console.log(req.body.colleges)
-			return element.userid == studentId && element.college == req.body.colleges
+			return element.userid == studentId && element.college == req.body.colleges // Check to add the profiles  for the user that is applying to that college
 		})
 	}
 	filterUsers.forEach(element => {
 		userApps.forEach(filtered => {
-			if (element.userid == filtered.userid) {
-				userAppsFiltered.push(filtered)
+			if (element.userid == filtered.userid) { // Filters the userids with the ones given in the filterUsers which checks between the student profile and app
+				userAppsFilteredStatus.push(filtered)
 			}
 		})
 	})
-	// console.log(userAppsFiltered)
-	if (req.body.listBtn == "List") {
-		console.log(filterUsers, userAppsFiltered)
-		res.render('student_applications_tracker_list.ejs', { users: filterUsers, statuses: userAppsFiltered });
+	// console.log(userAppsFilteredStatus)
+	if (req.body.listBtn == "List") { //If button is List the resulting info will be sent to List Ejs
+		console.log(filterUsers, userAppsFilteredStatus)
+		res.render('student_applications_tracker_list.ejs', { users: filterUsers, statuses: userAppsFilteredStatus }); 
 	}
-	if (req.body.listBtn == "Scatterplot") {
+	if (req.body.listBtn == "Scatterplot") { //If the button picked is Scatterplot the resulting info is sent into the scatterplot ejs
 		mongoClient.connect(mongodb, function (err, db) {
 			let currentDB = db.db('c4me')
 			currentDB.collection('profile').findOne({ userId: req.session.userId }, function (err, result) {
@@ -365,24 +365,14 @@ app.post('/tracker', function (req, res) {
 						collegeName: '',
 						decision: '',
 						users: filterUsers,
-						statuses: userAppsFiltered
+						statuses: userAppsFilteredStatus
 					});
 				}
-				//res.render('student_applications_tracker_scatter.ejs', { users: filterUsers , statuses: userAppsFiltered });
 
-				// app.post('/tracker/list', function (req, res) {
-				// 	res.render('student_applications_tracker_list.ejs', { users: filterUsers , statuses: userAppsFiltered });
-				// 	});
-				// app.post('/scatter', function (req, res) {
-				// 	res.render('student_applications_tracker_list.ejs', { users: filterUsers , statuses: userAppsFiltered });
-				// });
 			});
 		});
 	}
 });
-		app.post('/listProfile', function (req, res) {
-			console.log(req.body)
-		});
 
 
 		app.post('/edit', function (req, res) {

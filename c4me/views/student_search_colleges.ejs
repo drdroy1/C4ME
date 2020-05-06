@@ -41,20 +41,11 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="my-1 mr-2" for="cost">Cost</label>
-                    <select class="custom-select my-1 mr-sm-2" id="cost" name="cost">
-                        <option value ="All">All</option>
-                        <option value=0>$0 - $10,000</option>
-                        <option value=1>$10,001 - $20,000</option>
-                        <option value=2>$20,001 - $30,000</option>
-                        <option value=3>$30,001 - $40,000</option>
-                        <option value=4>$40,001 - $50,000</option>
-                        <option value=5>$50,001 - $60,000</option>
-                        <option value=6>$60,001 - $70,000</option>
-                        <option value=7>$70,001 - $80,000</option>
-                    </select>
+                    <label for="cost">Cost</label><br>
+                    <input type="text" id="cost1" name="cost1" placeholder="Enter Cost">
+                    <br> to - <br>
+                    <input type="text" id="cost2" name="cost2" placeholder="Enter Cost">
                 </div>
-
                 <label for="location">Location</label><br>
                 <input list="location" type="text" name="loc">
                 <datalist id="location">
@@ -68,22 +59,14 @@
                 <br><br>
 
                 <label for="major">Major(s)</label><br>
-                <input list="major" type="text" name="m1">
-                <datalist id="major">
-                    <option value="Mathematics"></option>
-                    <option value="Computer Science"></option>
-                    <option value="Chemistry"></option>
-                    <option value="Biology"></option>
-                    <option value="Education"></option>
-                    <option value="English"></option>
-                    <option value="Philosophy"></option>
-                    <option value="Psychology"></option>
-                    <option value="Engineering"></option>
-                    <option value="Music"></option>
-                </datalist>
+                <select name="m1" id="m1">
+                    <option>All</option>
+ 
+            </select>
+            <select name="m2" id="m2">
+                <option>All</option>
 
-                <input list="major" type="text" name="m2">
-
+            </select>
                 <br><br>
 
                 <div class="form-group">
@@ -110,55 +93,28 @@
                     <tr>
                         <td>
                             <div class="form-group">
-                            <label class="my-1 mr-2" for="math">
-                            <select class="custom-select my-1 mr-sm-2" id="math" name="math">
-                                <option value="All"></option>
-                                <option value=0>0-100</option>
-                                <option value=1>101-200</option>
-                                <option value=2>201-300</option>
-                                <option value=3>301-400</option>
-                                <option value=4>401-500</option>
-                                <option value=5>501-600</option>
-                                <option value=6>601-700</option>
-                                <option value=7>701-800</option>
-                            </datalist>
-                        </select>
-                    </div>
+                                <label for="size">Sat Math</label><br>
+                                <input type="text" id="math1" name="math1" placeholder="0-800">
+                                <br> to - <br>
+                                <input type="text" id="math2" name="math2" placeholder="0-800">
+                            </div>   
+
                         </td>
                         <td>
                             <div class="form-group">
-                                <label class="my-1 mr-2" for="reading">
-                                <select class="custom-select my-1 mr-sm-2" id="reading" name="reading">
-                                    <option value="All"></option>
-                                    <option value=0>0-100</option>
-                                    <option value=1>101-200</option>
-                                    <option value=2>201-300</option>
-                                    <option value=3>301-400</option>
-                                    <option value=4>401-500</option>
-                                    <option value=5>501-600</option>
-                                    <option value=6>601-700</option>
-                                    <option value=7>701-800</option>
-                                </datalist>
-                            </select>
-                        </div>
+                                <label for="size">Sat EBRW</label><br>
+                                <input type="text" id="eng1" name="eng1" placeholder="0-800">
+                                <br> to - <br>
+                                <input type="text" id="eng2" name="eng2" placeholder="0-800">
+                            </div>  
                         </td>
                         <td>
                             <div class="form-group">
-                                <label class="my-1 mr-2" for="act">
-                                <select class="custom-select my-1 mr-sm-2" id="act" name="act">
-                                <option value="All"></option>
-                                <option value=0>1-4</option>
-                                <option value=1>5-8</option>
-                                <option value=2>9-12</option>
-                                <option value=3>13-16</option>
-                                <option value=4>17-20</option>
-                                <option value=5>21-24</option>
-                                <option value=6>25-28</option>
-                                <option value=7>29-32</option>
-                                <option value=8>33-36</option>
-                            </datalist>
-                        </select>
-                    </div>
+                                <label for="size">Act Comp</label><br>
+                                <input type="text" id="act1" name="act1" placeholder="0-36">
+                                <br> to - <br>
+                                <input type="text" id="act2" name="act2" placeholder="0-36">
+                            </div>  
                         </td>
                     </tr>
                 </table>
@@ -193,6 +149,68 @@ function updateTextInput(val) {
 function updateTextInput2(val) {
           document.getElementById('textInput2').value=val; 
         }
+var majors = [
+  'Accounting', 
+  'Acting',              'Actuarial Science',   'Advertising',
+  'African Studies',     'Animal Physiology',   'Anthropology',
+  'Applied Economics',   'Applied Psychology',  'Archeology',
+  'Architecture',        'Area Studies, Other', 'Army JROTC/ROTC',
+  'Art History',
+  'Asian History',       'Astronomy',           'Astrophysics',
+  'Ballet',              'Behavioral Sciences', 'Biochemistry', 'Biology',
+  'Bioinformatics',      'Biometry/Biometrics', 'Biophysics',
+  'Biopsychology',       'Biostatistics',       'Biotechnology',
+  'Business Statistics', 'Caribbean Studies',   'Chemical Physics',
+  'Chemistry, General',  'Chemistry, Other',    'Child Development',
+  'Chinese Studies',     'Christian Studies',   'Cognitive Science',
+  'Computer Graphics',   'Computer Science',    'Consumer Economics',
+  'Computer Engineering',
+  'Creative Writing',    'Criminology',         'Dairy Science',
+  'Dance, General',      'Dance, Other',        'Dietetics/Dietitian',
+  'Digital Arts',        'Divinity/Ministry',   'Drawing',
+  'East Asian Studies',  'Ecology',             'Economics, General',
+  'Economics, Other',    'Education, General',  'Education, Other',
+  'Engineering Science', 'English',             'Entomology',
+  'Epidemiology',        'Ethics',              'Ethnic Studies',
+  'European History',    'Exercise Physiology', 'Finance, General',
+  'Folklore Studies',    'Food Science',        'Forestry, General',
+  'Forestry, Other',     'French Studies',      'General Literature',
+  'General Studies',     'Geography',           'Geography, Other',
+  'German Studies',      'Gerontology',         'Graphic Design',
+  'History, General',    'History, Other',      'Human Nutrition',
+  'Illustration',        'Informatics',         'Insurance',
+  'Interior Design',     'Islamic Studies',     'Italian Studies',
+  'Japanese Studies',    'Jazz/Jazz Studies',   'Journalism',
+  'Labor Studies',       'Learning Sciences',   'Linguistics',
+  'Logic',               'Management Science',  'Marine Sciences',
+  'Marketing',           'Marketing Research',    'Materials Science',
+  'Mathematics',         'Medical',             'Medical Informatics',
+  'Modern Languages',
+  'Molecular Biology',   'Music Management',    'Music',   
+  'Music Pedagogy',      'Music Technology',                
+  'Musical Theatre',     'Natural Sciences',    'Neuroscience',
+  'Nuclear Engineering', 'Nursing Science',     'Nutrition Sciences',
+  'Operations Research', 'Organic Chemistry',   'Painting',
+  'Pharmacology',        'Pharmacy',            'Philosophy',
+  'Philosophy, Other',   'Photography',         'Photojournalism',
+  'Physical Chemistry',  'Physical Sciences',   'Physician Assistant',
+  'Physics',             'Physics, Other',      'Physiology, General',
+  'Political Economy',   'Polysomnography',     'Population Biology',
+  'Poultry Science',     'Pre-Engineering',     'Pre-Law Studies',
+  'Pre-Nursing Studies', 'Printing Management', 'Printmaking',
+  'Project Management',  'Psychology, General', 'Publishing',
+  'Real Estate',         'Religious Education', 'Resort Management',
+  'Retail Management',   'Russian Studies',     'School Psychology',
+  'Sculpture',           'Slavic Studies',      'Social Work',
+  'Social Work, Other',  'Sociology',           'South Asian Studies',
+  'Sports Studies',      'Statistics, General', 'Structural Biology',
+  'Systems Engineering', 'Urban Forestry',      'Voice and Opera',
+  "Women's Studies",     'Writing, General'
+]
+majors.forEach(major=>{
+    $("#m1").append($("<option/>",{value:major,html:major}))
+    $("#m2").append($("<option/>",{value:major,html:major}))
+})
 
 </script>
 

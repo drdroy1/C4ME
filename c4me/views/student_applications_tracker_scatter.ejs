@@ -12,12 +12,14 @@
 <link rel="stylesheet" src="../css/scatter.css" />
 
 <script>
+  //Users ad statuses that have been filtered and separated in order to maintain a clean array of both and just compare to pull the right info between userids
   var users = <%- JSON.stringify(users) %>;
 
 
   var statuses = <%- JSON.stringify(statuses) %>;
   console.log(statuses)
 
+  //The profile info that has been passed
   var lName = <%- JSON.stringify(lName) %>
   console.log(lName)
   var myGpa = <%- JSON.stringify(gpa) %>
@@ -34,6 +36,7 @@
   users.push(myProfile)
   console.log(users)
 
+  //I want to take the averages of things early on in order to create the average lines later
   var avgGpa = 0
   var avgSatMath = 0
   var avgSatEbrw = 0
@@ -62,7 +65,7 @@
   }
 
 
-
+//Algorithm for getting the weighted average, goes through each of the subject tests and accounts them for 5% each and splitting betwen ACT and SAT for the rest
   function getWeightedAvg(users) {
       var subjectTestCounter = 0;
       var subjectTestWeight = 0;
@@ -72,79 +75,81 @@
       if (isNaN(parseInt(users.SAT_literature))) {
           subjectTestWeight += 0
       } else {
-          subjectTestWeight += ((parseInt(users.SAT_literature) / 800) * 0.05)
+          subjectTestWeight += ((parseInt(users.SAT_literature)) * 0.05)
           subjectTestCounter++
       }
       if (isNaN(parseInt(users.SAT_US_hist))) {
           subjectTestWeight += 0
       } else {
-          subjectTestWeight += ((parseInt(users.SAT_US_hist) / 800) * 0.05)
+          subjectTestWeight += ((parseInt(users.SAT_US_hist)) * 0.05)
           subjectTestCounter++
       }
       if (isNaN(parseInt(users.SAT_world_hist))) {
           subjectTestWeight += 0
       } else {
-          subjectTestWeight += ((parseInt(users.SAT_world_hist) / 800) * 0.05)
+          subjectTestWeight += ((parseInt(users.SAT_world_hist)) * 0.05)
           subjectTestCounter++
       }
       if (isNaN(parseInt(users.SAT_math_I))) {
           subjectTestWeight += 0
       } else {
-          subjectTestWeight += ((parseInt(users.SAT_math_I) / 800) * 0.05)
+          subjectTestWeight += ((parseInt(users.SAT_math_I)) * 0.05)
           subjectTestCounter++
       }
       if (isNaN(parseInt(users.SAT_math_II))) {
           subjectTestWeight += 0
       } else {
-          subjectTestWeight += ((parseInt(users.SAT_math_II) / 800) * 0.05)
+          subjectTestWeight += ((parseInt(users.SAT_math_II)) * 0.05)
           subjectTestCounter++
       }
       if (isNaN(parseInt(users.SAT_eco_bio))) {
           subjectTestWeight += 0
       } else {
-          subjectTestWeight += ((parseInt(users.SAT_eco_bio) / 800) * 0.05)
+          subjectTestWeight += ((parseInt(users.SAT_eco_bio)) * 0.05)
           subjectTestCounter++
       }
       if (isNaN(parseInt(users.SAT_mol_bio))) {
           subjectTestWeight += 0
       } else {
-          subjectTestWeight += ((parseInt(users.SAT_mol_bio) / 800) * 0.05)
+          subjectTestWeight += ((parseInt(users.SAT_mol_bio)) * 0.05)
           subjectTestCounter++
       }
       if (isNaN(parseInt(users.SAT_chemistry))) {
           subjectTestWeight += 0
       } else {
-          subjectTestWeight += ((parseInt(users.SAT_chemistry) / 800) * 0.05)
+          subjectTestWeight += ((parseInt(users.SAT_chemistry)) * 0.05)
           subjectTestCounter++
       }
       if (isNaN(parseInt(users.SAT_physics))) {
           subjectTestWeight += 0
       } else {
-          subjectTestWeight += ((parseInt(users.SAT_physics) / 800) * 0.05)
+          subjectTestWeight += ((parseInt(users.SAT_physics)) * 0.05)
           subjectTestCounter++
       }
       majorTestWeight = 1 - (0.05 * subjectTestCounter)
       if (isNaN(parseInt(users.SAT_math)) == false && isNaN(parseInt(users.SAT_EBRW)) == false && isNaN(parseInt(users.ACT_composite)) == false) {
-          SATFull = (parseInt(users.SAT_math) + parseInt(users.SAT_EBRW)) / 1600
-          ACTFull = (parseInt(users.ACT_composite) / 36)
-          fullWeight = ((SATFull * (majorTestWeight / 2)) + (ACTFull * (majorTestWeight / 2)) + subjectTestWeight) * 100
+          SATFull = (parseInt(users.SAT_math) + parseInt(users.SAT_EBRW))
+          ACTFull = (parseInt(users.ACT_composite))
+          console.log(majorTestWeight)
+          fullWeight = ((SATFull * (majorTestWeight / 2)) + (ACTFull * (majorTestWeight / 2)) + subjectTestWeight)
+          console.log(fullWeight)
           return fullWeight
       } else if (isNaN(parseInt(users.SAT_math)) == false && isNaN(parseInt(users.SAT_EBRW)) == false && isNaN(parseInt(users.ACT_composite)) == true) {
-          SATFull = (parseInt(users.SAT_math) + parseInt(users.SAT_EBRW)) / 1600
-          fullWeight = ((SATFull * majorTestWeight) + subjectTestWeight) * 100
+          SATFull = (parseInt(users.SAT_math) + parseInt(users.SAT_EBRW))
+          fullWeight = ((SATFull * majorTestWeight) + subjectTestWeight)
           return fullWeight
       } else {
-          ACTFull = (parseInt(users.ACT_composite) / 36)
-          fullWeight = ((ACTFull * majorTestWeight) + subjectTestWeight) * 100
+          ACTFull = (parseInt(users.ACT_composite))
+          fullWeight = ((ACTFull * majorTestWeight) + subjectTestWeight) 
           return fullWeight
       }
 
   }
-  users.forEach(element => {
+  users.forEach(element => { //Going through each user to get their weighted average to get the weighted average average line
       weightedAvg += getWeightedAvg(element)
   });
   weightedAvg = weightedAvg / users.length
-  console.log(avgGpa, avgSatEbrw, avgSatMath, weightedAvg)
+  console.log(avgGpa, avgSatEbrw, avgSatMath, weightedAvg, weightedAvg*users.length)
 </script>
 
 <script>
@@ -166,10 +171,10 @@
   //d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/2_TwoNum.csv", function(data) {
 
   // console.log(users, "Hello you have reached me")
-  function drawgraph(users) {
+  function drawgraph(users) { //Function that starts to draw the scatter plot
     console.log(users, "Start of function");
     var body = d3.select("body");
-    var selectData = [
+    var selectData = [ //This is the dropdown menu selectors
       {
         text: "SAT EBRW + Math",
       },
@@ -189,19 +194,19 @@
       .attr("id", "xSelect")
       .on("change", xChange)
       .selectAll("option")
-      .data(selectData)
+      .data(selectData) //Takes the data from above
       .enter()
       .append("option")
       .attr("value", function (d) {
         return d.text;
       })
       .text(function (d) {
-        return d.text;
+        return d.text; //Function that returns the text that has been clicked on
       });
     body.append("br");
 
     // Variables
-    var body = d3.select("body");
+    var body = d3.select("body"); //Constructs the margins and body of the scatterplot
     var margin = {
       top: 100,
       right: 30,
@@ -212,7 +217,7 @@
     var w = 600 - margin.top - margin.bottom;
     //var formatPercent = d3.format('.2%')
     // Scales
-    function colorScale(d) {
+    function colorScale(d) { //Sets the color based on status or profile
       console.log("Profiles:", d.userid);
       if (d.userid == "me") {
         color = "blue";
@@ -229,18 +234,18 @@
 
       return color;
     }
-    var xScale = d3
+    var xScale = d3 //Setting domain and range for x
       .scaleLinear()
       .domain([d3.min([0, 0]), d3.max([0, 1600])])
       .range([0, w]);
-    console.log("xScale domain:", xScale.domain());
-    var yScale = d3
+    console.log("xScale domain:", xScale.domain()); 
+    var yScale = d3 //Setting domain and range for y
       .scaleLinear()
       .domain([d3.min([0, 0]), d3.max([0, 4])])
       .range([h, 0]);
     console.log("yScale domain:", yScale.domain());
     // SVG
-    var svg = body
+    var svg = body //Svg will take the body info and create axes
       .append("svg")
       .attr("height", h + margin.top + margin.bottom)
       .attr("width", w + margin.left + margin.right)
@@ -261,7 +266,7 @@
       .ticks(10);
 
     // Circles
-    var circles = svg
+    var circles = svg //This is what fills in based on the values 
       .selectAll("circle")
       .data(users)
       .enter()
@@ -285,7 +290,7 @@
       .attr("stroke", "black")
       .attr("stroke-width", 1)
       .attr("fill", function (users, i) {
-        return colorScale(users);
+        return colorScale(users); //Sets size and color of circle
       })
       .on("mouseover", function () {
         d3.select(this)
@@ -301,7 +306,7 @@
           .attr("r", 5)
           .attr("stroke-width", 1);
       })
-      .append("title") // Tooltip
+      .append("title") // When hovering over circle this will display info
       .text(function (users) {
         return (
           users.userid +
@@ -331,7 +336,7 @@
     // });
     // console.log()
     svg
-      .append("line")
+      .append("line") //For appeding the average lines
       .attr("x1", 0)
       .attr("y1", 470 - avgGpa * (h / 4))
       .attr("x2", w)
@@ -383,7 +388,7 @@
       .style("text-anchor", "end")
       .text("GPA");
 
-    function xChange() {
+    function xChange() { //Transformation of the x axis based on dropdown menu
       var value = this.value; // get the new x value
       console.log("Changing Value:", value);
       if (value == "SAT EBRW + Math") {
@@ -482,7 +487,7 @@
       if (value == "Weighted Average") {
         d3.selectAll("line").remove();
         xScale // change the xScale
-          .domain([d3.min([0, 0]), d3.max([0, 100])]);
+          .domain([d3.min([0, 0]), d3.max([0, 1250])]);
         xAxis.scale(xScale); // change the xScale
         d3.select("#xAxis") // redraw the xAxis
           .transition()
@@ -511,54 +516,14 @@
 
         svg
           .append("line")
-          .attr("x1", weightedAvg / (100 / w))
+          .attr("x1", weightedAvg / (1250 / w))
           .attr("y1", 0)
-          .attr("x2", weightedAvg / (100 / w))
+          .attr("x2", weightedAvg / (1250 / w))
           .attr("y2", h)
           .style("stroke", "blue");
       }
     }
   }
 
-  // //users.forEach(data => {
-
-  // // Add X axis
-  // var x = d3.scaleLinear()
-  //   .domain([0, 36])
-  //   .range([ 0, width ]);
-  // svg.append("g")
-  //   .attr("transform", "translate(0," + height + ")")
-  //   .call(d3.axisBottom(x));
-
-  // // Add Y axis
-  // var y = d3.scaleLinear()
-  //   .domain([0, 4])
-  //   .range([ height, 0]);
-  // svg.append("g")
-  //   .call(d3.axisLeft(y));
-
-  //   //var student = {"userid":"me", " GPA":<%# gpa %>, " ACT_English":25};
-
-  //   //data.push(student);
-  //   function color(d){
-  //       var color = "black"
-  //       if (d.userid == "me"){
-  //           color = "blue"
-  //       }
-  //       return color;
-  //   }
-  // // Add dots
-  // svg.append('g')
-  //   .selectAll("dot")
-  //   .data(users)
-  //   .enter()
-  //   .append("circle")
-  //     .attr("cx", function (users) {console.log(users.ACT_composite); return x(users.ACT_composite); } )
-  //     .attr("cy", function (users) { return y(users.GPA); } )
-  //     .attr("r", 1.5)
-  //     .style("fill", color)
-
-  //})
-  // }
   drawgraph(users);
 </script>

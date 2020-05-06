@@ -31,7 +31,7 @@
             </tbody>
         </table>
         <div id="profileInfo"></div>
-        <div id="dialog" title="Full Profile Info">
+        <div id="dialog" title="College Profile">
     </section>
     </body>
 
@@ -132,6 +132,8 @@
 
     <script>
         var search = <%- JSON.stringify(search) %>
+        var globalCollegeInfo;
+        var allMajors = ""
         console.log(search)
         const northeast = ['ME', 'NH', 'VT', 'MA', 'CT', 'RI', 'NY', 'PA', 'NJ', 'DC'];
         const midwest = ['ND', 'MN', 'WI', 'MI', 'SD', 'IA', 'IL', 'IN', 'OH', 'NE', 'MO', 'KS'];
@@ -139,15 +141,67 @@
         const south = ['OK', 'AR', 'KY', 'WV', 'MD', 'DE', 'TX', 'LA', 'TN', 'DC', 'MS', 'AL', 'NC', 'GA', 'SC', 'FL'];
         const pacific = ['HI', 'AK'];
         //$.getJSON("/json/college_data.json", showColleges) //Gets the Json College File and then uses the function showColleges to display onto tables
-        var filteredColleges = []
+        var filteredColleges = [] 
         console.log("Search", search)
-        $.getJSON("/json/college_data.json", filterColleges)
-        function filterColleges(collegeInfo) {
+        $.getJSON("/json/college_data.json", filterColleges) //Gets the data for the colleges and passes it to filtercolleges
+        function filterColleges(collegeInfo) { //Goes through each of the filters specifed and filters out colleges based on those spcifications
+            globalCollegeInfo = collegeInfo
+            var thead = $("<thead/>")
+            var row = $("<tr/>")
+            console.log(collegeInfo)
+            Object.keys(collegeInfo[0]).forEach(key => { //MUST Modify will go through each key specifed and print out a column head for them
+                console.log(key)
+
+                if (key == "name") {
+                    row.append($("<td/>", { html: '<th  onclick="sortTable(0)">Name</th>' }))
+                }
+                else if (key == "cost_gen") {
+                    row.append($("<td/>", { html: '<th  onclick="sortTable(1)">Cost to Attend</th>' }))
+                }
+                else if (key == "admis_percent") {
+                    row.append($("<td/>", { html: '<th  onclick="sortTable(2)">Admitted Percent</th>' }))
+                }
+                else if (key == "size") {
+                    row.append($("<td/>", { html: '<th  onclick="sortTable(3)">Size</th>' }))
+                }
+                else if (key == "location") {
+                    row.append($("<td/>", { html: '<th onclick="sortTable(4)">Location</th>' }))
+                }
+                else if (key == "ranking") {
+
+                    row.append($("<td/>", { html: '<th onclick="sortTable(5)">Ranking</th>' }))
+                }
+                else if (key == "testscores") {
+                    row.append($("<td/>", { html: '<th onclick="sortTable(6)">SAT EBRW</th>' }))
+                    row.append($("<td/>", { html: '<th onclick="sortTable(7)">SAT Math</th>' }))
+                    row.append($("<td/>", { html: '<th onclick="sortTable(8)">ACT Composite</th>' }))
+                }
+                else if (key == "completion_percent") {
+                    row.append($("<td/>", { html: "View Profile" }))
+
+                }
+            })
+            thead.append(row)
+            $("#myTable2").append(thead)
             var location = ''
             console.log("College Info:", collegeInfo)
             console.log("Search", search)
+            if (search.cost1 != '') {
+                var cost1 = parseInt(search.cost1) //We want to check if the field is empty or not for each of these and to maintain easy code naming consistency
+            }
+            else {
+                var cost1 = ''
+            }
+
+            if (search.cost2 != '') {
+                var cost2 = parseInt(search.cost2)
+            }
+            else {
+                var cost2 = ''
+            }
+
             if (search.rank1 != '') {
-                var rank1 = parseInt(search.rank1)
+                var rank1 = parseInt(search.rank1) //We want to check if the field is empty or not for each of these and to maintain easy code naming consistency
             }
             else {
                 var rank1 = ''
@@ -173,23 +227,86 @@
             else {
                 var size2 = ''
             }
-            console.log(size1)
-            console.log(size2)
-            console.log(rank1)
-            console.log(rank2)
+            if (search.math1 != '') {
+                var math1 = parseInt(search.math1) //We want to check if the field is empty or not for each of these and to maintain easy code naming consistency
+            }
+            else {
+                var math1 = ''
+            }
 
-            collegeInfo.forEach(college => {
+            if (search.math2 != '') {
+                var math2 = parseInt(search.math2)
+            }
+            else {
+                var math2 = ''
+            }
+
+            if (search.eng1 != '') {
+                var eng1 = parseInt(search.eng1) //We want to check if the field is empty or not for each of these and to maintain easy code naming consistency
+            }
+            else {
+                var eng1 = ''
+            }
+
+            if (search.eng2 != '') {
+                var eng2 = parseInt(search.eng2)
+            }
+            else {
+                var eng2 = ''
+            }
+
+            if (search.act1 != '') {
+                var act1 = parseInt(search.act1) //We want to check if the field is empty or not for each of these and to maintain easy code naming consistency
+            }
+            else {
+                var act1 = ''
+            }
+
+            if (search.act2 != '') {
+                var act2 = parseInt(search.act2)
+            }
+            else {
+                var act2 = ''
+            }
+            if(search.inlineRadioOptions = 'lax'){
+                var sOrl = 'lax'
+            }
+            if(search.inlineRadioOptions = 'strict'){
+                var sOrl = 'strict' //Never got to it
+            }
+
+            // console.log(size1)
+            // console.log(size2)
+            // console.log(rank1)
+            // console.log(rank2)
+            // console.log(cost1)
+            // console.log(cost2)
+            // console.log(math1)
+            // console.log(math2)
+            // console.log(eng1)
+            // console.log(eng2)
+            // console.log(act1)
+            // console.log(act2)
+            console.log(allMajors)
+            collegeInfo.forEach(college => { //Loops through each college passed by the JSON
+                allMajors += college.majors[0]
+                allMajors += college.majors[1]
+
                 location = college.location.substring(college.location.length - 2, college.location.length)
-                var ranking = 0
                 if (college.ranking == "401-500") {
-                    ranking = 450
+                    var ranking = 450
                 }
                 if (college.ranking == "> 600") {
-                    ranking = 600
+                    var ranking = 600
                 }
-                else {
-                    ranking = college.ranking
+                else if(college.ranking > 0) {
+                    var ranking = college.ranking
                 }
+                else if (college.name == "Idaho State University"){
+                    var ranking = 501
+                }
+                
+
                 var size = 0
                 if (college.size < 0 || college.size == "NaN") {
                     size = 0
@@ -198,9 +315,18 @@
                     size = parseInt(college.size)
                 }
 
+                if(parseInt(college.cost_gen) > 0){
+                    var cost = parseInt(college.cost_gen)
+                }
+                else if((parseInt(college.cost_instate) + parseInt(college.cost_outstate))>0){
+                    var costi = parseInt(college.cost_instate)
+                    var costo = parseInt(college.cost_outstate)
+                }
+                //console.log("Three Costs" ,cost, costi, costo)
                 var act = 0
                 var satEnglish = 0
                 var satMath = 0
+                //Makes sure to set the act, and sat scores early on to avoid confusion from the colleges
                 if (parseInt(college.testscores.sat_ebrw.avg) > 0 || (parseInt(college.testscores.sat_ebrw.lrange) > 0 && parseInt(college.testscores.sat_ebrw.rrange) > 0)) {
                             if (parseInt(college.testscores.sat_ebrw.avg) > 0) {
 
@@ -242,49 +368,51 @@
 
 
                 //console.log(location)
-                if (college.name.includes(search.collegeName)) {
+                if (college.name.includes(search.collegeName)) { //Start up the filtering process in order by how the filters are and each one is pretty explanatory by name
 
                     if ((search.admissionRate1 <= college.admis_percent && search.admissionRate2 >= college.admis_percent) || (search.admissionRate1 <= search.admissionRate2)) {
-                        if (search.cost == "All" || (search.cost == "0" && college.cost_gen > 0 && college.cost_gen <= 10000)
-                            || (search.cost == "1" && college.cost_gen >= 10001 && college.cost_gen <= 20000)
-                            || (search.cost == "2" && college.cost_gen >= 20001 && college.cost_gen <= 30000)
-                            || (search.cost == "3" && college.cost_gen >= 30001 && college.cost_gen <= 40000)
-                            || (search.cost == "4" && college.cost_gen >= 40001 && college.cost_gen <= 50000)
-                            || (search.cost == "5" && college.cost_gen >= 50001 && college.cost_gen <= 60000)
-                            || (search.cost == "6" && college.cost_gen >= 60001 && college.cost_gen <= 70000)
-                            || (search.cost == "7" && college.cost_gen >= 70001 && college.cost_gen <= 80000)
+                        if ((isNaN(cost) && (isNaN(costi)) && (isNaN(costo)))
+                            ||(cost1 <= cost && isNaN(cost2)) //size
+                            || (isNaN(cost1) && cost <= cost2)
+                            || (isNaN(cost1) && isNaN(cost2))
+                            || (cost1 <= cost && cost2 >= cost)
+                            || (cost1 == '' && cost2 == '')
+                            || (cost1 == '' && cost2 >= cost)
+                            || (cost1 <= cost && cost2 == '')
 
-                            || (search.cost == "1" && college.cost_instate >= 10001 && college.cost_instate <= 20000)
-                            || (search.cost == "2" && college.cost_instate >= 20001 && college.cost_instate <= 30000)
-                            || (search.cost == "3" && college.cost_instate >= 30001 && college.cost_instate <= 40000)
-                            || (search.cost == "4" && college.cost_instate >= 40001 && college.cost_instate <= 50000)
-                            || (search.cost == "5" && college.cost_instate >= 50001 && college.cost_instate <= 60000)
-                            || (search.cost == "6" && college.cost_instate >= 60001 && college.cost_instate <= 70000)
-                            || (search.cost == "7" && college.cost_instate >= 70001 && college.cost_instate <= 80000)
+                            ||(cost1 <= costi && isNaN(cost2)) //size
+                            || (isNaN(cost1) && costi <= cost2)
+                            || (isNaN(cost1) && isNaN(cost2))
+                            || (cost1 <= costi && cost2 >= costi)
+                            || (cost1 == '' && cost2 == '')
+                            || (cost1 == '' && cost2 >= costi)
+                            || (cost1 <= costi && cost2 == '')
 
-                            || (search.cost == "1" && college.cost_outstate >= 10001 && college.cost_outstate <= 20000)
-                            || (search.cost == "2" && college.cost_outstate >= 20001 && college.cost_outstate <= 30000)
-                            || (search.cost == "3" && college.cost_outstate >= 30001 && college.cost_outstate <= 40000)
-                            || (search.cost == "4" && college.cost_outstate >= 40001 && college.cost_outstate <= 50000)
-                            || (search.cost == "5" && college.cost_outstate >= 50001 && college.cost_outstate <= 60000)
-                            || (search.cost == "6" && college.cost_outstate >= 60001 && college.cost_outstate <= 70000)
-                            || (search.cost == "7" && college.cost_outstate >= 70001 && college.cost_outstate <= 80000)
+                            ||(cost1 <= costo && isNaN(cost2)) //size
+                            || (isNaN(cost1) && costo <= cost2)
+                            || (isNaN(cost1) && isNaN(cost2))
+                            || (cost1 <= costo && cost2 >= costo)
+                            || (cost1 == '' && cost2 == '')
+                            || (cost1 == '' && cost2 >= costo)
+                            || (cost1 <= costo && cost2 == '')
                         ) {
-                            if (search.loc == ''
+                            if (search.loc == '' //Location
                                 || (search.loc == "Northeast" && northeast.indexOf(location) > -1)
                                 || (search.loc == "Midwest" && midwest.indexOf(location) > -1)
                                 || (search.loc == "South" && south.indexOf(location) > -1)
                                 || (search.loc == "West" && west.indexOf(location) > -1)
                                 || (search.loc == "Pacific" && pacific.indexOf(location) > -1)
                             ) {
-                                if ((search.m1 == '' && search.m2 == '')
-                                    || college.majors[0].includes(search.m1)
-                                    || college.majors[0].includes(search.m2)
-                                    || college.majors[1].includes(search.m1)
-                                    || college.majors[1].includes(search.m2)
+                                if ((search.m1 == 'All' && search.m2 == 'All') //majors
+                                    || (college.majors[0].includes(search.m1) && college.majors[0].includes(search.m2))
+                                    || (college.majors[1].includes(search.m1) && college.majors[1].includes(search.m2))
+                                    ||(college.majors[0].includes(search.m1) && college.majors[1].includes(search.m2))
+                                    ||(college.majors[1].includes(search.m1) && college.majors[0].includes(search.m2))
+                                    ||((college.majors[0].includes(search.m1) || college.majors[1].includes(search.m1)) && search.m2 == 'All')
+                                    ||((college.majors[0].includes(search.m2) || college.majors[1].includes(search.m2)) && search.m1 == 'All')
                                 ) {
-                                    //console.log(typeof rank1 === 'string')
-                                    if ((rank1 <= ranking && isNaN(rank2))
+
+                                    if ((rank1 <= ranking && isNaN(rank2)) //ranking
                                         || (isNaN(rank1) && ranking <= rank2)
                                         || (isNaN(rank1) && isNaN(rank2))
                                         || (rank1 <= ranking && rank2 >= ranking)
@@ -296,7 +424,7 @@
                                     ){
 
                                         if (size == 0
-                                            || (size1 <= size && isNaN(size2))
+                                            || (size1 <= size && isNaN(size2)) //size
                                             || (isNaN(size1) && size <= size2)
                                             || (isNaN(size1) && isNaN(size2))
                                             || (size1 <= size && size2 >= size)
@@ -305,44 +433,34 @@
                                             || (size1 <= size && size2 == '')
                                         ){
 
-                                            if(search.math == 'All'
-                                            ||(search.math == '0' && satMath >= 0 && satMath <=100)
-                                            ||(search.math == '1' && satMath >= 101 && satMath <=200)
-                                            ||(search.math == '2' && satMath >= 201 && satMath <=300)
-                                            ||(search.math == '3' && satMath >= 301 && satMath <=400)
-                                            ||(search.math == '4' && satMath >= 401 && satMath <=500)
-                                            ||(search.math == '5' && satMath >= 501 && satMath <=600)
-                                            ||(search.math == '6' && satMath >= 601 && satMath <=700)
-                                            ||(search.math == '7' && satMath >= 701 && satMath <=800)
-                                            
+                                            if ((math1 <= satMath && isNaN(math2)) //size
+                                            || (isNaN(math1) && satMath <= math2)
+                                            || (isNaN(math1) && isNaN(math2))
+                                            || (math1 <= satMath && math2 >= satMath)
+                                            || (math1 == '' && math2 == '')
+                                            || (math1 == '' && math2 >= satMath)
+                                            || (math1 <= satMath && math2 == '')
+                                        ){
+                                                if ((eng1 <= satEnglish && isNaN(eng2)) //size
+                                                || (isNaN(eng1) && satEnglish <= eng2)
+                                                || (isNaN(eng1) && isNaN(eng2))
+                                                || (eng1 <= satEnglish && eng2 >= satEnglish)
+                                                || (eng1 == '' && eng2 == '')
+                                                || (eng1 == '' && eng2 >= satEnglish)
+                                                || (eng1 <= satEnglish && eng2 == '')
                                             ){
-                                                    if(search.reading == 'All'
-                                                ||(search.reading == '0' && satEnglish >= 0 && satEnglish <=100)
-                                                ||(search.reading == '1' && satEnglish >= 101 && satEnglish <=200)
-                                                ||(search.reading == '2' && satEnglish >= 201 && satEnglish <=300)
-                                                ||(search.reading == '3' && satEnglish >= 301 && satEnglish <=400)
-                                                ||(search.reading == '4' && satEnglish >= 401 && satEnglish <=500)
-                                                ||(search.reading == '5' && satEnglish >= 501 && satEnglish <=600)
-                                                ||(search.reading == '6' && satEnglish >= 601 && satEnglish <=700)
-                                                ||(search.reading == '7' && satEnglish >= 701 && satEnglish <=800)
-                                                
-                                                ){
-                                                        if(search.act == 'All'
-                                                    ||(search.act == '0' && act >= 1 && act <=4)
-                                                    ||(search.act == '1' && act >= 5 && act <=8)
-                                                    ||(search.act == '2' && act >= 9 && act <=12)
-                                                    ||(search.act == '3' && act >= 13 && act <=16)
-                                                    ||(search.act == '4' && act >= 17 && act <=20)
-                                                    ||(search.act == '5' && act >= 21 && act <=24)
-                                                    ||(search.act == '6' && act >= 25 && act <=28)
-                                                    ||(search.act == '7' && act >= 29 && act <=32)
-                                                    ||(search.act == '7' && act >= 33 && act <=36)
-
-                                                    ){
+                                                if ((act1 <= act && isNaN(act2)) //size
+                                                || (isNaN(act1) && act <= act2)
+                                                || (isNaN(act1) && isNaN(act2))
+                                                || (act1 <= act && act2 >= act)
+                                                || (act1 == '' && act2 == '')
+                                                || (act1 == '' && act2 >= act)
+                                                || (act1 <= act && act2 == '')
+                                            ){
 
                                             
-                                                        console.log("true:", college)
-                                                            return college
+                                                        //console.log("true:", college)
+                                                            showColleges([college])
                                                     }
                                                 }
                                             }
@@ -368,50 +486,17 @@
 
         console.log("Filtered Colleges:", filteredColleges)
         //console.log("Hello")
-        function showColleges(collegeInfo) {
-            console.log("Received College Info:", collegeInfo)
+        function showColleges(collegeInfo) { //This will print them out to a table
+            //console.log("Received College Info:", collegeInfo)
             var thead = $("<thead/>")
             var row = $("<tr/>")
-            Object.keys(collegeInfo[0]).forEach(key => {
-                console.log(key)
-
-                if (key == "name") {
-                    row.append($("<td/>", { html: '<th  onclick="sortTable(0)">Name</th>' }))
-                }
-                else if (key == "cost_gen") {
-                    row.append($("<td/>", { html: '<th  onclick="sortTable(1)">Cost to Attend</th>' }))
-                }
-                else if (key == "admis_percent") {
-                    row.append($("<td/>", { html: '<th  onclick="sortTable(2)">Admitted Percent</th>' }))
-                }
-                else if (key == "size") {
-                    row.append($("<td/>", { html: '<th  onclick="sortTable(3)">Size</th>' }))
-                }
-                else if (key == "location") {
-                    row.append($("<td/>", { html: '<th onclick="sortTable(4)">Location</th>' }))
-                }
-                else if (key == "ranking") {
-
-                    row.append($("<td/>", { html: '<th onclick="sortTable(5)">Ranking</th>' }))
-                }
-                else if (key == "testscores") {
-                    row.append($("<td/>", { html: '<th onclick="sortTable(6)">SAT EBRW</th>' }))
-                    row.append($("<td/>", { html: '<th onclick="sortTable(7)">SAT Math</th>' }))
-                    row.append($("<td/>", { html: '<th onclick="sortTable(8)">ACT Composite</th>' }))
-                }
-                else if (key == "completion_percent") {
-                    row.append($("<td/>", { html: "View Profile" }))
-
-                }
-            })
-            thead.append(row)
-            $("#myTable2").append(thead)
+ //Appends to the table listed in the html
             collegeInfo.forEach(college => {
                 //console.log(profileInfo)
                 //console.log("Dialog Tester:", $(college).attr("name"))
                 //console.log(college)
                 var row = $("<tr/>")
-                Object.keys(college).forEach(key => {
+                Object.keys(college).forEach(key => { //For specific keys specfic data will be printed
 
                     if (key == "name" || key == "admis_percent" || key == "location") { //Key Names
 
@@ -532,13 +617,43 @@
                         }
                     }
                     else if (key == "completion_percent") {
-                        var keyData = $("<td/>", { html: '<a class="viewProfile" href="/view?url=<%# college %>">View Profile</a>' })
+                        //console.log(college)
+                        
+                        var keyData = $("<td/>").append($("<a/>",{id:college["_id"].$oid,class:"viewProfile",html:"viewProfile",href:"#"}))
                         row.append(keyData)
                     }
                 })
                 $("#myTable2").append(row)
             });
-        }
+            $(".viewProfile").one('click', function (evt) { //Like the List function this will have a dialog box pop up to show the college info
+                $("#dialog").empty()
+                $("#dialog").dialog('open', "option", "position", "center");
+                evt.preventDefault()
+                var collegeID = $(this).attr("id");
+                var profileInfo = globalCollegeInfo.find(college => college["_id"].$oid == collegeID)
+                console.log(profileInfo)
+                $("#dialog").append(`College Name: ${profileInfo["name"]}<br>
+                    College Type: ${profileInfo["ctype"]}<br>
+                    Cost General: ${profileInfo["cost_gen"]}<br>
+                    Cost Instate: ${profileInfo["cost_instate"]}<br>
+                    Cost Outstate: ${profileInfo["cost_outstate"]}<br>
+                    Location: ${profileInfo["location"]}<br>
+                    College Size: ${profileInfo["size"]}<br>
+                    Admitted Number: ${profileInfo["admis_num"]}<br>
+                    Admitted Percent: ${profileInfo["admis_percent"]}<br>
+                    Completion Percent: ${profileInfo["completion_percent"]}<br>
+                    Avg GPA: ${profileInfo["testscores"].avg_gpa}<br>
+                    Graduated Student Median Debt: ${profileInfo["med_debt"]}<br>
+                    Majors: ${profileInfo["majors"]}<br>
+                    
+                    `)
+                })
+                $("#dialog").dialog({
+                    close: function () {
+                        $("#dialog").empty()
+                    }
+                })
+            }
         //showColleges(filteredColleges)
     </script>
 
@@ -553,31 +668,7 @@
             })
         });
         $(() => {
-            $(".viewProfile").on('click', function (evt) {
-                $("#dialog").empty()
-                $("#dialog").dialog('open', "option", "position", "center");
-                evt.preventDefault()
-                var profileID = $(this).attr("name");
-                var profileInfo = collegeInfo.find(college => college.name == profileID)
-                console.log(profileInfo)
-                // $("#dialog").append(`Userid: ${profileInfo["name"]}<br>
-                //     Residence State: ${profileInfo["size"]}<br>
-                //     High School Name: ${profileInfo["admis_num"]}<br>
-                //     High School City: ${profileInfo["admis_percent"]}<br>
-                //     High School State: ${profileInfo["admis_percent"]}<br>
-                //     GPA: ${profileInfo["majors"]}<br>
-                //     College Class: ${profileInfo["ranking"]}<br>
-                //     First Choice Major: ${profileInfo["completion_percent"]}<br>
-                //     Second Choice Major: ${profileInfo["ctype"]}<br>
-                //     SAT EBRW: ${profileInfo["med_debt"]}<br>
-                //     `)
-                //})
-                $("#dialog").dialog({
-                    close: function () {
-                        $("#dialog").empty()
-                    }
-                })
-            })
+            
         });
     </script>
 
